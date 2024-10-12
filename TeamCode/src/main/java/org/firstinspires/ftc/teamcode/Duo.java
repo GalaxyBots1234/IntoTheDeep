@@ -25,6 +25,7 @@ import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
 /*import org.firstinspires.ftc.teamcode.common.subsystem.DroneSubsystem;
 import org.firstinspires.ftc.teamcode.common.subsystem.HangSubsystem;
 import org.firstinspires.ftc.teamcode.common.subsystem.IntakeSubsystem;*/
+import org.firstinspires.ftc.teamcode.common.subsystem.Arm2Subsystem;
 import org.firstinspires.ftc.teamcode.common.util.MathUtils;
 
 @Config
@@ -42,6 +43,8 @@ public class Duo extends CommandOpMode {
 //    private boolean lastJoystickDownLeft = false;
     private boolean extendIntake = true;
 
+    private Arm2Subsystem a2s;
+
     @Override
     public void initialize() {
         CommandScheduler.getInstance().reset();
@@ -53,13 +56,14 @@ public class Duo extends CommandOpMode {
         gamepadEx = new GamepadEx(gamepad1);
         gamepadEx2 = new GamepadEx(gamepad2);
 
+        a2s = new Arm2Subsystem(hardwareMap);
         robot.init(hardwareMap);
 
         gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_UP)
-                .whenPressed(new ArmCommand(1000));
+                .whenPressed(new InstantCommand(() -> a2s.pitchStepUp()));
 
         gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
-                .whenPressed(new ArmCommand(0));
+                .whenPressed(new InstantCommand(() -> a2s.pitchStepDown()));
 
         robot.read();
         while (opModeInInit()) {
@@ -69,9 +73,14 @@ public class Duo extends CommandOpMode {
     }
 
     @Override
-    public void run() {
-        CommandScheduler.getInstance().run();
-        robot.clearBulkCache();
+    public void run()
+    {
+        super.run();
+
+        a2s.extensionPower(-gamepadEx.getRightY());
+
+        /*CommandScheduler.getInstance().run();
+        // robot.clearBulkCache();
         robot.read();
         robot.periodic();
         robot.write();
@@ -79,17 +88,19 @@ public class Duo extends CommandOpMode {
         // G1 - Drivetrain Control
         // robot.drivetrain.set(new Pose(gamepad1.left_stick_x, -gamepad1.left_stick_y, MathUtils.joystickScalar(-gamepad1.left_trigger + gamepad1.right_trigger, 0.01)), 0);
 
-        boolean currentJoystickUpRight = gamepad1.right_stick_y < -0.5 || gamepad2.right_stick_y < -0.5;
+        /*boolean currentJoystickUpRight = gamepad1.right_stick_y < -0.5 || gamepad2.right_stick_y < -0.5;
         boolean currentJoystickDownRight = gamepad1.right_stick_y > 0.5 || gamepad2.right_stick_y > 0.5;
 
         lastJoystickUpRight = currentJoystickUpRight;
-        lastJoystickDownRight = currentJoystickDownRight;
+        lastJoystickDownRight = currentJoystickDownRight;* /
 
         double loop = System.nanoTime();
-        telemetry.addData("hz ", 1000000000 / (loop - loopTime));
-        telemetry.addData("arm ticks", robot.armMotor.getCurrentPosition());
-        telemetry.addData("arm ticks", robot.armMotor.encoder.getPosition());
+        // telemetry.addData("hz ", 1000000000 / (loop - loopTime));
+        telemetry.addData("arm power", robot.armMotor.getPower());
+        telemetry.addData("arm current pos", robot.armMotor.getCurrentPosition());
+        telemetry.addData("arm get postition", robot.armActuator.getPosition());
+        telemetry.addData("arm target position", robot.armActuator.getTargetPosition());
         loopTime = loop;
-        telemetry.update();
+        telemetry.update();*/
     }
 }

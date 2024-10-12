@@ -7,31 +7,18 @@ import org.firstinspires.ftc.teamcode.common.hardware.Sensors;
 import org.firstinspires.ftc.teamcode.common.util.MathUtils;
 import org.firstinspires.ftc.teamcode.common.util.wrappers.WSubsystem;
 
+import java.util.concurrent.ExecutionException;
 import java.util.function.DoubleSupplier;
 import java.util.function.IntSupplier;
 
 @Config
-public class ArmSubsystem extends WSubsystem {
-
+public class ArmSubsystem extends WSubsystem
+{
     private final RobotHardware robot = RobotHardware.getInstance();
-    private int backdropHeight = 0;
-    private int stackHeight = 1;
     public IntSupplier liftTicks;
     public DoubleSupplier armAngle;
 
     public double feedforward = 0.0;
-
-    private double[] stackHeights = { // 0.0325
-            0.435,
-            0.4675,
-            0.5,
-            0.5325,
-            0.565,
-            0.5975,
-            0.63,
-            0.6625,
-            0.695
-    };
 
     public ArmSubsystem() {
         this.liftTicks = () -> robot.intSubscriber(Sensors.SensorType.EXTENSION_ENCODER);
@@ -72,19 +59,15 @@ public class ArmSubsystem extends WSubsystem {
         double feedforward = 0.1 * Math.abs(Math.cos(robot.armActuator.getPosition())) * Math.signum(error);
 
 
-//        robot.extensionActuator.updateFeedforward(Math.abs(error) > 10 ? feedforward : 0);
+//        robot.extensionActuator.updateFeedforward(Math.abs(error) > 10 ? feedforward : 0);*/
 
-        robot.armActuator.periodic();
-        robot.extensionActuator.periodic();*/
-
-        if (robot.armMotor.atTargetPosition()) {
-            robot.armMotor.stopMotor();
-        }
+        // robot.armActuator.periodic();
+        robot.extensionActuator.periodic();
     }
 
     @Override
     public void read() {
-
+        // robot.armActuator.read();
     }
 
     @Override
@@ -96,29 +79,5 @@ public class ArmSubsystem extends WSubsystem {
     @Override
     public void reset() {
 
-    }
-
-    public int getBackdropHeight() {
-        return backdropHeight;
-    }
-
-    public double getStackHeight() {
-        return stackHeights[getStackHeightIndex()];
-    }
-
-    public int getStackHeightIndex() {
-        return stackHeight;
-    }
-
-    public void incrementBackdropHeight(int amount) {
-        this.backdropHeight = (int) MathUtils.clamp(getBackdropHeight() + amount, 0, 11);
-    }
-
-    public void incrementStackHeight(int amount) {
-        this.stackHeight = (int) MathUtils.clamp(getStackHeightIndex() + amount, 0, 8);
-    }
-
-    public void setBackdropHeight(int amount) {
-        this.backdropHeight = (int) MathUtils.clamp(amount, 0, 11);
     }
 }

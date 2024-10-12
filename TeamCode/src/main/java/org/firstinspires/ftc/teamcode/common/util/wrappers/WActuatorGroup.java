@@ -6,9 +6,9 @@ import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-/*import org.firstinspires.ftc.teamcode.common.drive.pathing.geometry.profile.AsymmetricMotionProfile;
+import org.firstinspires.ftc.teamcode.common.drive.pathing.geometry.profile.AsymmetricMotionProfile;
 import org.firstinspires.ftc.teamcode.common.drive.pathing.geometry.profile.ProfileConstraints;
-import org.firstinspires.ftc.teamcode.common.drive.pathing.geometry.profile.ProfileState;*/
+import org.firstinspires.ftc.teamcode.common.drive.pathing.geometry.profile.ProfileState;
 import org.firstinspires.ftc.teamcode.common.hardware.AbsoluteAnalogEncoder;
 import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
 import org.firstinspires.ftc.teamcode.common.hardware.Sensors;
@@ -30,9 +30,9 @@ public class WActuatorGroup {
     }
 
     private final Map<String, HardwareDevice> devices = new HashMap<>();
-    /*private AsymmetricMotionProfile profile;
+    private AsymmetricMotionProfile profile;
     private ProfileConstraints constraints;
-    private ProfileState state;*/
+    private ProfileState state;
     private PIDController controller;
     private DoubleSupplier voltage;
     public ElapsedTime timer;
@@ -117,7 +117,8 @@ public class WActuatorGroup {
      * Stores a boolean representing whether or not the actuator group is within
      * some tolerance given by a specified value.
      */
-    public void periodic() {
+    public void periodic()
+    {
         if (timer == null) {
             timer = new ElapsedTime();
         }
@@ -127,7 +128,8 @@ public class WActuatorGroup {
             this.targetPosition = state.x + targetPositionOffset;
         }*/
 
-        if (controller != null) {
+        if (controller != null)
+        {
             this.power = controller.calculate(position, targetPosition + targetPositionOffset);
 
             switch (mode) {
@@ -142,6 +144,7 @@ public class WActuatorGroup {
                     break;
                 default:
             }
+
             this.power = MathUtils.clamp(power, -1, 1);
         }
 
@@ -190,7 +193,7 @@ public class WActuatorGroup {
         this.offset = offset;
     }
 
-    /*public void setMotionProfileTargetPosition(double targetPosition) {
+    public void setMotionProfileTargetPosition(double targetPosition) {
         this.overallTargetPosition = targetPosition;
         this.profile = new AsymmetricMotionProfile(getTargetPosition(), targetPosition, constraints);
         this.timer.reset();
@@ -205,7 +208,7 @@ public class WActuatorGroup {
         this.constraints = constraints;
         this.profile = new AsymmetricMotionProfile(position, targetPosition, constraints);
         return this;
-    }*/
+    }
 
     public WActuatorGroup setPIDController(PIDController controller) {
         this.controller = controller;
@@ -318,13 +321,13 @@ public class WActuatorGroup {
         return new ArrayList<>(devices.values());
     }
 
-    /*public ProfileState getState() {
+    public ProfileState getState() {
         return this.state;
     }
 
     public ProfileConstraints getConstraints() {
         return this.constraints;
-    }*/
+    }
 
     /**
      * Returns whether or not the given actuation group is within error

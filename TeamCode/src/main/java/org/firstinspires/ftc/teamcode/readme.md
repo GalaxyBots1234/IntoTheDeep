@@ -1,4 +1,21 @@
-## TeamCode Module
+# TeamCode Module
+
+## TODO
+
+- Hardware
+  - Cabling & protection for Claw
+  - Springs
+  - New claw design / improvement with color sensor
+- Software
+  - Test file - FTCLIB based
+  - TeleOp
+    - Basic Servo movement
+    - Subsystems
+    - Actions
+    - periodic
+  - Autonomous
+    - Simple drive routines
+    - FTCLIB or roadrunner
 
 Welcome!
 

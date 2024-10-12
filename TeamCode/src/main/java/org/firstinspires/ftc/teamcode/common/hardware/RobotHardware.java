@@ -22,8 +22,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-/*import org.firstinspires.ftc.teamcode.common.drive.drivetrain.MecanumDrivetrain;
-import org.firstinspires.ftc.teamcode.common.drive.localizer.AprilTagConstants;
+import org.firstinspires.ftc.teamcode.common.drive.drivetrain.MecanumDrivetrain;
+/*import org.firstinspires.ftc.teamcode.common.drive.localizer.AprilTagConstants;
 import org.firstinspires.ftc.teamcode.common.drive.localizer.FusedLocalizer;
 import org.firstinspires.ftc.teamcode.common.drive.pathing.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.subsystem.DroneSubsystem;
@@ -58,15 +58,14 @@ public class RobotHardware {
     public DcMotorEx dtBackRightMotor;
 
     // extension
-    // public AbsoluteAnalogEncoder armPitchEncoder;
-    public AnalogInput armPitchEnc;
+    // public WEncoder armPitchEncoder;
+    // public AnalogInput armPitchEnc;
 
     public AnalogInput leftDistSensor;
     public AnalogInput rightDistSensor;
 
     public DcMotorEx extensionMotor;
     // public DcMotorEx armMotor;
-    public Motor armMotor;
 
     public WActuatorGroup armActuator;
     public WActuatorGroup extensionActuator;
@@ -103,12 +102,7 @@ public class RobotHardware {
     private ArrayList<WSubsystem> subsystems;
 
     public ArmSubsystem arm;
-    /*public IntakeSubsystem intake;
     public MecanumDrivetrain drivetrain;
-    public DroneSubsystem drone;
-    public HangSubsystem hang;
-
-    public PreloadDetectionPipeline preloadDetectionPipeline;*/
 
     private final Object imuLock = new Object();
     @GuardedBy("imuLock")
@@ -148,33 +142,33 @@ public class RobotHardware {
         // DRIVETRAIN
         this.dtBackLeftMotor = hardwareMap.get(DcMotorEx.class, "leftBackMotor");
         dtBackLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        dtBackLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         this.dtFrontLeftMotor = hardwareMap.get(DcMotorEx.class, "leftFrontMotor");
         dtFrontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        dtFrontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         this.dtBackRightMotor = hardwareMap.get(DcMotorEx.class, "rightBackMotor");
         dtBackRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        dtBackRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         this.dtFrontRightMotor = hardwareMap.get(DcMotorEx.class, "rightFrontMotor");
         dtFrontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        dtFrontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // UWUXTENSION
-        extensionMotor = hardwareMap.get(DcMotorEx.class, "rightFrontMotor");
+        extensionMotor = hardwareMap.get(DcMotorEx.class, "motorArmExtension");
         /*armMotor = hardwareMap.get(DcMotorEx.class, "motorArmPitch");
-        armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        armMotor.setDirection(DcMotorSimple.Direction.REVERSE);*/
-//        armMotor = new Motor(hardwareMap, "motorArmPitch", Motor.GoBILDA.RPM_30);
-        armMotor = new Motor(hardwareMap, "leftFrontMotor", Motor.GoBILDA.RPM_30);
+        armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);*/
+        // armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        /* armMotor = new Motor(hardwareMap, "motorArmPitch", Motor.GoBILDA.RPM_30);
         armMotor.stopAndResetEncoder();
         armMotor.setRunMode(Motor.RunMode.PositionControl);
         //armMotor.setPositionCoefficient(10);
         armMotor.setVeloCoefficients(0.01, 0.0025, 0.005);
         armMotor.setPositionTolerance(20);
         armMotor.set(0);
-        //armMotor.setVeloCoefficients(1.75, 0, 0.05);
-
+        //armMotor.setVeloCoefficients(1.75, 0, 0.05);*/
 
         /*this.leftDistSensor = hardwareMap.get(AnalogInput.class, "leftDist");
         this.rightDistSensor = hardwareMap.get(AnalogInput.class, "rightDist");*/
@@ -187,11 +181,19 @@ public class RobotHardware {
 //                .setMotionProfile(0, new ProfileConstraints(1000, 5000, 2000))
                 .setErrorTolerance(20);
 
-        /*this.armActuator = new WActuatorGroup(
-                () -> intSubscriber(Sensors.SensorType.ARM_ENCODER), armMotor)
-                .setPIDController(new PIDController(1.7500, 0, 0.05))
-                .setFeedforward(WActuatorGroup.FeedforwardMode.CONSTANT, 0.0)
-                .setErrorTolerance(0.03);*/
+        /**
+         * Main Robot - Arm Pitch
+         * - 30 RPM,
+         * - Range = 0 (-5 degrees) to
+         *      -  450 (0 degrees)
+         *      - 5700 (90 degrees)
+         * - BEST P = 0.0015, I = 0, D = 0, F = 0.00001
+         * /
+        this.armPitchEncoder = new WEncoder(new MotorEx(hardwareMap, "motorArmPitch").encoder);
+        this.armActuator = new WActuatorGroup(armMotor, armPitchEncoder)
+                .setPIDController(new PIDController(0.0015, 0, 0.0))
+                // .setFeedforward(WActuatorGroup.FeedforwardMode.CONSTANT, 0.00001)
+                .setErrorTolerance(50);
 
         /*armLiftServo = new WServo(hardwareMap.get(Servo.class, "lift"));
 
@@ -214,21 +216,21 @@ public class RobotHardware {
         this.podFront = new WEncoder(new MotorEx(hardwareMap, "dtBackRightMotor").encoder);
         this.podRight = new WEncoder(new MotorEx(hardwareMap, "dtFrontRightMotor").encoder);
 */
-        InverseKinematics.calculateTarget(3, 0);
+        /*InverseKinematics.calculateTarget(3, 0);
 
         modules = hardwareMap.getAll(LynxModule.class);
 
         for (LynxModule m : modules) {
             m.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
             if (m.isParent() && LynxConstants.isEmbeddedSerialNumber(m.getSerialNumber())) CONTROL_HUB = m;
-        }
+        }*/
 
 
         subsystems = new ArrayList<>();
         arm = new ArmSubsystem();
-        /*drivetrain = new MecanumDrivetrain();
+        drivetrain = new MecanumDrivetrain();
 
-        intake = new IntakeSubsystem();
+        /*intake = new IntakeSubsystem();
         if (Globals.IS_AUTO) {
             localizer = new FusedLocalizer();
 
@@ -242,9 +244,6 @@ public class RobotHardware {
             }
 
             imuOffset = AngleUnit.normalizeRadians(imu.getAngularOrientation().firstAngle);
-        } else {
-            drone = new DroneSubsystem();
-            hang = new HangSubsystem();
         }*/
 
         voltage = hardwareMap.voltageSensor.iterator().next().getVoltage();
@@ -252,7 +251,8 @@ public class RobotHardware {
 
     public void read() {
         // Read all hardware devices here
-        values.put(Sensors.SensorType.ARM_ENCODER, armMotor.getCurrentPosition());
+        arm.read();
+        // values.put(Sensors.SensorType.ARM_ENCODER, armMotor.getCurrentPosition());
         if (Globals.IS_AUTO) {
             values.put(Sensors.SensorType.POD_LEFT, podLeft.getPosition());
             values.put(Sensors.SensorType.POD_FRONT, podFront.getPosition());
@@ -262,9 +262,7 @@ public class RobotHardware {
 
     public void write() {
         arm.write();
-        /*
-        intake.write();
-        drivetrain.write();*/
+        drivetrain.write();
     }
 
     public void periodic() {
@@ -273,9 +271,8 @@ public class RobotHardware {
 //            voltage = hardwareMap.voltageSensor.iterator().next().getVoltage();
 //        }
 
-        /*intake.periodic();
         drivetrain.periodic();
-        if (Globals.IS_AUTO) {
+        /*if (Globals.IS_AUTO) {
             localizer.periodic();
         }*/
         arm.periodic();
