@@ -2,22 +2,16 @@ package org.firstinspires.ftc.teamcode.opmode.testing;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandOpMode;
-import com.arcrobotics.ftclib.command.CommandScheduler;
-import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
 import org.firstinspires.ftc.teamcode.common.command.PositionCommand;
-import org.firstinspires.ftc.teamcode.common.hardware.Globals;
-import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
 import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware2;
-import org.firstinspires.ftc.teamcode.common.subsystem.Arm2Subsystem;
 
 @Config
-@TeleOp
+@TeleOp(name = "DriveTuningTest")
 public class DriveTuningTest extends CommandOpMode
 {
     private RobotHardware2 robot;
@@ -30,7 +24,7 @@ public class DriveTuningTest extends CommandOpMode
         gamepadEx = new GamepadEx(gamepad1);
 
         gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_UP)
-                .whenPressed(new PositionCommand(new Pose2d(1, 0, new Rotation2d())));
+                .whenPressed(new PositionCommand(new Pose2d(0, 0, new Rotation2d(Math.PI / 2))));
 
         gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                 .whenPressed(new PositionCommand(new Pose2d(0, 0, new Rotation2d())));
@@ -46,7 +40,9 @@ public class DriveTuningTest extends CommandOpMode
     {
         super.run();
 
-        /* telemetry.addData("arm target position", robot.armActuator.getTargetPosition());
-        telemetry.update(); */
+        Pose2d pos = robot.odo.getPose();
+        telemetry.addData("Position", "{X: %.3f, Y: %.3f, H: %.3f}", pos.getX(), pos.getY(), pos.getHeading());
+        // telemetry.addData("arm target position", robot.armActuator.getTargetPosition());
+        telemetry.update();
     }
 }
