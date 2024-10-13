@@ -1,17 +1,13 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.opmode.teleop;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
-import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.common.commandbase.subsystem.ArmCommand;
 /*import org.firstinspires.ftc.teamcode.common.commandbase.teleopcommand.ClawDepositCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.teleopcommand.ClawToggleCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.teleopcommand.DepositExtendCommand;
@@ -19,14 +15,12 @@ import org.firstinspires.ftc.teamcode.common.commandbase.teleopcommand.DepositRe
 import org.firstinspires.ftc.teamcode.common.commandbase.teleopcommand.HeightChangeCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.teleopcommand.IntakeExtendCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.teleopcommand.IntakeRetractCommand;*/
-import org.firstinspires.ftc.teamcode.common.drive.pathing.geometry.Pose;
 import org.firstinspires.ftc.teamcode.common.hardware.Globals;
 import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
 /*import org.firstinspires.ftc.teamcode.common.subsystem.DroneSubsystem;
 import org.firstinspires.ftc.teamcode.common.subsystem.HangSubsystem;
 import org.firstinspires.ftc.teamcode.common.subsystem.IntakeSubsystem;*/
 import org.firstinspires.ftc.teamcode.common.subsystem.Arm2Subsystem;
-import org.firstinspires.ftc.teamcode.common.util.MathUtils;
 
 @Config
 @TeleOp(name = "Duo")

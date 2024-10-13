@@ -9,7 +9,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.common.drive.pathing.geometry.profile.AsymmetricMotionProfile;
 import org.firstinspires.ftc.teamcode.common.drive.pathing.geometry.profile.ProfileConstraints;
 import org.firstinspires.ftc.teamcode.common.drive.pathing.geometry.profile.ProfileState;
-import org.firstinspires.ftc.teamcode.common.hardware.AbsoluteAnalogEncoder;
 import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
 import org.firstinspires.ftc.teamcode.common.hardware.Sensors;
 import org.firstinspires.ftc.teamcode.common.util.MathUtils;
@@ -101,10 +100,7 @@ public class WActuatorGroup {
         }
 
         for (HardwareDevice device : devices.values()) {
-            if (device instanceof AbsoluteAnalogEncoder) {
-                this.position = ((AbsoluteAnalogEncoder) device).getCurrentPosition() + offset;
-                return;
-            } else if (device instanceof WEncoder) {
+            if (device instanceof WEncoder) {
                 this.position = (int) (((WEncoder) device).getPosition() + offset);
                 return;
             }
