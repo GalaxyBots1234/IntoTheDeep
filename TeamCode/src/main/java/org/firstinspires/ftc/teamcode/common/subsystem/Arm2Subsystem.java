@@ -40,7 +40,7 @@ public class Arm2Subsystem extends SubsystemBase
     private static final int    EXTENSION_MAX       = 14000;
 
     private MotorEx armPitch;
-    public MotorEx armExtension;
+    private MotorEx armExtension;
 
     private PIDFController pitchC;
     private PIDFController extensionC;
@@ -55,7 +55,8 @@ public class Arm2Subsystem extends SubsystemBase
 
     // -------------------------------------------------------------------------------------------
 
-    public Arm2Subsystem(final HardwareMap hMap) {
+    public Arm2Subsystem(final HardwareMap hMap)
+    {
         pitchC = new PIDFController(pitchP, pitchI, pitchD, pitchF);
 
         armPitch = new MotorEx(hMap, "motorArmPitch", Motor.GoBILDA.RPM_30);
