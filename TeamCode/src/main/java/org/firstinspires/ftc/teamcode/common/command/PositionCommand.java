@@ -8,6 +8,7 @@ import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.arcrobotics.ftclib.geometry.Vector2d;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 @Config
 public class PositionCommand extends CommandBase
@@ -107,18 +108,18 @@ public class PositionCommand extends CommandBase
         double yPower = yController.calculate(robotPose.getY(), targetPose.getY());
         double hPower = hController.calculate(rh, th);
 
-        // double x_rotated = xPower * Math.cos(-rh) - yPower * Math.sin(-rh);
-        // double y_rotated = xPower * Math.sin(-rh) + yPower * Math.cos(-rh);
+        double x_rotated = xPower * Math.cos(-rh) - yPower * Math.sin(-rh);
+        double y_rotated = xPower * Math.sin(-rh) + yPower * Math.cos(-rh);
 
         // technically i dont think this is normalized correctly
-        // hPower = Range.clip(hPower, -MAX_ROTATIONAL_SPEED, MAX_ROTATIONAL_SPEED);
-        // x_rotated = Range.clip(x_rotated, -MAX_TRANSLATIONAL_SPEED / X_GAIN, MAX_TRANSLATIONAL_SPEED / X_GAIN);
-        // y_rotated = Range.clip(y_rotated, -MAX_TRANSLATIONAL_SPEED, MAX_TRANSLATIONAL_SPEED);
+        hPower = Range.clip(hPower, -MAX_ROTATIONAL_SPEED, MAX_ROTATIONAL_SPEED);
+        x_rotated = Range.clip(x_rotated, -MAX_TRANSLATIONAL_SPEED / X_GAIN, MAX_TRANSLATIONAL_SPEED / X_GAIN);
+        y_rotated = Range.clip(y_rotated, -MAX_TRANSLATIONAL_SPEED, MAX_TRANSLATIONAL_SPEED);
 
         // System.out.println("ypwoer " + robotPose.getY() + " " + targetPose.getY() + " " + yPower);
-        System.out.printf("hPower: %.3f, %.3f, %.3f", rh, th, hPower);
+        // System.out.printf("hPower: %.3f, %.3f, %.3f", rh, th, hPower);
 
-        return new double[] { yPower, -xPower, hPower /*x_rotated * X_GAIN, y_rotated, hPower*/ };
+        return new double[] { y_rotated, -x_rotated * X_GAIN, hPower };
     }
 
     @Override
