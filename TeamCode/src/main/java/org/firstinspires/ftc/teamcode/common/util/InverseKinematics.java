@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.common.util;
 
+import com.qualcomm.robotcore.util.Range;
+
 public class InverseKinematics {
     public static double t_extension = 0.0;
     public static double t_angle = 0.0;
@@ -32,7 +34,7 @@ public class InverseKinematics {
         double diff_x = t_x - y_t;
 
         t_angle = Math.atan2(diff_y, diff_x);
-        t_extension = MathUtils.clamp(Math.hypot(diff_x, diff_y), d_retracted, d_extended);
+        t_extension = Range.clip(Math.hypot(diff_x, diff_y), d_retracted, d_extended);
 
         System.out.println("EXT: " + Math.hypot(diff_x, diff_y));
         t_extension -= d_retracted;

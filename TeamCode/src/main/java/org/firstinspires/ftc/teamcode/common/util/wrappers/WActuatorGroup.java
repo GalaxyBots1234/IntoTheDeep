@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.common.drive.pathing.geometry.profile.AsymmetricMotionProfile;
 import org.firstinspires.ftc.teamcode.common.drive.pathing.geometry.profile.ProfileConstraints;
@@ -141,7 +142,7 @@ public class WActuatorGroup {
                 default:
             }
 
-            this.power = MathUtils.clamp(power, -1, 1);
+            this.power = Range.clip(power, -1, 1);
         }
 
         this.reached = Math.abs((targetPosition + targetPositionOffset) - position) < tolerance;
