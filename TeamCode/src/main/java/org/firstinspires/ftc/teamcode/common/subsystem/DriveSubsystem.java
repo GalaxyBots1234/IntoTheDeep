@@ -20,8 +20,12 @@ public class DriveSubsystem extends SubsystemBase
         bL = new MotorEx(hMap, "leftBackMotor", Motor.GoBILDA.RPM_312);
         bR = new MotorEx(hMap, "rightBackMotor", Motor.GoBILDA.RPM_312);
 
+        fL.setInverted(true);
+        bL.setInverted(true);
+
         // create our drive object
-        drive = new MecanumDrive(fL, fR, bL, bR);
+        drive = new MecanumDrive(false, fL, fR, bL, bR);
+        drive.setMaxSpeed(0.3);
     }
 
     // -------------------------------------------------------------------------------------------
