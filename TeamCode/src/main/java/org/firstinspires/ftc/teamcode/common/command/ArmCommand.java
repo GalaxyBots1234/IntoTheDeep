@@ -2,8 +2,8 @@ package org.firstinspires.ftc.teamcode.common.command;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 
-import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware;
-import org.firstinspires.ftc.teamcode.common.subsystem.Arm2Subsystem;
+import org.firstinspires.ftc.teamcode.common.system.RobotHardware;
+import org.firstinspires.ftc.teamcode.common.system.Arm2Subsystem;
 
 public class ArmCommand extends InstantCommand
 {

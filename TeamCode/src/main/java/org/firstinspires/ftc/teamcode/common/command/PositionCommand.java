@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.common.command;
 
-import org.firstinspires.ftc.teamcode.common.hardware.RobotHardware2;
+import org.firstinspires.ftc.teamcode.common.system.RobotHardware2;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDFController;
