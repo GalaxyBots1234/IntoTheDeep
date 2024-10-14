@@ -4,8 +4,6 @@ import android.util.Size;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.controller.PIDController;
-import com.arcrobotics.ftclib.hardware.motors.Motor;
-import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -15,9 +13,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.PwmControl;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.configuration.LynxConstants;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -30,10 +25,8 @@ import org.firstinspires.ftc.teamcode.common.subsystem.DroneSubsystem;
 import org.firstinspires.ftc.teamcode.common.subsystem.HangSubsystem;
 import org.firstinspires.ftc.teamcode.common.subsystem.IntakeSubsystem;*/
 import org.firstinspires.ftc.teamcode.common.subsystem.ArmSubsystem;
-import org.firstinspires.ftc.teamcode.common.util.InverseKinematics;
 import org.firstinspires.ftc.teamcode.common.util.wrappers.WActuatorGroup;
 import org.firstinspires.ftc.teamcode.common.util.wrappers.WEncoder;
-import org.firstinspires.ftc.teamcode.common.util.wrappers.WServo;
 import org.firstinspires.ftc.teamcode.common.util.wrappers.WSubsystem;
 /*import org.firstinspires.ftc.teamcode.common.vision.PreloadDetectionPipeline;*/
 import org.firstinspires.ftc.vision.VisionPortal;
@@ -69,13 +62,6 @@ public class RobotHardware {
 
     public WActuatorGroup armActuator;
     public WActuatorGroup extensionActuator;
-
-    public WServo armLiftServo;
-
-    public WServo intakeClawLeftServo;
-    public WServo intakeClawRightServo;
-    public WServo intakePivotLeftServo;
-    public WServo intakePivotRightServo;
 
     public WEncoder podLeft;
     public WEncoder podRight;

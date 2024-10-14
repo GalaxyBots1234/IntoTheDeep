@@ -3,19 +3,25 @@
 ## TODO
 
 - Hardware
-  - Cabling & protection for Claw
+  - New arm order & assembly
   - Springs
+  - Steel chain for pitch
+  - Cabling & protection for Claw
   - New claw design / improvement with color sensor
 - Software
-  - Test file - FTCLIB based
+  - General
+    - Constants
+    - Simplify RobotHardware
+    - Remove as much of Kookybotz / dead code as possible
   - TeleOp
-    - Basic Servo movement
-    - Subsystems
-    - Actions
-    - periodic
+    - Duo2: VelocityControl for drive motors, study the impact 
+    - Duo2: Merge Arm subsystem control.
+    - Basic Servo movement (decide controls)
   - Autonomous
-    - Simple drive routines
-    - FTCLIB or roadrunner
+    - Retest drive forward, left, turn with VelocityControl
+    - Drive to fixed position
+    - Drive to fixed position, via (Study FTClib trajectories)
+    - Drive to AprilTag
 
 Welcome!
 
