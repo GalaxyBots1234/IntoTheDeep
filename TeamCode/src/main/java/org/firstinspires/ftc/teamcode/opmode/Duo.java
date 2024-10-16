@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 /*import org.firstinspires.ftc.teamcode.common.commandbase.teleopcommand.ClawDepositCommand;
@@ -24,6 +25,7 @@ import org.firstinspires.ftc.teamcode.common.system.Arm2Subsystem;
 
 @Config
 @TeleOp(name = "Duo")
+@Disabled
 public class Duo extends CommandOpMode {
 
     private final RobotHardware robot = RobotHardware.getInstance();
@@ -71,7 +73,7 @@ public class Duo extends CommandOpMode {
     {
         super.run();
 
-        a2s.extensionPower(-gamepadEx.getRightY());
+        a2s.extensionPower(-gamepadEx.getRightY(), true);
 
         /*CommandScheduler.getInstance().run();
         // robot.clearBulkCache();

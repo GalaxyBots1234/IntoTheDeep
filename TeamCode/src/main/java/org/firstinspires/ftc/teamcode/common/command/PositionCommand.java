@@ -17,21 +17,21 @@ public class PositionCommand extends CommandBase
 
     public Pose2d targetPose;
 
-    public static double xP = 0.08;
-    public static double xD = 0.0;
+    public static double xP = 0.0001;
+    public static double xD = 0.00005;
 
-    private static double yP = 0.11;
-    private static double yD = 0.0;
+    public static double yP = 0.0001;
+    public static double yD = 0.00005;
 
-    private static double hP = 0.3;
-    private static double hD = 0.00;
+    public static double hP = 0.0001;
+    public static double hD = 0.00005;
 
     private static PIDFController xController = new PIDFController(xP, 0.0, xD, 0);
     private static PIDFController yController = new PIDFController(yP, 0.0, yD, 0);
     private static PIDFController hController = new PIDFController(hP, 0.0, hD, 0);
 
     public static double ALLOWED_TRANSLATIONAL_ERROR = 0.5;
-    public static double ALLOWED_HEADING_ERROR = 0.02;
+    public static double ALLOWED_HEADING_ERROR = (Math.PI / 180) * 2.5;
 
     private ElapsedTime timer;
     private ElapsedTime stable;
@@ -104,6 +104,10 @@ public class PositionCommand extends CommandBase
         while (th - rh > Math.PI)   {   th -= 2 * Math.PI;  }
         while (th - rh < -Math.PI)  {   th += 2 * Math.PI;  }
 
+        xController.setPIDF(xP, 0, xD, 0);
+        yController.setPIDF(yP, 0, yD, 0);
+        hController.setPIDF(hP, 0, hD, 0);
+
         double xPower = xController.calculate(robotPose.getX(), targetPose.getX());
         double yPower = yController.calculate(robotPose.getY(), targetPose.getY());
         double hPower = hController.calculate(rh, th);
@@ -119,7 +123,8 @@ public class PositionCommand extends CommandBase
         // System.out.println("ypwoer " + robotPose.getY() + " " + targetPose.getY() + " " + yPower);
         // System.out.printf("hPower: %.3f, %.3f, %.3f", rh, th, hPower);
 
-        return new double[] { y_rotated, -x_rotated * X_GAIN, hPower };
+        return new double[] { -y_rotated, x_rotated, -hPower };
+        // return new double[] { y_rotated, -x_rotated * X_GAIN, hPower };
     }
 
     @Override
