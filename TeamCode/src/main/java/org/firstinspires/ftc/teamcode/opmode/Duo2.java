@@ -25,7 +25,7 @@ public class Duo2 extends CommandOpMode
     {
         super.run();
 
-        robot.drive.drive.driveRobotCentric(gp1.getLeftX(), gp1.getLeftY(),
+        robot.drive.driveRobotCentric(gp1.getLeftX(), gp1.getLeftY(),
                 // gp1.getRightX(),
                 MathUtils.joystickScalar(-gp1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) +
                         gp1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER), 0.01)

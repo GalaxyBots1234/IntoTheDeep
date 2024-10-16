@@ -67,7 +67,7 @@ public class PositionCommand extends CommandBase
         Pose2d robotPose = robot.odo.getPose();
 
         double[] p = getSpeeds(robotPose);
-        robot.drive.drive.driveRobotCentric(p[0], p[1], p[2]);
+        robot.drive.driveRobotCentric(p[0], p[1], p[2]);
     }
 
     @Override
@@ -124,6 +124,6 @@ public class PositionCommand extends CommandBase
 
     @Override
     public void end(boolean interrupted) {
-        robot.drive.drive.driveRobotCentric(0, 0, 0);
+        robot.drive.driveRobotCentric(0, 0, 0);
     }
 }
