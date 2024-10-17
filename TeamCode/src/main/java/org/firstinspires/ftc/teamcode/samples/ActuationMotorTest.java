@@ -13,13 +13,11 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.teamcode.common.drive.WEncoder;
-
 @Config
 @TeleOp(name = "ActuationMotorTest")
 @Disabled
 public class ActuationMotorTest extends OpMode {
-    public WEncoder extensionPitchEncoder;
+
     public AnalogInput extensionPitchEnc;
 
     public DcMotorEx armMotor;
@@ -47,7 +45,7 @@ public class ActuationMotorTest extends OpMode {
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        this.extensionPitchEncoder = new WEncoder(new MotorEx(hardwareMap, "motorArmPitch").encoder);
+        // this.extensionPitchEncoder = new WEncoder(new MotorEx(hardwareMap, "motorArmPitch").encoder);
 
         // a, lift, went up with 0.1
         // b, arm, went down with 0.1

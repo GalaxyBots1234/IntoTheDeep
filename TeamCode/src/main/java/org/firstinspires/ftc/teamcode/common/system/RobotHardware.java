@@ -22,7 +22,6 @@ import org.firstinspires.ftc.teamcode.common.drive.Pose;
 import org.firstinspires.ftc.teamcode.common.subsystem.DroneSubsystem;
 import org.firstinspires.ftc.teamcode.common.subsystem.HangSubsystem;
 import org.firstinspires.ftc.teamcode.common.subsystem.IntakeSubsystem;*/
-import org.firstinspires.ftc.teamcode.common.drive.WEncoder;
 /*import org.firstinspires.ftc.teamcode.common.vision.PreloadDetectionPipeline;*/
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.VisionProcessor;
@@ -51,10 +50,6 @@ public class RobotHardware {
 
     public DcMotorEx extensionMotor;
     // public DcMotorEx armMotor;
-
-    public WEncoder podLeft;
-    public WEncoder podRight;
-    public WEncoder podFront;
 
     public CRServoImplEx leftHang;
     public CRServoImplEx rightHang;
