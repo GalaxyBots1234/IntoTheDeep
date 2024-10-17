@@ -13,11 +13,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.teamcode.common.system.Sensors;
-import org.firstinspires.ftc.teamcode.common.drive.WActuatorGroup;
 import org.firstinspires.ftc.teamcode.common.drive.WEncoder;
-
-import java.util.HashMap;
 
 @Config
 @TeleOp(name = "ActuationMotorTest")
@@ -27,11 +23,6 @@ public class ActuationMotorTest extends OpMode {
     public AnalogInput extensionPitchEnc;
 
     public DcMotorEx armMotor;
-
-    public HashMap<Sensors.SensorType, Object> values;
-
-    public WActuatorGroup pitchActuator;
-    public WActuatorGroup extensionActuator;
 
     private double loopTime = 0.0;
 
@@ -49,14 +40,6 @@ public class ActuationMotorTest extends OpMode {
     @Override
     public void init()
     {
-        this.values = new HashMap<>();
-
-        values.put(Sensors.SensorType.EXTENSION_ENCODER, 0);
-        values.put(Sensors.SensorType.ARM_ENCODER, 0.0);
-        values.put(Sensors.SensorType.POD_LEFT, 0.0);
-        values.put(Sensors.SensorType.POD_FRONT, 0.0);
-        values.put(Sensors.SensorType.POD_RIGHT, 0.0);
-
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         armMotor = hardwareMap.get(DcMotorEx.class, "motorArmPitch");
@@ -69,12 +52,6 @@ public class ActuationMotorTest extends OpMode {
         // a, lift, went up with 0.1
         // b, arm, went down with 0.1
 
-        pitchActuator = new WActuatorGroup(armMotor, extensionPitchEncoder)
-                .setPIDController(new PIDController(0.0015, 0, 0))
-                //.setMotionProfile(0, new ProfileConstraints(5, 100, 100))
-                // .setFeedforward(WActuatorGroup.FeedforwardMode.ANGLE_BASED, 0.04)
-                .setErrorTolerance(30);
-
         telemetry.addLine("here");
         telemetry.update();
     }
@@ -84,23 +61,11 @@ public class ActuationMotorTest extends OpMode {
 //        pitchActuator.setPID(P, I, D);
 //        pitchActuator.setFeedforward(WActuatorGroup.FeedforwardMode.ANGLE_BASED, F);
 
-        pitchActuator.read();
-
-
-        if(gamepad1.a) pitchActuator.setTargetPosition(0);
-        if(gamepad1.b) pitchActuator.setTargetPosition(1000);
-//        if(gamepad1.x) pitchActuator.setMotionProfile(0.2, new ProfileConstraints(V, A, DA));
-
-
         try {
             Thread.sleep(5);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        pitchActuator.periodic();
-
-        pitchActuator.write();
 
 //        if (gamepad1.a) {
 //            liftMotor.setPower(0.1);
@@ -118,12 +83,8 @@ public class ActuationMotorTest extends OpMode {
 //        telemetry.addData("radian reading", extensionPitchEncoder.getCurrentPosition());
 
 //        telemetry.addData("voltage", extensionEncoder.getVoltage());
-        telemetry.addData("power", pitchActuator.getPower());
         telemetry.addData("targetPosition", armTargetPosition);
         // telemetry.addData("targetPositionLift", pitchActuator.getState().x);
-        telemetry.addData("currentPosition", pitchActuator.getPosition());
-        telemetry.addData("reached", pitchActuator.hasReached());
-//        ProfileState state = pitchActuator.getState();
 
 //        telemetry.addData("v", state.v);
 //        telemetry.addData("p", state.x);

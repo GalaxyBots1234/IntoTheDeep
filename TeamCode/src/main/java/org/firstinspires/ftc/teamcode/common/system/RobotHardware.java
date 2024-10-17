@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.common.system;
 import android.util.Size;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -17,25 +16,19 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.common.drive.MecanumDrivetrain;
 /*import org.firstinspires.ftc.teamcode.common.drive.localizer.AprilTagConstants;
 import org.firstinspires.ftc.teamcode.common.drive.localizer.FusedLocalizer;
 import org.firstinspires.ftc.teamcode.common.drive.Pose;
 import org.firstinspires.ftc.teamcode.common.subsystem.DroneSubsystem;
 import org.firstinspires.ftc.teamcode.common.subsystem.HangSubsystem;
 import org.firstinspires.ftc.teamcode.common.subsystem.IntakeSubsystem;*/
-import org.firstinspires.ftc.teamcode.common.drive.WActuatorGroup;
 import org.firstinspires.ftc.teamcode.common.drive.WEncoder;
-import org.firstinspires.ftc.teamcode.common.drive.WSubsystem;
 /*import org.firstinspires.ftc.teamcode.common.vision.PreloadDetectionPipeline;*/
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.concurrent.GuardedBy;
@@ -59,9 +52,6 @@ public class RobotHardware {
     public DcMotorEx extensionMotor;
     // public DcMotorEx armMotor;
 
-    public WActuatorGroup armActuator;
-    public WActuatorGroup extensionActuator;
-
     public WEncoder podLeft;
     public WEncoder podRight;
     public WEncoder podFront;
@@ -83,12 +73,6 @@ public class RobotHardware {
     public List<LynxModule> modules;
     public LynxModule CONTROL_HUB;
 
-
-    private ArrayList<WSubsystem> subsystems;
-
-    public ArmSubsystem arm;
-    public MecanumDrivetrain drivetrain;
-
     private final Object imuLock = new Object();
     @GuardedBy("imuLock")
     public BNO055IMU imu;
@@ -97,9 +81,6 @@ public class RobotHardware {
     public double imuOffset = 0;
     private double startOffset = 0;
     // public FusedLocalizer localizer;
-
-
-    public HashMap<Sensors.SensorType, Object> values;
 
     public static RobotHardware getInstance() {
         if (instance == null) {
@@ -116,13 +97,6 @@ public class RobotHardware {
      */
     public void init(final HardwareMap hardwareMap) {
         this.hardwareMap = hardwareMap;
-        this.values = new HashMap<>();
-
-        values.put(Sensors.SensorType.EXTENSION_ENCODER, 0);
-        values.put(Sensors.SensorType.ARM_ENCODER, 0.0);
-        values.put(Sensors.SensorType.POD_LEFT, 0.0);
-        values.put(Sensors.SensorType.POD_FRONT, 0.0);
-        values.put(Sensors.SensorType.POD_RIGHT, 0.0);
 
         // DRIVETRAIN
         this.dtBackLeftMotor = hardwareMap.get(DcMotorEx.class, "leftBackMotor");
@@ -157,14 +131,6 @@ public class RobotHardware {
 
         /*this.leftDistSensor = hardwareMap.get(AnalogInput.class, "leftDist");
         this.rightDistSensor = hardwareMap.get(AnalogInput.class, "rightDist");*/
-
-
-        this.extensionActuator = new WActuatorGroup(
-                () -> intSubscriber(Sensors.SensorType.EXTENSION_ENCODER), extensionMotor)
-                .setPIDController(new PIDController(0.008, 0.0, 0.0004))
-                .setFeedforward(WActuatorGroup.FeedforwardMode.CONSTANT, 0.0)
-//                .setMotionProfile(0, new ProfileConstraints(1000, 5000, 2000))
-                .setErrorTolerance(20);
 
         /**
          * Main Robot - Arm Pitch
@@ -210,11 +176,6 @@ public class RobotHardware {
             if (m.isParent() && LynxConstants.isEmbeddedSerialNumber(m.getSerialNumber())) CONTROL_HUB = m;
         }*/
 
-
-        subsystems = new ArrayList<>();
-        arm = new ArmSubsystem();
-        drivetrain = new MecanumDrivetrain();
-
         /*intake = new IntakeSubsystem();
         if (Globals.IS_AUTO) {
             localizer = new FusedLocalizer();
@@ -235,19 +196,9 @@ public class RobotHardware {
     }
 
     public void read() {
-        // Read all hardware devices here
-        arm.read();
-        // values.put(Sensors.SensorType.ARM_ENCODER, armMotor.getCurrentPosition());
-        if (Globals.IS_AUTO) {
-            values.put(Sensors.SensorType.POD_LEFT, podLeft.getPosition());
-            values.put(Sensors.SensorType.POD_FRONT, podFront.getPosition());
-            values.put(Sensors.SensorType.POD_RIGHT, podRight.getPosition());
-        }
     }
 
     public void write() {
-        arm.write();
-        drivetrain.write();
     }
 
     public void periodic() {
@@ -255,12 +206,6 @@ public class RobotHardware {
 //            voltageTimer.reset();
 //            voltage = hardwareMap.voltageSensor.iterator().next().getVoltage();
 //        }
-
-        drivetrain.periodic();
-        /*if (Globals.IS_AUTO) {
-            localizer.periodic();
-        }*/
-        arm.periodic();
     }
 
     public void startIMUThread(LinearOpMode opMode) {
@@ -283,10 +228,6 @@ public class RobotHardware {
     }
 
     public void reset() {
-        for (WSubsystem subsystem : subsystems) {
-            subsystem.reset();
-        }
-
         imuOffset = imuAngle;
     }
 
@@ -298,39 +239,8 @@ public class RobotHardware {
         CONTROL_HUB.clearBulkCache();
     }
 
-    public void addSubsystem(WSubsystem... subsystems) {
-        this.subsystems.addAll(Arrays.asList(subsystems));
-    }
-
-
     public double getVoltage() {
         return voltage;
-    }
-
-    public double doubleSubscriber(Sensors.SensorType topic) {
-        Object value = values.getOrDefault(topic, 0.0);
-        if (value instanceof Integer) {
-            return ((Integer) value).doubleValue();
-        } else if (value instanceof Double) {
-            return (Double) value;
-        } else {
-            throw new ClassCastException();
-        }
-    }
-
-    public int intSubscriber(Sensors.SensorType topic) {
-        Object value = values.getOrDefault(topic, 0);
-        if (value instanceof Integer) {
-            return (Integer) value;
-        } else if (value instanceof Double) {
-            return ((Double) value).intValue();
-        } else {
-            throw new ClassCastException();
-        }
-    }
-
-    public boolean boolSubscriber(Sensors.SensorType topic) {
-        return (boolean) values.getOrDefault(topic, 0);
     }
 
     /*public Pose getAprilTagPosition() {
