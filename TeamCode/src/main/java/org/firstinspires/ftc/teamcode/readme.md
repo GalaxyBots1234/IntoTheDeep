@@ -3,8 +3,8 @@
 ## TODO
 
 - Hardware
-  - New arm order & assembly
   - Springs
+  - New arm assembly
   - Steel chain for pitch
   - Cabling & protection for Claw
   - New claw design / improvement with color sensor
@@ -14,15 +14,15 @@
     - Simplify RobotHardware
     - Remove as much of Kookybotz / dead code as possible
   - TeleOp
-    - Duo2: VelocityControl for drive motors, study the impact 
-    - Duo2: Merge Arm subsystem control.
+    - Use PositionControl for extension
+    - Provide enough control for climbing
     - Basic Servo movement (decide controls)
   - Autonomous
-    - Retest drive forward, left, turn with VelocityControl
-    - Drive to fixed position
-    - Drive to fixed position, via (Study FTClib trajectories)
+    - Study jerking
+    - Drive to fixed position on mat
     - Drive to AprilTag
-
+    - Drive to fixed position, via (Study FTClib trajectories)
+    
 Welcome!
 
 This module, TeamCode, is the place where you will write/paste the code for your team's
