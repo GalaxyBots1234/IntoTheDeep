@@ -42,13 +42,12 @@ public class ArmSubsystem extends SubsystemBase
     private static final int    EXTENSION_MIN       = 0;
     private static final int    EXTENSION_MAX       = 13200;
 
-    private MotorEx armPitch;
-    private MotorEx armExtension;
+    private final MotorEx armPitch;
+    private final MotorEx armExtension;
 
     // Pitch gear used the pitch diameter of a 10-tooth and 42-tooth sprocket
     // GoBilda 30 RPM
-    private final double pitchP = 0.0015, pitchI = 0.0, pitchD = 0.0;
-    private double pitchF = 0;
+    private final double pitchP = 0.0015;
     public int pitchTargetDegree = PITCH_DEFAULT;
     public int extensionTarget = 0;
 
@@ -138,9 +137,6 @@ public class ArmSubsystem extends SubsystemBase
      * Ideally get rid of this method. The joystick should control power, and we should
      * set the target to the extremes. User will be able to control power, system will control
      * bounds.
-     *
-     * @param length
-     * @param checkBounds
      */
     public void changeExtension(int length, boolean checkBounds)
     {
