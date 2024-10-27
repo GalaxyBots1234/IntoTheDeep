@@ -3,9 +3,6 @@
 ## TODO
 
 - Hardware
-  - Springs
-  - New arm assembly
-  - Steel chain for pitch
   - Cabling & protection for Claw
   - New claw design / improvement with color sensor
 - Software
@@ -14,8 +11,10 @@
     - Simplify RobotHardware
     - Remove as much of Kookybotz / dead code as possible
   - TeleOp
-    - Use PositionControl for extension
-    - Provide enough control for climbing
+    - **Use PositionControl for extension**
+    - More angles for pitch
+    - Provide basic control for climbing
+    - Basic Limelight AprilTag
     - Basic Servo movement (decide controls)
   - Autonomous
     - Study jerking

@@ -12,7 +12,7 @@ public class RobotHardware2
     public  DriveSubsystem      drive;
     public  OdometrySubsystem   odo;
     private PinpointOdometry    gbOdo;
-    public  Arm2Subsystem       arm;
+    public ArmSubsystem arm;
 
     // -------------------------------------------------------------------------------------------
 
@@ -21,7 +21,7 @@ public class RobotHardware2
         instance = this;
 
         drive = new DriveSubsystem(hMap);
-        arm = new Arm2Subsystem(hMap);
+        arm = new ArmSubsystem(hMap);
 
         gbOdo = new PinpointOdometry(hMap,
                 new Pose2d(0, 0, new Rotation2d(0)));

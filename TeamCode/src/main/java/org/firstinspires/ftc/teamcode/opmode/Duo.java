@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.common.system.RobotHardware;
 /*import org.firstinspires.ftc.teamcode.common.subsystem.DroneSubsystem;
 import org.firstinspires.ftc.teamcode.common.subsystem.HangSubsystem;
 import org.firstinspires.ftc.teamcode.common.subsystem.IntakeSubsystem;*/
-import org.firstinspires.ftc.teamcode.common.system.Arm2Subsystem;
+import org.firstinspires.ftc.teamcode.common.system.ArmSubsystem;
 
 @Config
 @TeleOp(name = "Duo")
@@ -39,7 +39,7 @@ public class Duo extends CommandOpMode {
 //    private boolean lastJoystickDownLeft = false;
     private boolean extendIntake = true;
 
-    private Arm2Subsystem a2s;
+    private ArmSubsystem a2s;
 
     @Override
     public void initialize() {
@@ -52,7 +52,7 @@ public class Duo extends CommandOpMode {
         gamepadEx = new GamepadEx(gamepad1);
         gamepadEx2 = new GamepadEx(gamepad2);
 
-        a2s = new Arm2Subsystem(hardwareMap);
+        a2s = new ArmSubsystem(hardwareMap);
         robot.init(hardwareMap);
 
         gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_UP)
