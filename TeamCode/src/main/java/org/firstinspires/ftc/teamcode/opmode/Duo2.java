@@ -14,6 +14,8 @@ public class Duo2 extends CommandOpMode
     private RobotHardware2 robot;
     private GamepadEx gp1;
 
+    private double lastRunTime = 0.0;
+
     @Override
     public void initialize()
     {
@@ -30,9 +32,14 @@ public class Duo2 extends CommandOpMode
     @Override
     public void run()
     {
+        double runTime = System.nanoTime();
+
         super.run();
 
-        robot.arm.extensionPower(-gp1.getRightY(), true);
+        // telemetry.addData("hz ", 1000000000 / (loop - loopTime));
+
+        // robot.arm.extensionPower(-gp1.getRightY(), true);
+        robot.arm.changeExtension((int)(-gp1.getRightY() * 200), true);
 
         robot.drive.driveRobotCentric(gp1.getLeftX(), gp1.getLeftY(),
                 // gp1.getRightX(),
@@ -40,8 +47,10 @@ public class Duo2 extends CommandOpMode
                         gp1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER), 0.01)
         );
 
+        lastRunTime = runTime;
+
         telemetry.addData("Joysticks", "leftX: %.2f, leftY: %.2f", gp1.getLeftX(), gp1.getLeftY());
-        telemetry.addData("Arm", "Pitch: %.2f, Extension: %d", 0.1, robot.arm.getCurrentExtension());
+        telemetry.addData("Arm", "Pitch: %d, Extension: %d, %d", robot.arm.pitchTargetDegree, robot.arm.extensionTarget, robot.arm.getCurrentExtension());
         telemetry.update();
     }
 }
