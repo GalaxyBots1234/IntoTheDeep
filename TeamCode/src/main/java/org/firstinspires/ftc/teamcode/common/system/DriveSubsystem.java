@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class DriveSubsystem extends SubsystemBase
 {
     private static final double MAX_POWER   = 0.5;
-    private static final double motorP      = 0.5;
+    private static final double motorP      = 0.3;
 
     private MotorEx fL, fR, bL, bR;
     private MecanumDrive drive;
@@ -46,12 +46,12 @@ public class DriveSubsystem extends SubsystemBase
 
     @Override
     public void periodic() {
-
     }
 
     public void driveRobotCentric(double strafeSpeed, double forwardSpeed, double turnSpeed)
     {
         // Use this for tuning
+        // drive.setMaxSpeed(MAX_POWER);
         // for (MotorEx m: new MotorEx[] { fL, fR, bL, bR }) {
         //    m.setVeloCoefficients(motorP, 0.0, 0.0);
         // }
