@@ -3,7 +3,6 @@
 ## TODO
 
 - Hardware
-  - Cabling & protection for Claw
   - New claw design / improvement with color sensor
 - Software
   - General
@@ -12,10 +11,7 @@
     - Remove as much of Kookybotz / dead code as possible
   - TeleOp
     - **Use PositionControl for extension**
-    - More angles for pitch
-    - Provide basic control for climbing
     - Basic Limelight AprilTag
-    - Basic Servo movement (decide controls)
   - Autonomous
     - Study jerking
     - Drive to fixed position on mat

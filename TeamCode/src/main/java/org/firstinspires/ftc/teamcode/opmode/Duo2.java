@@ -27,6 +27,9 @@ public class Duo2 extends CommandOpMode
 
         gp1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                 .whenPressed(new InstantCommand(() -> robot.arm.pitchStepDown()));
+
+        gp1.getGamepadButton(GamepadKeys.Button.A)
+                .whenPressed(new InstantCommand(() -> robot.claw.toggle()));
     }
 
     @Override
