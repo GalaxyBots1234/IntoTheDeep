@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -8,13 +9,18 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.common.system.RobotHardware2;
 import org.firstinspires.ftc.teamcode.common.system.MathUtils;
 
+@Config
 @TeleOp(name = "Duo2")
 public class Duo2 extends CommandOpMode
 {
     private RobotHardware2 robot;
     private GamepadEx gp1;
 
+    public static boolean checkBounds = true;
+
     private double lastRunTime = 0.0;
+
+    // -------------------------------------------------------------------------------------------
 
     @Override
     public void initialize()
@@ -41,8 +47,8 @@ public class Duo2 extends CommandOpMode
 
         // telemetry.addData("hz ", 1000000000 / (loop - loopTime));
 
-        // robot.arm.extensionPower(-gp1.getRightY(), true);
-        robot.arm.changeExtension((int)(-gp1.getRightY() * 200), true);
+        // Joystick Y is negative when pushed forward.
+        robot.arm.extensionPower(-gp1.getRightY(), checkBounds);
 
         robot.drive.driveRobotCentric(gp1.getLeftX(), gp1.getLeftY(),
                 // gp1.getRightX(),
@@ -52,8 +58,8 @@ public class Duo2 extends CommandOpMode
 
         lastRunTime = runTime;
 
-        telemetry.addData("Joysticks", "leftX: %.2f, leftY: %.2f", gp1.getLeftX(), gp1.getLeftY());
-        telemetry.addData("Arm", "Pitch: %d, Extension: %d, %d", robot.arm.pitchTargetDegree, robot.arm.extensionTarget, robot.arm.getCurrentExtension());
+        telemetry.addData("GP1", "LX: %.2f, LY: %.2f, RY: %.2f", gp1.getLeftX(), gp1.getLeftY(), gp1.getRightY());
+        telemetry.addData("Arm", "Pitch: %d, Extension: %d", robot.arm.pitchTargetDegree, robot.arm.getCurrentExtension());
         telemetry.update();
     }
 }

@@ -27,32 +27,42 @@ import java.util.Arrays;
  *      - 14000 (Full stretch)
  * - BEST P = 0.001, I = 0, D = 0, F = 0
  */
-@Config
+// @Config
 public class ArmSubsystem extends SubsystemBase
 {
-    private static final int    PITCH_DEFAULT       = 90;
-    // private static final int    PITCH_MAX           = 100;
-    // private static final int    PITCH_MIN           = 0;
-    private static final double PITCH_GEARING       = 25.9 / 107;
-    private static final double PITCH_TICKS_DEGREE  = (Motor.GoBILDA.RPM_30.getCPR() / PITCH_GEARING) / 360.0;
-    private static final int[]  PITCH_STOPS         = {0, 15, 80, 90, 105};
-
-    // 400 units is the right about of negative move it can take at starting position.
-
-    private static final int    EXTENSION_MIN       = 0;
-    private static final int    EXTENSION_MAX       = 13200;
-
     private final MotorEx armPitch;
     private final MotorEx armExtension;
 
+    // 0    = For picking
+    // 20   = For clearing the submersible wall while retracting
+    // 80   = For high basket drop
+    // 90   = For bot to fit
+    // 100  = Latch onto first bar while climbing
+    // 110  = Clear the back wall
+    private static final int[]  PITCH_STOPS         = {0, 20, 80, 90, 100, 110};
+    private static final int    PITCH_DEFAULT       = 90;
+    private static final double PITCH_GEARING       = 25.9 / 107;
+    private static final double PITCH_TICKS_DEGREE  = (Motor.GoBILDA.RPM_30.getCPR() / PITCH_GEARING) / 360.0;
+    private static final double PITCH_POWER         = 0.75;
+
+    // 13500 is total range assuming the slides are fully rolled back at 90 degrees.
+    // Slides extend about 450 units as the pitch goes to zero.
+    // Numbers below assume starting fully rolled back.
+    private static final int    EXTENSION_MIN       = 0;
+    private static final int    EXTENSION_TILTBACK  = 2200;
+    private static final int    EXTENSION_MAX       = 13400;
+    private static final double EXTENSION_POWER     = 1.00;
+
     // Pitch gear used the pitch diameter of a 10-tooth and 42-tooth sprocket
     // GoBilda 30 RPM
-    private final double pitchP = 0.0015;
-    public int pitchTargetDegree = PITCH_DEFAULT;
-    public int extensionTarget = 0;
+    private static final double pitchP = 0.0015;
 
     // P = 2 produces a strong vibration. At p = 0.1, the arm is not able to fully expand or close.
-    public static double extensionP = .004, extensionI = 0.0, extensionD = 0.0;
+    private static final double extensionP = .004;
+
+    public int pitchTargetDegree = PITCH_DEFAULT;
+    public int extensionTarget = 0;
+    private boolean extensionAuto = false;
 
     // -------------------------------------------------------------------------------------------
 
@@ -68,8 +78,6 @@ public class ArmSubsystem extends SubsystemBase
 
         armExtension = new MotorEx(hMap, "motorArmExtension", Motor.GoBILDA.RPM_117);
         armExtension.stopAndResetEncoder();
-        // armExtension.setRunMode(Motor.RunMode.VelocityControl);
-        // armExtension.setVeloCoefficients(extensionP, extensionI, extensionD);
         armExtension.setRunMode(Motor.RunMode.PositionControl);
         armExtension.setPositionCoefficient(extensionP);
         armExtension.setPositionTolerance(50);
@@ -81,8 +89,11 @@ public class ArmSubsystem extends SubsystemBase
     @Override
     public void periodic()
     {
-        armPitch.set(armPitch.atTargetPosition() ? 0 : 0.75);
-        armExtension.set(armExtension.atTargetPosition() ? 0 : 1);
+        armPitch.set(armPitch.atTargetPosition() ? 0 : PITCH_POWER);
+
+        if (extensionAuto) {
+            armExtension.set(armExtension.atTargetPosition() ? 0 : EXTENSION_POWER);
+        }
     }
 
     public void pitchStepUp() {
@@ -109,9 +120,9 @@ public class ArmSubsystem extends SubsystemBase
     {
         degree = MathUtils.clamp(degree, PITCH_STOPS[0], PITCH_STOPS[PITCH_STOPS.length - 1]);
 
-        // To go byeond 90 deg, you must be extended at least 4000.
-        if (extensionTarget < 2000 && degree > 90) {
-            degree = 90;
+        // To go beyond 90 deg, you must be extended at least certain amount
+        if (extensionTarget < EXTENSION_TILTBACK && degree > PITCH_DEFAULT) {
+            degree = PITCH_DEFAULT;
         }
 
         this.pitchTargetDegree = degree;
@@ -120,24 +131,30 @@ public class ArmSubsystem extends SubsystemBase
 
     public void extensionPower(double power, boolean checkBounds)
     {
-        int cp = armExtension.getCurrentPosition();
-        double ms = Motor.GoBILDA.RPM_117.getAchievableMaxTicksPerSecond();
-
-        if (checkBounds && power < 0 && cp < 1500) {
-            ms *= cp / 1500.0;
-        } else if (checkBounds && power > 0 && cp > EXTENSION_MAX - 1500) {
-            ms *= (EXTENSION_MAX - cp) / 1500.0;
+        if (power > 0) {
+            extensionAuto = false;
+            extensionTarget = checkBounds ? EXTENSION_MAX : EXTENSION_MAX * 2;
+            armExtension.setTargetPosition(extensionTarget);
+        } else if (power < 0) {
+            extensionAuto = false;
+            extensionTarget = checkBounds ?
+                    ((pitchTargetDegree > PITCH_DEFAULT) ? EXTENSION_TILTBACK : EXTENSION_MIN) :
+                    -EXTENSION_MAX;
+            armExtension.setTargetPosition(extensionTarget);
+        } else if (power == 0) {
+            extensionTarget = armExtension.getCurrentPosition();
         }
 
-        armExtension.setVeloCoefficients(extensionP, extensionI, extensionD);
-        armExtension.setVelocity(power * ms);
+        if (!extensionAuto) {
+            armExtension.set(Math.abs(power));
+        }
     }
 
     /**
      * Ideally get rid of this method. The joystick should control power, and we should
      * set the target to the extremes. User will be able to control power, system will control
      * bounds.
-     */
+     * /
     public void changeExtension(int length, boolean checkBounds)
     {
         if (length == 0 && armExtension.atTargetPosition()) {
@@ -152,7 +169,7 @@ public class ArmSubsystem extends SubsystemBase
 
         if (extensionI == 0 && checkBounds) {
             cp = MathUtils.clamp(cp,
-                    (pitchTargetDegree > 90) ? 4000: EXTENSION_MIN,
+                    (pitchTargetDegree > 90) ? 1500: EXTENSION_MIN,
                     EXTENSION_MAX);
         }
 
@@ -161,7 +178,7 @@ public class ArmSubsystem extends SubsystemBase
         // Need this only when tuning
         // armExtension.setPositionCoefficient(extensionP);
         armExtension.setTargetPosition(extensionTarget);
-    }
+    }*/
 
     public int getCurrentExtension() {
         return armExtension.getCurrentPosition();
