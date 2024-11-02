@@ -37,9 +37,9 @@ public class ArmSubsystem extends SubsystemBase
     // 20   = For clearing the submersible wall while retracting
     // 80   = For high basket drop
     // 90   = For bot to fit
-    // 100  = Latch onto first bar while climbing
-    // 110  = Clear the back wall
-    private static final int[]  PITCH_STOPS         = {0, 20, 80, 90, 105, 125};
+    // 105  = Latch onto first bar while climbing
+    // 120  = Clear the back wall
+    private static final int[]  PITCH_STOPS         = {0, 20, 80, 90, 105, 120};
     private static final int    PITCH_DEFAULT       = 90;
     private static final double PITCH_GEARING       = 25.9 / 107;
     private static final double PITCH_TICKS_DEGREE  = (Motor.GoBILDA.RPM_30.getCPR() / PITCH_GEARING) / 360.0;
@@ -51,14 +51,13 @@ public class ArmSubsystem extends SubsystemBase
     private static final int    EXTENSION_MIN       = 0;
     private static final int    EXTENSION_TILTBACK  = 1600;
     private static final int    EXTENSION_MAX       = 13400;
+    private static final double EXTENSION_POWERREST = 0.30;
     private static final double EXTENSION_POWER     = 1.00;
 
     // Pitch gear used the pitch diameter of a 10-tooth and 42-tooth sprocket
     // GoBilda 30 RPM
-    private static final double pitchP = 0.0015;
-
-    // P = 2 produces a strong vibration. At p = 0.1, the arm is not able to fully expand or close.
-    private static final double extensionP = .005;
+    private static final double pitchP      = 0.0015;
+    private static final double extensionP  = 0.005;
 
     public int pitchTargetDegree = PITCH_DEFAULT;
     public int extensionTarget = 0;
@@ -92,7 +91,7 @@ public class ArmSubsystem extends SubsystemBase
         armPitch.set(armPitch.atTargetPosition() ? 0 : PITCH_POWER);
 
         if (extensionAuto) {
-            armExtension.set(armExtension.atTargetPosition() ? 0 : EXTENSION_POWER);
+            armExtension.set(armExtension.atTargetPosition() ? EXTENSION_POWERREST : EXTENSION_POWER);
         }
     }
 
@@ -149,36 +148,6 @@ public class ArmSubsystem extends SubsystemBase
             armExtension.set(Math.abs(power));
         }
     }
-
-    /**
-     * Ideally get rid of this method. The joystick should control power, and we should
-     * set the target to the extremes. User will be able to control power, system will control
-     * bounds.
-     * /
-    public void changeExtension(int length, boolean checkBounds)
-    {
-        if (length == 0 && armExtension.atTargetPosition()) {
-            return;
-        } else if (length == 0) {
-            extensionTarget = armExtension.getCurrentPosition();
-            armExtension.setTargetPosition(extensionTarget);
-            return;
-        }
-
-        int cp = extensionTarget + length;
-
-        if (extensionI == 0 && checkBounds) {
-            cp = MathUtils.clamp(cp,
-                    (pitchTargetDegree > 90) ? 1500: EXTENSION_MIN,
-                    EXTENSION_MAX);
-        }
-
-        extensionTarget = cp;
-
-        // Need this only when tuning
-        // armExtension.setPositionCoefficient(extensionP);
-        armExtension.setTargetPosition(extensionTarget);
-    }*/
 
     public boolean pitchAtTarget() {
         return armPitch.atTargetPosition();
