@@ -26,10 +26,6 @@ public class ClawSubsystem extends SubsystemBase
 
     // -------------------------------------------------------------------------------------------
 
-    @Override
-    public void periodic() {
-    }
-
     public void open()
     {
         servo.setPosition(CLAW_OPEN);
