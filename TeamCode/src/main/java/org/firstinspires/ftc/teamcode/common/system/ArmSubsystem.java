@@ -39,7 +39,7 @@ public class ArmSubsystem extends SubsystemBase
     // 90   = For bot to fit
     // 100  = Latch onto first bar while climbing
     // 110  = Clear the back wall
-    private static final int[]  PITCH_STOPS         = {0, 20, 80, 90, 100, 110};
+    private static final int[]  PITCH_STOPS         = {0, 20, 80, 90, 105, 125};
     private static final int    PITCH_DEFAULT       = 90;
     private static final double PITCH_GEARING       = 25.9 / 107;
     private static final double PITCH_TICKS_DEGREE  = (Motor.GoBILDA.RPM_30.getCPR() / PITCH_GEARING) / 360.0;
@@ -49,7 +49,7 @@ public class ArmSubsystem extends SubsystemBase
     // Slides extend about 450 units as the pitch goes to zero.
     // Numbers below assume starting fully rolled back.
     private static final int    EXTENSION_MIN       = 0;
-    private static final int    EXTENSION_TILTBACK  = 2200;
+    private static final int    EXTENSION_TILTBACK  = 1600;
     private static final int    EXTENSION_MAX       = 13400;
     private static final double EXTENSION_POWER     = 1.00;
 
@@ -58,7 +58,7 @@ public class ArmSubsystem extends SubsystemBase
     private static final double pitchP = 0.0015;
 
     // P = 2 produces a strong vibration. At p = 0.1, the arm is not able to fully expand or close.
-    private static final double extensionP = .004;
+    private static final double extensionP = .005;
 
     public int pitchTargetDegree = PITCH_DEFAULT;
     public int extensionTarget = 0;
@@ -179,6 +179,10 @@ public class ArmSubsystem extends SubsystemBase
         // armExtension.setPositionCoefficient(extensionP);
         armExtension.setTargetPosition(extensionTarget);
     }*/
+
+    public boolean pitchAtTarget() {
+        return armPitch.atTargetPosition();
+    }
 
     public boolean extensionAtTarget() {
         return armExtension.atTargetPosition();

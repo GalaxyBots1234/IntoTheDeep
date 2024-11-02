@@ -3,11 +3,16 @@ package org.firstinspires.ftc.teamcode.opmode;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.common.command.ArmExtensionCmd;
+import org.firstinspires.ftc.teamcode.common.command.ArmPitchCmd;
+import org.firstinspires.ftc.teamcode.common.command.ArmPitchDownCmd;
+import org.firstinspires.ftc.teamcode.common.command.ArmPitchUpCmd;
 import org.firstinspires.ftc.teamcode.common.system.RobotHardware;
 import org.firstinspires.ftc.teamcode.common.system.MathUtils;
 
@@ -40,16 +45,29 @@ public class Duo2 extends CommandOpMode
                 .whenPressed(new InstantCommand(() -> robot.claw.toggle()));
 
         gp1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-                .whenPressed(new ArmExtensionCmd(2000));
-        gp1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
-                .whenPressed(new ArmExtensionCmd(3000));
-
-        gp1.getGamepadButton(GamepadKeys.Button.B)
                 .whenPressed(new SequentialCommandGroup(
-                        new ArmExtensionCmd(2000),
-                        new ArmExtensionCmd(3000)
+                        new ArmExtensionCmd(0),
+                        new ArmExtensionCmd(0)
                 ));
 
+        gp1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
+                .whenPressed(new SequentialCommandGroup(
+                        new ArmExtensionCmd(6500),
+                        new ArmPitchUpCmd(),    // 105
+                        new ArmExtensionCmd(1700),
+                        new ArmPitchDownCmd(),  // 90
+                        new ArmExtensionCmd(9000),
+                        new ArmPitchUpCmd(),    // 105
+                        new ArmExtensionCmd(11500),
+                        new WaitCommand(1000),
+                        new ArmExtensionCmd(8500),
+                        new ArmPitchUpCmd(),    // 125
+                        new ArmExtensionCmd(6500),
+                        new ArmPitchDownCmd(),  // 105
+                        new ArmExtensionCmd(1700),
+                        new ArmPitchDownCmd(),  // 90
+                        new ArmExtensionCmd(2700)
+                ));
     }
 
     @Override
@@ -74,6 +92,7 @@ public class Duo2 extends CommandOpMode
 
         telemetry.addData("GP1", "LX: %.2f, LY: %.2f, RY: %.2f", gp1.getLeftX(), gp1.getLeftY(), gp1.getRightY());
         telemetry.addData("Arm", "Pitch: %d, Extension: %d", robot.arm.pitchTargetDegree, robot.arm.getCurrentExtension());
+        // telemetry.addData("Ori", "Pitch: %.2f, Height: %.2f", robot.rev.getPitch(), robot.rev.getHeight());
         telemetry.update();
     }
 }
