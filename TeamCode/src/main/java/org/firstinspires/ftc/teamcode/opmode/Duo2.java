@@ -3,16 +3,15 @@ package org.firstinspires.ftc.teamcode.opmode;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.common.command.ArmExtensionCmd;
-import org.firstinspires.ftc.teamcode.common.command.ArmPitchCmd;
 import org.firstinspires.ftc.teamcode.common.command.ArmPitchDownCmd;
 import org.firstinspires.ftc.teamcode.common.command.ArmPitchUpCmd;
+import org.firstinspires.ftc.teamcode.common.command.Level2ClimbCmd;
 import org.firstinspires.ftc.teamcode.common.system.RobotHardware;
 import org.firstinspires.ftc.teamcode.common.system.MathUtils;
 
@@ -45,23 +44,20 @@ public class Duo2 extends CommandOpMode
                 .whenPressed(new InstantCommand(() -> robot.claw.toggle()));
 
         gp1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-                .whenPressed(new SequentialCommandGroup(
-                        new ArmExtensionCmd(0),
-                        new ArmExtensionCmd(0)
-                ));
+                .whenPressed(new Level2ClimbCmd());
 
         gp1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
                 .whenPressed(new SequentialCommandGroup(
-                        new ArmExtensionCmd(6500),
-                        new ArmPitchUpCmd(),    // 105
-                        new ArmExtensionCmd(1700),
-                        new ArmPitchDownCmd(),  // 90
+                        // Assume we are already at Level 2
                         new ArmExtensionCmd(9000),
-                        new ArmPitchUpCmd(),    // 105
+                        // 105. Delay until the arm has cleared enough of sliders to go up.
+                        new ArmPitchUpCmd(),
+                        // This has to be done slower, so to not cause swinging
+                        // TBD: Revise this number down to 10500
                         new ArmExtensionCmd(11500),
                         new WaitCommand(1000),
                         new ArmExtensionCmd(8500),
-                        new ArmPitchUpCmd(),    // 125
+                        new ArmPitchUpCmd(),    // 120
                         new ArmExtensionCmd(6500),
                         new ArmPitchDownCmd(),  // 105
                         new ArmExtensionCmd(1700),
