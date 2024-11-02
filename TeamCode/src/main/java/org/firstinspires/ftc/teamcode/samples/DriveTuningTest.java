@@ -8,19 +8,19 @@ import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.common.command.PositionCommand;
-import org.firstinspires.ftc.teamcode.common.system.RobotHardware2;
+import org.firstinspires.ftc.teamcode.common.system.RobotHardware;
 
 @Config
 @TeleOp(name = "DriveTuningTest")
 public class DriveTuningTest extends CommandOpMode
 {
-    private RobotHardware2 robot;
+    private RobotHardware robot;
     private GamepadEx gp1;
 
     @Override
     public void initialize()
     {
-        robot = new RobotHardware2(hardwareMap);
+        robot = new RobotHardware(hardwareMap);
         gp1 = new GamepadEx(gamepad1);
 
         gp1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)

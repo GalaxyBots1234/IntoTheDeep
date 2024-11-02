@@ -3,17 +3,19 @@ package org.firstinspires.ftc.teamcode.opmode;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import org.firstinspires.ftc.teamcode.common.system.RobotHardware2;
+import org.firstinspires.ftc.teamcode.common.command.ArmExtensionCmd;
+import org.firstinspires.ftc.teamcode.common.system.RobotHardware;
 import org.firstinspires.ftc.teamcode.common.system.MathUtils;
 
 @Config
 @TeleOp(name = "Duo2")
 public class Duo2 extends CommandOpMode
 {
-    private RobotHardware2 robot;
+    private RobotHardware robot;
     private GamepadEx gp1;
 
     public static boolean checkBounds = true;
@@ -25,7 +27,7 @@ public class Duo2 extends CommandOpMode
     @Override
     public void initialize()
     {
-        robot = new RobotHardware2(hardwareMap);
+        robot = new RobotHardware(hardwareMap);
         gp1 = new GamepadEx(gamepad1);
 
         gp1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
@@ -36,6 +38,18 @@ public class Duo2 extends CommandOpMode
 
         gp1.getGamepadButton(GamepadKeys.Button.A)
                 .whenPressed(new InstantCommand(() -> robot.claw.toggle()));
+
+        gp1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
+                .whenPressed(new ArmExtensionCmd(2000));
+        gp1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
+                .whenPressed(new ArmExtensionCmd(3000));
+
+        gp1.getGamepadButton(GamepadKeys.Button.B)
+                .whenPressed(new SequentialCommandGroup(
+                        new ArmExtensionCmd(2000),
+                        new ArmExtensionCmd(3000)
+                ));
+
     }
 
     @Override

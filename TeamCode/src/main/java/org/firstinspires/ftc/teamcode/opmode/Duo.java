@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.common.commandbase.teleopcommand.HeightCha
 import org.firstinspires.ftc.teamcode.common.commandbase.teleopcommand.IntakeExtendCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.teleopcommand.IntakeRetractCommand;*/
 import org.firstinspires.ftc.teamcode.common.system.Globals;
-import org.firstinspires.ftc.teamcode.common.system.RobotHardware;
+import org.firstinspires.ftc.teamcode.samples.RobotHardware;
 /*import org.firstinspires.ftc.teamcode.common.subsystem.DroneSubsystem;
 import org.firstinspires.ftc.teamcode.common.subsystem.HangSubsystem;
 import org.firstinspires.ftc.teamcode.common.subsystem.IntakeSubsystem;*/

@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.common.command;
 
-import org.firstinspires.ftc.teamcode.common.system.RobotHardware2;
+import org.firstinspires.ftc.teamcode.common.system.RobotHardware;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDFController;
@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.util.Range;
 @Config
 public class PositionCommand extends CommandBase
 {
-    private final RobotHardware2 robot;
+    private final RobotHardware robot;
 
     public Pose2d targetPose;
 
@@ -47,7 +47,7 @@ public class PositionCommand extends CommandBase
 
     public PositionCommand(Pose2d targetPose)
     {
-        robot = RobotHardware2.instance;
+        robot = RobotHardware.instance;
         this.targetPose = targetPose;
 
         xController.reset();

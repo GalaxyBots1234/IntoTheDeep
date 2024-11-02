@@ -180,7 +180,17 @@ public class ArmSubsystem extends SubsystemBase
         armExtension.setTargetPosition(extensionTarget);
     }*/
 
+    public boolean extensionAtTarget() {
+        return armExtension.atTargetPosition();
+    }
+
     public int getCurrentExtension() {
         return armExtension.getCurrentPosition();
+    }
+
+    public void setExtension(int length)
+    {
+        extensionAuto = true;
+        armExtension.setTargetPosition(length);
     }
 }
