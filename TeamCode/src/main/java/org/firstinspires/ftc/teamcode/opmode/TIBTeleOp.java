@@ -89,6 +89,7 @@ public class TIBTeleOp extends CommandOpMode
         telemetry.addData("GP1", "LX: %.2f, LY: %.2f, RY: %.2f", gp1.getLeftX(), gp1.getLeftY(), gp1.getRightY());
         telemetry.addData("Arm", "Pitch: %d, Extension: %d", robot.arm.pitchTargetDegree, robot.arm.getCurrentExtension());
         // telemetry.addData("Ori", "Pitch: %.2f, Height: %.2f", robot.rev.getPitch(), robot.rev.getHeight());
+        // telemetry.addData("Sample", "%s", robot.rev.detectSample().name());
         telemetry.update();
     }
 }

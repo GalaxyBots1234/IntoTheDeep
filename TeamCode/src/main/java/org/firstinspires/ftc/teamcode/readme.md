@@ -6,7 +6,6 @@
   - Add color sensor to extension cable/mount to claw
   - New claw design
 - Software
-  - ColorSensor Basics
   - Limit arm extension at specific angles.
   - TeleOp
     - Basic Limelight AprilTag
