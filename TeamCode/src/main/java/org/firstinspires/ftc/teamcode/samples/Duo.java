@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmode;
+package org.firstinspires.ftc.teamcode.samples;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandOpMode;
@@ -16,19 +16,18 @@ import org.firstinspires.ftc.teamcode.common.commandbase.teleopcommand.DepositRe
 import org.firstinspires.ftc.teamcode.common.commandbase.teleopcommand.HeightChangeCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.teleopcommand.IntakeExtendCommand;
 import org.firstinspires.ftc.teamcode.common.commandbase.teleopcommand.IntakeRetractCommand;*/
-import org.firstinspires.ftc.teamcode.common.system.Globals;
-import org.firstinspires.ftc.teamcode.samples.RobotHardware;
 /*import org.firstinspires.ftc.teamcode.common.subsystem.DroneSubsystem;
 import org.firstinspires.ftc.teamcode.common.subsystem.HangSubsystem;
 import org.firstinspires.ftc.teamcode.common.subsystem.IntakeSubsystem;*/
 import org.firstinspires.ftc.teamcode.common.system.ArmSubsystem;
+import org.firstinspires.ftc.teamcode.common.system.RobotHardware;
 
 @Config
 @TeleOp(name = "Duo")
 @Disabled
 public class Duo extends CommandOpMode {
 
-    private final RobotHardware robot = RobotHardware.getInstance();
+    private final RobotHardware robot = RobotHardware.instance;
     private GamepadEx gamepadEx;
     private GamepadEx gamepadEx2;
 
@@ -45,15 +44,11 @@ public class Duo extends CommandOpMode {
     public void initialize() {
         CommandScheduler.getInstance().reset();
 
-        Globals.IS_AUTO = false;
-        Globals.stopIntaking();
-        Globals.stopScoring();
-
         gamepadEx = new GamepadEx(gamepad1);
         gamepadEx2 = new GamepadEx(gamepad2);
 
         a2s = new ArmSubsystem(hardwareMap);
-        robot.init(hardwareMap);
+        // robot.init(hardwareMap);
 
         gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_UP)
                 .whenPressed(new InstantCommand(() -> a2s.pitchStepUp()));
@@ -61,7 +56,7 @@ public class Duo extends CommandOpMode {
         gamepadEx.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                 .whenPressed(new InstantCommand(() -> a2s.pitchStepDown()));
 
-        robot.read();
+        // robot.read();
         while (opModeInInit()) {
             telemetry.addLine("Robot Initialized.");
             telemetry.update();

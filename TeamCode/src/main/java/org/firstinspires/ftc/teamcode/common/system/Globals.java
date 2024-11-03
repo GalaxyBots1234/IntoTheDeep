@@ -2,11 +2,11 @@ package org.firstinspires.ftc.teamcode.common.system;
 
 public class Globals
 {
-    public static boolean IS_AUTO = false;
+    // public static boolean IS_AUTO = false;
 
     /**
      * Robot State Constants
-     */
+     * /
     public static boolean IS_SCORING = false;
     public static boolean IS_INTAKING = false;
 
@@ -28,5 +28,5 @@ public class Globals
     public static void stopIntaking() {
         IS_SCORING = false;
         IS_INTAKING = false;
-    }
+    }*/
 }

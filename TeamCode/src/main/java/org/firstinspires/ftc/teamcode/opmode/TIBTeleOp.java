@@ -16,8 +16,8 @@ import org.firstinspires.ftc.teamcode.common.system.RobotHardware;
 import org.firstinspires.ftc.teamcode.common.system.MathUtils;
 
 @Config
-@TeleOp(name = "Duo2")
-public class Duo2 extends CommandOpMode
+@TeleOp(name = "ITD TIBTeleOp")
+public class TIBTeleOp extends CommandOpMode
 {
     private RobotHardware robot;
     private GamepadEx gp1;

@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.common.system;
 
 public class MathUtils
 {
+    /*
     public static double map(double x, double in_min, double in_max, double out_min, double out_max) {
         return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
@@ -12,9 +13,9 @@ public class MathUtils
         return Math.abs(val1 - val2) < 1e-6;
     }
 
-    /*public static Vector2D toCartesian(double r, double theta) {
+    public static Vector2D toCartesian(double r, double theta) {
         return new Vector2D(r * Math.cos(theta), r * Math.sin(theta));
-    }*/
+    }
 
     public static double getRadRotDist(double start, double end){
         double diff = (end - start + Math.PI) % (2 * Math.PI) - Math.PI;
@@ -23,7 +24,7 @@ public class MathUtils
 
     public static double getRotDist(double start, double end){
         return MathUtils.getRadRotDist(start, end);
-    }
+    }*/
 
     public static double joystickScalar(double num, double min) {
         return joystickScalar(num, min, 0.66, 4);

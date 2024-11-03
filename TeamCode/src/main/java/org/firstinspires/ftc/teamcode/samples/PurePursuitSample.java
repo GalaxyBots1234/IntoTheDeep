@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmode;
+package org.firstinspires.ftc.teamcode.samples;
 
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
@@ -26,6 +26,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.common.system.PinpointOdometry;
+import org.firstinspires.ftc.teamcode.common.system.RobotHardware;
 
 import java.util.Locale;
 import java.util.function.Consumer;
@@ -152,7 +153,7 @@ public class PurePursuitSample extends CommandOpMode
     }
 
     /**
-     * Use this to pass the autonomous command to the main {@link Robot} class.
+     * Use this to pass the autonomous command to the main {@link RobotHardware} class.
      *
      * @return the command to run in autonomous
      */

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.samples;
+package org.firstinspires.ftc.teamcode.tuning;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -27,7 +27,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 @TeleOp
 @Config
 @Disabled
-public class PIDFArm extends LinearOpMode
+public class PIDFArmTest extends LinearOpMode
 {
     private PIDFController controller;
 
