@@ -35,6 +35,7 @@ public class RevSubsystem extends SubsystemBase
 
         colorSensor = hMap.get(RevColorSensorV3.class, "sensor_color");
         colorSensor.setGain(12);
+        colorSensor.enableLed(true);
     }
 
     // -------------------------------------------------------------------------------------------
@@ -51,7 +52,7 @@ public class RevSubsystem extends SubsystemBase
     {
         double dist = colorSensor.getDistance(DistanceUnit.INCH);
 
-        if (dist > 2) {
+        if (dist > 1.75) {
             return FTCSample.NONE;
         }
 
@@ -63,8 +64,10 @@ public class RevSubsystem extends SubsystemBase
             return FTCSample.BLUE;
         } else if (hsv[0] > 60 && hsv[0] < 90) {
             return FTCSample.YELLOW;
+        } else if (hsv[0] > 10 && hsv[0] < 40) {
+            return FTCSample.RED;
         }
 
-        return FTCSample.RED;
+        return FTCSample.UNKNOWN;
     }
 }

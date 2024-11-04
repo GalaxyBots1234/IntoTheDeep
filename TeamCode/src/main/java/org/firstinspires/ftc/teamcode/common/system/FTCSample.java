@@ -5,5 +5,6 @@ public enum FTCSample
     NONE,
     RED,
     BLUE,
-    YELLOW
+    YELLOW,
+    UNKNOWN
 }
