@@ -6,12 +6,14 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.common.command.PositionCommand;
 import org.firstinspires.ftc.teamcode.common.system.RobotHardware;
 
 @Config
 @TeleOp(name = "DriveTuningTest")
+@Disabled
 public class DriveTuningTest extends CommandOpMode
 {
     private RobotHardware robot;
