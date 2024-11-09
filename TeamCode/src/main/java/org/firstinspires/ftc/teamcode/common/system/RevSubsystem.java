@@ -35,13 +35,18 @@ public class RevSubsystem extends SubsystemBase
 
         colorSensor = hMap.get(RevColorSensorV3.class, "sensor_color");
         colorSensor.setGain(12);
-        colorSensor.enableLed(true);
+        // No effect
+        // colorSensor.enableLed(false);
     }
 
     // -------------------------------------------------------------------------------------------
 
     public double getHeight() {
         return height.getDistance(DistanceUnit.INCH);
+    }
+
+    public double getSampleDistance() {
+        return colorSensor.getDistance(DistanceUnit.INCH);
     }
 
     public double getPitch() {
