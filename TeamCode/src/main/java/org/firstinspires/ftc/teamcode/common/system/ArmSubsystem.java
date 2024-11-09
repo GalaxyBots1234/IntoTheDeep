@@ -48,9 +48,11 @@ public class ArmSubsystem extends SubsystemBase
     // 13500 is total range assuming the slides are fully rolled back at 90 degrees.
     // Slides extend about 450 units as the pitch goes to zero.
     // Numbers below assume starting fully rolled back.
-    private static final int    EXTENSION_MIN       = 0;
+    private static final int    EXTENSION_VMIN      = 0;
+    private static final int    EXTENSION_HMIN      = 450;
     private static final int    EXTENSION_TILTBACK  = 1600;
-    private static final int    EXTENSION_MAX       = 13400;
+    private static final int    EXTENSION_HMAX      = 5000;
+    private static final int    EXTENSION_VMAX      = 13400;
     private static final double EXTENSION_POWERREST = 0.30;
     private static final double EXTENSION_POWER     = 1.00;
 
@@ -123,6 +125,10 @@ public class ArmSubsystem extends SubsystemBase
         if (extensionTarget < EXTENSION_TILTBACK && degree > PITCH_DEFAULT) {
             degree = PITCH_DEFAULT;
         }
+        // To go less than 45 deg, you must not be too long
+        if (degree < 45 && extensionTarget > EXTENSION_HMAX) {
+            setExtension(EXTENSION_HMAX);
+        }
 
         this.pitchTargetDegree = degree;
         armPitch.setTargetPosition((int) ((PITCH_DEFAULT - degree) * PITCH_TICKS_DEGREE));
@@ -130,15 +136,18 @@ public class ArmSubsystem extends SubsystemBase
 
     public void extensionPower(double power, boolean checkBounds)
     {
+        final int min = (pitchTargetDegree < PITCH_DEFAULT) ? EXTENSION_HMIN : EXTENSION_VMIN;
+        final int max = (pitchTargetDegree < 45) ? EXTENSION_HMAX : EXTENSION_VMAX;
+
         if (power > 0) {
             extensionAuto = false;
-            extensionTarget = checkBounds ? EXTENSION_MAX : EXTENSION_MAX * 2;
+            extensionTarget = checkBounds ? max : max * 2;
             armExtension.setTargetPosition(extensionTarget);
         } else if (power < 0) {
             extensionAuto = false;
             extensionTarget = checkBounds ?
-                    ((pitchTargetDegree > PITCH_DEFAULT) ? EXTENSION_TILTBACK : EXTENSION_MIN) :
-                    -EXTENSION_MAX;
+                    ((pitchTargetDegree > PITCH_DEFAULT) ? EXTENSION_TILTBACK : min) :
+                    -max;
             armExtension.setTargetPosition(extensionTarget);
         } else if (power == 0) {
             extensionTarget = armExtension.getCurrentPosition();
