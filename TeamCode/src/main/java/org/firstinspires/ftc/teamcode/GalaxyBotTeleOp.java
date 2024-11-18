@@ -18,6 +18,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 @TeleOp(name="GalaxyBot-TeleOp", group="Opmode")
 public class GalaxyBotTeleOp extends OpMode {
     private GalaxyBot robot;
+    String direction = "";
 
     private Gamepad currentGamepad1 = new Gamepad();
     private Gamepad previousGamepad1 = new Gamepad();
@@ -84,6 +85,7 @@ public class GalaxyBotTeleOp extends OpMode {
     @Override
     public void init() {
         robot = new GalaxyBot(hardwareMap);
+        robot.resetIntake();
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         imu = hardwareMap.get(IMU.class, "imu");
@@ -97,12 +99,32 @@ public class GalaxyBotTeleOp extends OpMode {
         );
         imu.initialize(myIMUparameters);
     }
+    private void pushyPush()
+    {
+        if(gamepad2.dpad_right)
+        {
+            robot.intakePushForward(0.01);
+            direction = "Moving forward";
+        }
+        else if (gamepad2.dpad_left)
+        {
+            robot.intakePushBack(0.01);
+            direction = "Moving back";
+        }
+        else
+        {
+           robot.intakePushBack(0.00);
+           direction = "Not moving";
+        }
+    }
 
 
-    public void start() {
+    public void start()
+    {
     }
     @Override
-    public void loop() {
+    public void loop()
+    {
         try {
             copyGamepad();
         } catch (RobotCoreException e) {
@@ -110,6 +132,7 @@ public class GalaxyBotTeleOp extends OpMode {
         }
         double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         mecanumDrive(botHeading);
+        telemetry.addData("direction: ",  direction);
         telemetry.update();
     }
 }
