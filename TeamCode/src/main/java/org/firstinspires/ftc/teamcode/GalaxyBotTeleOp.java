@@ -18,13 +18,15 @@ import org.firstinspires.ftc.vision.VisionPortal;
 @TeleOp(name="GalaxyBot-TeleOp", group="Opmode")
 public class GalaxyBotTeleOp extends OpMode {
     private GalaxyBot robot;
-    String direction = "";
+    String pushDirection = "";
+    String slideDirection = "";
 
     private Gamepad currentGamepad1 = new Gamepad();
     private Gamepad previousGamepad1 = new Gamepad();
 
     private Gamepad currentGamepad2 = new Gamepad();
     private Gamepad previousGamepad2 = new Gamepad();
+
 
     private IMU imu;
 
@@ -103,17 +105,33 @@ public class GalaxyBotTeleOp extends OpMode {
         if(gamepad2.dpad_right)
         {
             robot.intakePushForward(0.6);
-            direction = "Moving forward";
+            pushDirection = "Moving forward";
         }
         else if (gamepad2.dpad_left)
         {
             robot.intakePushBack(0.6);
-            direction = "Moving back";
+            pushDirection = "Moving back";
         }
         else
         {
            robot.intakePushBack(0.00);
-           direction = "Not moving";
+           pushDirection = "Not moving";
+        }
+    }
+
+    private void slimSlidy()
+    {
+        if(currentGamepad2.dpad_up && previousGamepad2.dpad_up) {
+            robot.slideUp(0.8f);
+            slideDirection = "Slides going up";
+        }
+        else if (currentGamepad2.dpad_down && previousGamepad2.dpad_down) {
+            robot.slideDown(0.8f);
+            slideDirection = "Slides going down";
+        }
+        else {
+            robot.slideStop();
+            slideDirection = "Slides stopped";
         }
     }
 
@@ -132,7 +150,9 @@ public class GalaxyBotTeleOp extends OpMode {
         double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         mecanumDrive(botHeading);
         pushyPush();
-        telemetry.addData("direction: ",  direction);
+        slimSlidy();
+        telemetry.addData("push direction: ",  pushDirection);
+        telemetry.addData("slide direction: ", slideDirection);
         telemetry.update();
     }
 }

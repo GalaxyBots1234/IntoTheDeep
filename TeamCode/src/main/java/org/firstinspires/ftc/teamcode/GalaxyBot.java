@@ -17,7 +17,8 @@ public class GalaxyBot {
     private DcMotor rightFront;
     private CRServo leftIntake;
     private CRServo rightIntake;
-
+    private DcMotor rightSlide;
+    private DcMotor  leftSlide;
     private HardwareMap hwMap;
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -33,16 +34,25 @@ public class GalaxyBot {
         rightBack = hwMap.get(DcMotor.class, "right_back");
         leftIntake = hwMap.get(CRServo.class, "left_intake");
         rightIntake = hwMap.get(CRServo.class, "right_intake");
+        rightSlide = hwMap.get(DcMotor.class,"right_slide" );
+        leftSlide = hwMap.get(DcMotor.class,"left_slide" );
 
         leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftSlide.setDirection(DcMotorSimple.Direction.REVERSE);
 
         leftIntake.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+
     }
 
     public void drive(double speed) {
@@ -68,6 +78,21 @@ public class GalaxyBot {
     {
         leftIntake.setPower(-amount);
         rightIntake.setPower(-amount);
+    }
+    public void slideUp (float magnitude)
+    {
+        leftSlide.setPower(magnitude);
+        rightSlide.setPower(magnitude);
+    }
+    public void slideDown(float magnitude)
+    {
+        leftSlide.setPower(-magnitude);
+        rightSlide.setPower(-magnitude);
+    }
+    public void slideStop()
+    {
+        leftSlide.setPower(0.0);
+        rightSlide.setPower(0.0);
     }
 
     public double getElapsedTime() {
