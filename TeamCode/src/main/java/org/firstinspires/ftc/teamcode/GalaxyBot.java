@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -14,8 +15,8 @@ public class GalaxyBot {
     private DcMotor leftFront;
     private DcMotor rightBack;
     private DcMotor rightFront;
-    private Servo leftIntake;
-    private Servo rightIntake;
+    private CRServo leftIntake;
+    private CRServo rightIntake;
 
     private HardwareMap hwMap;
     private ElapsedTime runtime = new ElapsedTime();
@@ -30,8 +31,8 @@ public class GalaxyBot {
         rightFront = hwMap.get(DcMotor.class, "right_front");
         leftBack = hwMap.get(DcMotor.class, "left_back");
         rightBack = hwMap.get(DcMotor.class, "right_back");
-        leftIntake = hwMap.get(Servo.class, "left_intake");
-        rightIntake = hwMap.get(Servo.class, "right_intake");
+        leftIntake = hwMap.get(CRServo.class, "left_intake");
+        rightIntake = hwMap.get(CRServo.class, "right_intake");
 
         leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -40,7 +41,8 @@ public class GalaxyBot {
 
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftIntake.setDirection(Servo.Direction.REVERSE);
+
+        leftIntake.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     public void drive(double speed) {
@@ -57,24 +59,15 @@ public class GalaxyBot {
         rightFront.setPower(frontRightPower);
     }
 
-    public void intake(double position) {
-        leftIntake.setPosition(position);
-        rightIntake.setPosition(position);
-    }
-
-    public void resetIntake()
-    {
-        intake(0.00);
-    }
     public void intakePushForward(double amount)
     {
-        leftIntake.setPosition(leftIntake.getPosition() + amount);
-        rightIntake.setPosition(rightIntake.getPosition() + amount);
+        leftIntake.setPower(amount);
+        rightIntake.setPower(amount);
     }
     public void intakePushBack(double amount)
     {
-        leftIntake.setPosition(leftIntake.getPosition() - amount);
-        rightIntake.setPosition(rightIntake.getPosition() - amount);
+        leftIntake.setPower(-amount);
+        rightIntake.setPower(-amount);
     }
 
     public double getElapsedTime() {

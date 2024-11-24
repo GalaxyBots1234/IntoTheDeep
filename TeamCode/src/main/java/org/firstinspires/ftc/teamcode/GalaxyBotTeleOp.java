@@ -85,7 +85,6 @@ public class GalaxyBotTeleOp extends OpMode {
     @Override
     public void init() {
         robot = new GalaxyBot(hardwareMap);
-        robot.resetIntake();
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         imu = hardwareMap.get(IMU.class, "imu");
@@ -103,12 +102,12 @@ public class GalaxyBotTeleOp extends OpMode {
     {
         if(gamepad2.dpad_right)
         {
-            robot.intakePushForward(0.01);
+            robot.intakePushForward(0.6);
             direction = "Moving forward";
         }
         else if (gamepad2.dpad_left)
         {
-            robot.intakePushBack(0.01);
+            robot.intakePushBack(0.6);
             direction = "Moving back";
         }
         else
@@ -132,6 +131,7 @@ public class GalaxyBotTeleOp extends OpMode {
         }
         double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         mecanumDrive(botHeading);
+        pushyPush();
         telemetry.addData("direction: ",  direction);
         telemetry.update();
     }
