@@ -20,6 +20,8 @@ public class GalaxyBot {
     private DcMotor rightSlide;
     private DcMotor  leftSlide;
     private CRServo geckoIntake;
+    private CRServo leftSpin;
+    private CRServo rightSpin;
     private HardwareMap hwMap;
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -38,6 +40,8 @@ public class GalaxyBot {
         rightSlide = hwMap.get(DcMotor.class,"right_slide" );
         leftSlide = hwMap.get(DcMotor.class,"left_slide" );
         geckoIntake = hwMap.get(CRServo.class, "gecko_intake");
+        leftSpin = hwMap.get(CRServo.class,"left_spin");
+        rightSpin = hwMap.get(CRServo.class, "right_spin");
 
         leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -49,8 +53,9 @@ public class GalaxyBot {
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
         leftSlide.setDirection(DcMotorSimple.Direction.REVERSE);
-
+        leftSpin.setDirection(CRServo.Direction.REVERSE);
         leftIntake.setDirection(DcMotorSimple.Direction.REVERSE);
+
         leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -103,6 +108,22 @@ public class GalaxyBot {
     public void geckoStop()
     {
         geckoIntake.setPower(0.0);
+    }
+    public void spinUp()
+    {
+        leftSpin.setPower(0.4);
+        rightSpin.setPower(0.4);
+    }
+    public void spinDown()
+    {
+        leftSpin.setPower(-0.4);
+        rightSpin.setPower(-0.4);
+    }
+
+    public void spinStop()
+    {
+        leftSpin.setPower(0.0);
+        rightSpin.setPower(0.0);
     }
 
     public double getElapsedTime() {

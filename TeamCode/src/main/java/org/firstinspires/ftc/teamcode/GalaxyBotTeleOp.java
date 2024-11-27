@@ -21,6 +21,7 @@ public class GalaxyBotTeleOp extends OpMode {
     String pushDirection = "";
     String slideDirection = "";
     String geckoDirection = "";
+    String spinnerDirection = "";
 
     private Gamepad currentGamepad1 = new Gamepad();
     private Gamepad previousGamepad1 = new Gamepad();
@@ -136,7 +137,7 @@ public class GalaxyBotTeleOp extends OpMode {
         }
     }
 
-    private void SpinnySpin()
+    private void geckoIntake()
     {
         if (currentGamepad2.a && previousGamepad2.a) {
             robot.geckoStart(0.8);
@@ -144,6 +145,20 @@ public class GalaxyBotTeleOp extends OpMode {
         } else {
             robot.geckoStop();
             geckoDirection = "Wheels not intaeking";
+        }
+    }
+    private void spinnySpin()
+    {
+        if (currentGamepad2.b && previousGamepad2.b) {
+            robot.spinUp();
+            spinnerDirection = "Spinners up";
+        } else if (currentGamepad2.x && previousGamepad2.y) {
+            robot.spinDown();
+            spinnerDirection = "Spinner down";
+        }
+        else {
+            robot.spinStop();
+            spinnerDirection = "Spinner stopped";
         }
     }
 
@@ -163,11 +178,13 @@ public class GalaxyBotTeleOp extends OpMode {
         mecanumDrive(botHeading);
         pushyPush();
         slimSlidy();
-        SpinnySpin();
+        geckoIntake();
+        spinnySpin();
 
         telemetry.addData("push direction: ",  pushDirection);
         telemetry.addData("slide direction: ", slideDirection);
         telemetry.addData("wheel direction: ", geckoDirection);
+        telemetry.addData("Spinner direction", spinnerDirection);
         telemetry.update();
     }
 }
