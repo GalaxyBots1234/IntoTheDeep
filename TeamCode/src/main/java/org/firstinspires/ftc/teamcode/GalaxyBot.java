@@ -19,6 +19,7 @@ public class GalaxyBot {
     private CRServo rightIntake;
     private DcMotor rightSlide;
     private DcMotor  leftSlide;
+    private CRServo geckoIntake;
     private HardwareMap hwMap;
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -36,6 +37,7 @@ public class GalaxyBot {
         rightIntake = hwMap.get(CRServo.class, "right_intake");
         rightSlide = hwMap.get(DcMotor.class,"right_slide" );
         leftSlide = hwMap.get(DcMotor.class,"left_slide" );
+        geckoIntake = hwMap.get(CRServo.class, "gecko_intake");
 
         leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -93,6 +95,14 @@ public class GalaxyBot {
     {
         leftSlide.setPower(0.0);
         rightSlide.setPower(0.0);
+    }
+    public void geckoStart(double power)
+    {
+        geckoIntake.setPower(power);
+    }
+    public void geckoStop()
+    {
+        geckoIntake.setPower(0.0);
     }
 
     public double getElapsedTime() {
