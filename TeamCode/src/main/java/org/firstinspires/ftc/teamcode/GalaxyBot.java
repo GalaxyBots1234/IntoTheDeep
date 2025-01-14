@@ -1,44 +1,73 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Color;
+
+import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.concurrent.TimeUnit;
 
+@Config
 public class GalaxyBot {
-
     private DcMotor leftBack;
     private DcMotor leftFront;
+
+    int driveDir = 1;
+
 
     private DcMotor rightBack;
     private DcMotor rightFront;
 
-    private DcMotor leftSlide;
-    private DcMotor rightSlide;
+    NormalizedRGBA clawColors;
 
-    CRServo leftIntake;
-    CRServo rightIntake;
+    public DcMotorEx leftSlide;
+    public DcMotorEx rightSlide;
 
-    private Servo leftSwing;
-    private Servo rightSwing;
+    public RevColorSensorV3 clawSense;
+
+    Servo leftIntake;
+    Servo rightIntake;
+
+    Servo leftSwing;
+    Servo rightSwing;
 
 //  private DcMotor rightSlide;
 //   private DcMotor  leftSlide;
 
-    private CRServo geckoIntake;
+    public Servo intakeClaw;
+    public Servo twister;
 
-    public int swingStage = 0;
+    public boolean swingUp = false;
     public boolean clawOpen = false;
+    public boolean intakeClawOpen = false;
+    public boolean spinUp = false;
+    public boolean clawSpinUp = false;
+    public boolean intakeExtend = false;
+    public boolean slideUp = false;
+    public boolean twisted = false;
 
-    public Servo leftSpin;
+    public static double intakeDetractPos = 0.0;
+    public static double intakeExtendPos = 0.58;
+
+    public static int slideUpPos = 3100;
+    public static int slideDownPos = 50;
+
+    public boolean redDetected = false;
+    public boolean blueDetected = false;
+    public boolean yellowDetected = false;
+
+    // public Servo leftSpin;
     public Servo rightSpin;
-
-    private CRServo clawSpinner;
     private Servo claw;
+    public Servo clawSpinner;
 
     private HardwareMap hwMap;
     private ElapsedTime runtime = new ElapsedTime();
@@ -49,28 +78,48 @@ public class GalaxyBot {
     }
 
     private void map() {
+        swingUp = false;
+        clawOpen = false;
+        intakeClawOpen = false;
+        spinUp = false;
+        clawSpinUp = false;
+        intakeExtend = false;
+        slideUp = false;
+        twisted = false;
         leftFront = hwMap.get(DcMotor.class, "left_front");
         rightFront = hwMap.get(DcMotor.class, "right_front");
         leftBack = hwMap.get(DcMotor.class, "left_back");
         rightBack = hwMap.get(DcMotor.class, "right_back");
 
-        leftIntake = hwMap.get(CRServo.class, "left_intake");
-        rightIntake = hwMap.get(CRServo.class, "right_intake");
+        leftIntake = hwMap.get(Servo.class, "left_intake");
+        rightIntake = hwMap.get(Servo.class, "right_intake");
+
+        clawSense = hwMap.get(RevColorSensorV3.class, "claw_sense");
 
         leftSwing = hwMap.get(Servo.class, "left_swing");
         rightSwing = hwMap.get(Servo.class, "right_swing");
 
+        twister = hwMap.get(Servo.class, "rotater");
 
-        rightSlide = hwMap.get(DcMotor.class,"right_slide");
-        leftSlide = hwMap.get(DcMotor.class,"left_slide");
+        rightSlide = hwMap.get(DcMotorEx.class,"right_slide");
+        leftSlide = hwMap.get(DcMotorEx.class,"left_slide");
+        rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightSlide.setTargetPositionTolerance(5);
+        leftSlide.setTargetPositionTolerance(5);
+// Cristiano Ronaldo
+        // rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        // leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        geckoIntake = hwMap.get(CRServo.class, "gecko_intake");
+        intakeClaw = hwMap.get(Servo.class, "intake_claw");
 
-        leftSpin = hwMap.get(Servo.class,"left_spin");
+        // leftSpin = hwMap.get(Servo.class,"left_spin");
         rightSpin = hwMap.get(Servo.class, "right_spin");
-        clawSpinner = hwMap.get(CRServo.class, "claw_spinner");
 
         claw = hwMap.get(Servo.class, "claw");
+        clawSpinner = hwMap.get(Servo.class, "claw_spinner");
+
+        clawSense.setGain(5);
 
         leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -81,16 +130,14 @@ public class GalaxyBot {
 
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftSlide.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftSpin.setDirection(Servo.Direction.REVERSE);
+        rightSlide.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightSpin.setDirection(Servo.Direction.REVERSE);
 
-        leftIntake.setDirection(CRServo.Direction.REVERSE);
-        leftSwing.setDirection(Servo.Direction.REVERSE);
+        rightIntake.setDirection(Servo.Direction.REVERSE);
+        rightSwing.setDirection(Servo.Direction.REVERSE);
 
        leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
        rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-
     }
 
     public void drive(double speed) {
@@ -107,116 +154,273 @@ public class GalaxyBot {
         rightFront.setPower(frontRightPower);
     }
 
-    public void slideUp (float magnitude)
+    public void updateSense()
     {
-        leftSlide.setPower(magnitude);
-        rightSlide.setPower(magnitude);
-    }
-    public void slideDown(float magnitude)
-    {
-        leftSlide.setPower(-magnitude);
-        rightSlide.setPower(-magnitude);
-    }
-    public void slideStop()
-    {
-        leftSlide.setPower(0.0);
-        rightSlide.setPower(0.0);
+        float[] hsv = new float[3];
+        clawColors = clawSense.getNormalizedColors();
+
+        Color.colorToHSV(clawColors.toColor(), hsv);
+        if (hsv[0] > 200 && hsv[0] < 240)
+        {
+            blueDetected = true;
+            redDetected = false;
+            yellowDetected = false;
+        }
+        else if (hsv[0] > 60 && hsv[0] < 90)
+        {
+            blueDetected = false;
+            redDetected = false;
+            yellowDetected = true;
+        }
+        else if (hsv[0] > 10 && hsv[0] < 40)
+        {
+            blueDetected = false;
+            redDetected = true;
+            yellowDetected = false;
+        }
+        else
+        {
+            blueDetected = false;
+            redDetected = false;
+            yellowDetected = false;
+        }
     }
 
-    public void intakeDetract()
+    public static double slideSpeed = 1.0;
+    public void slide()
     {
-        leftIntake.setPower(0.8);
-        rightIntake.setPower(0.8);
+        slideUp = !slideUp;
+
+        if (slideUp)
+        {
+            leftSlide.setTargetPosition(slideUpPos);
+            rightSlide.setTargetPosition(slideUpPos);
+
+        }
+        else
+        {
+            leftSlide.setTargetPosition(slideDownPos);
+            rightSlide.setTargetPosition(slideDownPos);
+
+        }
+        leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftSlide.setPower(slideSpeed);
+        rightSlide.setPower(slideSpeed);
     }
 
-    public void intakeStop()
+    public void slideDown()
     {
-        leftIntake.setPower(0.0);
-        rightIntake.setPower(0.0);
+        slideUp = false;
+
+        leftSlide.setTargetPosition(slideDownPos);
+        rightSlide.setTargetPosition(slideDownPos);
+
+        leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftSlide.setPower(-slideSpeed);
+        rightSlide.setPower(-slideSpeed);
     }
 
-    public void intakeExtend()
+    public void slideUp()
     {
-        leftIntake.setPower(-0.8);
-        rightIntake.setPower(-0.8);
+        slideUp = true;
+
+        leftSlide.setTargetPosition(slideUpPos);
+        rightSlide.setTargetPosition(slideUpPos);
+
+        leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftSlide.setPower(slideSpeed);
+        rightSlide.setPower(slideSpeed);
     }
 
-    public void clawOpen()
+    public void intakeExtend() {
+        intakeExtend = true;
+        leftIntake.setPosition(intakeExtendPos);
+        rightIntake.setPosition(intakeExtendPos);
+    }
+
+    public void intakeDetract() {
+        intakeExtend = false;
+        leftIntake.setPosition(intakeDetractPos);
+        rightIntake.setPosition(intakeDetractPos);
+    }
+
+    public void intakePreciseExtend(float amount)
+    {
+        leftIntake.setPosition(leftIntake.getPosition() + amount);
+        rightIntake.setPosition(rightIntake.getPosition() + amount);
+    }
+
+    public void intakePreciseDetract(float amount)
+    {
+        leftIntake.setPosition(leftIntake.getPosition() - amount);
+        rightIntake.setPosition(rightIntake.getPosition() - amount);
+    }
+
+    public static double unTwistPos = 0.27;
+    public static double twistPos = 0.63;
+
+    public void doTwist()
+    {
+        twisted = true;
+        twister.setPosition(twistPos);
+    }
+
+    public void doUnTwist()
+    {
+        twisted = false;
+        twister.setPosition(unTwistPos);
+    }
+
+    public static double clawOpenPos = 0.75;
+    public static double clawClosedPos = 1.0;
+
+    public void claw()
+    {
+        clawOpen = !clawOpen;
+
+        if (clawOpen)
+            doClawOpen();
+        else
+            doClawClose();
+    }
+
+    public void doClawOpen()
     {
         clawOpen = true;
-        claw.setPosition(0.0);
+        claw.setPosition(clawOpenPos);
     }
 
-    public void clawClose()
+    public void doClawClose()
     {
         clawOpen = false;
-        claw.setPosition(0.4);
+        claw.setPosition(clawClosedPos);
     }
 
-    public void swingUp()
+    public static double intakeClawOpenPos = 0;
+    public static double intakeClawClosePos = 0.31;
+    public void intakeClaw()
     {
-        swingStage++;
+        intakeClawOpen = !intakeClawOpen;
+
+        if (intakeClawOpen)
+            intakeClawOpen();
+        else
+            intakeClawClose();
     }
 
-    public void swingDown()
+    public void intakeClawOpen()
     {
-        swingStage--;
+        intakeClawOpen = true;
+        intakeClaw.setPosition(intakeClawOpenPos);
     }
 
-    public void swingUpdate()
+    public void intakeClawClose()
     {
-        if (swingStage == -1)
+        intakeClawOpen = false;
+        intakeClaw.setPosition(intakeClawClosePos);
+    }
+
+    public static double swingUpPos = 0.65;
+    public static double swingDownPos = 0.03;
+    public void swing()
+    {
+        swingUp = !swingUp;
+        if (swingUp)
         {
-            leftSwing.setPosition(0.39);
-            rightSwing.setPosition(0.39);
+            doSwingUp();
         }
-        else if (swingStage == 0)
+        else
         {
-            leftSwing.setPosition(0.54);
-            rightSwing.setPosition(0.54);
+            doSwingDown();
         }
-        else if (swingStage == 1)
+    }
+
+    public void doSwingUp()
+    {
+        swingUp = true;
+        leftSwing.setPosition(swingUpPos);
+        rightSwing.setPosition(swingUpPos);
+    }
+
+    public void doSwingDown()
+    {
+        swingUp = false;
+        leftSwing.setPosition(swingDownPos);
+        rightSwing.setPosition(swingDownPos);
+    }
+
+    public static double swingUpAuto = 0.3;
+    public static double swingDownAuto = 0.03;
+
+    public void doAutoUpPos() {
+        leftSwing.setPosition(swingUpAuto);
+        rightSwing.setPosition(swingUpAuto);
+    }
+
+    public void doAutoDownPos() {
+        leftSwing.setPosition(swingDownAuto);
+        rightSwing.setPosition(swingDownAuto);
+    }
+
+    public static double intakeWristPosUp = 0;
+    public static double intakeWristPosDown = 0.1;
+
+    public void doAutoClawDown() {
+
+    }
+
+    public void doAutoClawUp() {
+
+    }
+
+    public static double spinUpPos = 0.92;
+    public static double spinDownPos = 0.0;
+    public static double spinTwistPos = 0.05;
+    public void spin()
+    {
+        spinUp = !spinUp;
+        if (spinUp) {
+            spinUp();
+        }
+        else
         {
-            leftSwing.setPosition(0.9);
-            rightSwing.setPosition(0.9);
+            spinDown();
         }
-    }
-
-    public void geckoStart(double power)
-    {
-        geckoIntake.setPower(power);
-    }
-
-    public void geckoStop()
-    {
-        geckoIntake.setPower(0.0);
-    }
-
-    public void spinUp()
-    {
-        leftSpin.setPosition(0.9);
-        rightSpin.setPosition(0.9);
     }
 
     public void spinDown()
     {
-        leftSpin.setPosition(0.0);
-        rightSpin.setPosition(0.0);
+        spinUp = false;
+        rightSpin.setPosition(spinDownPos);
     }
 
-    public void clawSpinUp()
+    public void spinUp()
     {
-        clawSpinner.setPower(1.0);
+        spinUp = true;
+        rightSpin.setPosition(spinUpPos);
     }
 
-    public void clawSpinDown()
+    public void spinTwist()
     {
-        clawSpinner.setPower(-1.0);
+        spinUp = false;
+        rightSpin.setPosition(spinTwistPos);
     }
 
-    public void clawSpinStop()
+    public static double clawSpinUpPos = 0.03;
+    public static double clawSpinDownPos = 0.03;
+    public void clawSpin()
     {
-        clawSpinner.setPower(0.0);
+        clawSpinUp = !clawSpinUp;
+        if (clawSpinUp) {
+            clawSpinner.setPosition(clawSpinUpPos);
+        }
+        else
+        {
+            clawSpinner.setPosition(clawSpinDownPos);
+        }
     }
 
     public double getElapsedTime() {
