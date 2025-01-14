@@ -40,7 +40,6 @@ public class GalaxyRedSpecimen extends LinearOpMode {
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-
         TrajectoryActionBuilder specimen = drive.actionBuilder(startPose)
                 .lineToY(y);
         //.lineToX(x);
