@@ -57,8 +57,6 @@ public class GalaxyBot {
     public static double intakeDetractPos = 0.0;
     public static double intakeExtendPos = 0.58;
 
-    public static int slideUpPos = 2850;
-    public static int slideDownPos = 50;
     public boolean redDetected = false;
     public boolean blueDetected = false;
     public boolean yellowDetected = false;
@@ -186,29 +184,29 @@ public class GalaxyBot {
     }
 
     public static double slideSpeed = 1.0;
-    public void slide()
-    {
-        slideUp = !slideUp;
+//    public void slide()
+//    {
+//        slideUp = !slideUp;
+//
+//        if (slideUp)
+//        {
+//            leftSlide.setTargetPosition(slideUpPos);
+//            rightSlide.setTargetPosition(slideUpPos);
+//
+//        }
+//        else
+//        {
+//            leftSlide.setTargetPosition(slideDownPos);
+//            rightSlide.setTargetPosition(slideDownPos);
+//
+//        }
+//        leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        leftSlide.setPower(slideSpeed);
+//        rightSlide.setPower(slideSpeed);
+//    }
 
-        if (slideUp)
-        {
-            leftSlide.setTargetPosition(slideUpPos);
-            rightSlide.setTargetPosition(slideUpPos);
-
-        }
-        else
-        {
-            leftSlide.setTargetPosition(slideDownPos);
-            rightSlide.setTargetPosition(slideDownPos);
-
-        }
-        leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftSlide.setPower(slideSpeed);
-        rightSlide.setPower(slideSpeed);
-    }
-
-    public void slideDown()
+    public void slideDown(int slideDownPos)
     {
         slideUp = false;
 
@@ -221,7 +219,7 @@ public class GalaxyBot {
         rightSlide.setPower(-slideSpeed);
     }
 
-    public void slideUp()
+    public void slideUp(int slideUpPos)
     {
         slideUp = true;
 
@@ -232,6 +230,7 @@ public class GalaxyBot {
         rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         leftSlide.setPower(slideSpeed);
         rightSlide.setPower(slideSpeed);
+
     }
 
     public void intakeExtend() {

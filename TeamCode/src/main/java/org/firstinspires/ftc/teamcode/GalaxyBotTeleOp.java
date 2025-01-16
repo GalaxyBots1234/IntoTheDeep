@@ -40,6 +40,10 @@ public class GalaxyBotTeleOp extends OpMode
 
     private boolean fieldCentric = false;
 
+
+    public static int slideUpPos = 2850;
+    public static int slideDownPos = 50;
+
     private void mecanumDrive(double botHeading)
     {
         float LIMIT_SPEED = 1.0f;
@@ -164,14 +168,14 @@ public class GalaxyBotTeleOp extends OpMode
     {
         if (currentGamepad2.dpad_up && !previousGamepad2.dpad_up) {
             if (robot.slideUp) {
-                robot.slideDown();
+                robot.slideDown(slideUpPos);
 
                 robot.doSwingDown();
                 robot.doClawOpen();
                 slideDirection = "Slides going up";
             }
             else {
-                robot.slideUp();
+                robot.slideUp(slideDownPos);
 
                 robot.doSwingUp();
                 slideDirection = "Slides are down";
