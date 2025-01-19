@@ -49,13 +49,16 @@ public class GalaxyBot {
     public boolean clawOpen = false;
     public boolean intakeClawOpen = false;
     public boolean spinUp = false;
-    public boolean clawSpinUp = false;
+    public boolean clawSampling = false;
     public boolean intakeExtend = false;
     public boolean slideUp = false;
     public boolean twisted = false;
 
     public static double intakeDetractPos = 0.0;
-    public static double intakeExtendPos = 0.58;
+    public static double intakeExtendPos = 0.57;
+
+    public static int slideUpPos = 3000;
+    public static int slideDownPos = 0;
 
     public boolean redDetected = false;
     public boolean blueDetected = false;
@@ -79,7 +82,7 @@ public class GalaxyBot {
         clawOpen = false;
         intakeClawOpen = false;
         spinUp = false;
-        clawSpinUp = false;
+        clawSampling = false;
         intakeExtend = false;
         slideUp = false;
         twisted = false;
@@ -102,8 +105,8 @@ public class GalaxyBot {
         leftSlide = hwMap.get(DcMotorEx.class,"left_slide");
         rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightSlide.setTargetPositionTolerance(5);
-        leftSlide.setTargetPositionTolerance(5);
+        rightSlide.setTargetPositionTolerance(50);
+        leftSlide.setTargetPositionTolerance(50);
 // Cristiano Ronaldo
         // rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         // leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -206,7 +209,7 @@ public class GalaxyBot {
 //        rightSlide.setPower(slideSpeed);
 //    }
 
-    public void slideDown(int slideDownPos)
+    public void slideDown()
     {
         slideUp = false;
 
@@ -215,11 +218,11 @@ public class GalaxyBot {
 
         leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftSlide.setPower(-slideSpeed);
-        rightSlide.setPower(-slideSpeed);
+        leftSlide.setPower(slideSpeed);
+        rightSlide.setPower(slideSpeed);
     }
 
-    public void slideUp(int slideUpPos)
+    public void slideUp()
     {
         slideUp = true;
 
@@ -230,8 +233,54 @@ public class GalaxyBot {
         rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         leftSlide.setPower(slideSpeed);
         rightSlide.setPower(slideSpeed);
-
     }
+
+
+    public static int slideUpSpecimenPos = 2500;
+    public static int slideDownSpecimenPos = 1300;
+    public static int slideUpSpecimenPickupPos = 400;
+
+    public void slideUpSpecimen()
+    {
+        slideUp = true;
+
+        leftSlide.setTargetPosition(slideUpSpecimenPos);
+        rightSlide.setTargetPosition(slideUpSpecimenPos);
+
+        leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftSlide.setPower(slideSpeed);
+        rightSlide.setPower(slideSpeed);
+    }
+
+
+    public void slideUpSpecimenPickup()
+    {
+        slideUp = true;
+
+        leftSlide.setTargetPosition(slideUpSpecimenPickupPos);
+        rightSlide.setTargetPosition(slideUpSpecimenPickupPos);
+
+        leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftSlide.setPower(slideSpeed);
+        rightSlide.setPower(slideSpeed);
+    }
+
+    public void slideDownSpecimen()
+    {
+        slideUp = true;
+
+        leftSlide.setTargetPosition(slideDownSpecimenPos);
+        rightSlide.setTargetPosition(slideDownSpecimenPos);
+
+        leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftSlide.setPower(slideSpeed);
+        rightSlide.setPower(slideSpeed);
+    }
+
+
 
     public void intakeExtend() {
         intakeExtend = true;
@@ -272,7 +321,7 @@ public class GalaxyBot {
         twister.setPosition(unTwistPos);
     }
 
-    public static double clawOpenPos = 0.75;
+    public static double clawOpenPos = 0.8;
     public static double clawClosedPos = 1.0;
 
     public void claw()
@@ -321,8 +370,8 @@ public class GalaxyBot {
         intakeClaw.setPosition(intakeClawClosePos);
     }
 
-    public static double swingUpPos = 0.65;
-    public static double swingDownPos = 0.07;
+    public static double swingUpPos = 0.8;
+    public static double swingDownPos = 0.15;
     public void swing()
     {
         swingUp = !swingUp;
@@ -363,20 +412,8 @@ public class GalaxyBot {
         rightSwing.setPosition(swingDownAuto);
     }
 
-    public static double intakeWristPosUp = 0;
-    public static double intakeWristPosDown = 0.1;
-
-    public void doAutoClawDown() {
-
-    }
-
-    public void doAutoClawUp() {
-
-    }
-
-    public static double spinUpPos = 0.92;
+    public static double spinUpPos = 1;
     public static double spinDownPos = 0.0;
-    public static double spinTwistPos = 0.05;
     public void spin()
     {
         spinUp = !spinUp;
@@ -401,24 +438,19 @@ public class GalaxyBot {
         rightSpin.setPosition(spinUpPos);
     }
 
-    public void spinTwist()
+    public static double clawSpinSamplePos = 0.7;
+    public static double clawSpinSpecimenPos = 0.15;
+
+    public void clawSpinSample()
     {
-        spinUp = false;
-        rightSpin.setPosition(spinTwistPos);
+        clawSampling = true;
+        clawSpinner.setPosition(clawSpinSamplePos);
     }
 
-    public static double clawSpinUpPos = 0.03;
-    public static double clawSpinDownPos = 0.03;
-    public void clawSpin()
+    public void clawSpinSpecimen()
     {
-        clawSpinUp = !clawSpinUp;
-        if (clawSpinUp) {
-            clawSpinner.setPosition(clawSpinUpPos);
-        }
-        else
-        {
-            clawSpinner.setPosition(clawSpinDownPos);
-        }
+        clawSampling = false;
+        clawSpinner.setPosition(clawSpinSpecimenPos);
     }
 
     public double getElapsedTime() {

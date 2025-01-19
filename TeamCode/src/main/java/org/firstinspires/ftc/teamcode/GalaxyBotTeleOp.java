@@ -40,10 +40,6 @@ public class GalaxyBotTeleOp extends OpMode
 
     private boolean fieldCentric = false;
 
-
-    public static int slideUpPos = 2850;
-    public static int slideDownPos = 50;
-
     private void mecanumDrive(double botHeading)
     {
         float LIMIT_SPEED = 1.0f;
@@ -116,9 +112,6 @@ public class GalaxyBotTeleOp extends OpMode
         imu.initialize(myIMUparameters);
     }
 
-    double intakePos;
-    double intakePos2;
-
     private void pushyPush()
     {
         if (currentGamepad2.cross && !previousGamepad2.cross)
@@ -137,8 +130,6 @@ public class GalaxyBotTeleOp extends OpMode
                 pushDirection = "detracted";
             }
         }
-        intakePos = robot.rightIntake.getPosition();
-        intakePos2 = robot.leftIntake.getPosition();
     }
     private void pushyPushPrecise()
     {
@@ -168,14 +159,14 @@ public class GalaxyBotTeleOp extends OpMode
     {
         if (currentGamepad2.dpad_up && !previousGamepad2.dpad_up) {
             if (robot.slideUp) {
-                robot.slideDown(slideUpPos);
+                robot.slideDown();
 
                 robot.doSwingDown();
                 robot.doClawOpen();
                 slideDirection = "Slides going up";
             }
             else {
-                robot.slideUp(slideDownPos);
+                robot.slideUp();
 
                 robot.doSwingUp();
                 slideDirection = "Slides are down";
@@ -270,8 +261,7 @@ public class GalaxyBotTeleOp extends OpMode
 
     public void start()
     {
-        robot.clawSpin();
-//        robot.swingUpdate();
+        robot.clawSpinSample();
         robot.doClawOpen();
         robot.intakeClawOpen();
         robot.doSwingDown();
@@ -325,8 +315,6 @@ public void loop()
     telemetry.addData("detected red: ", robot.redDetected);
     telemetry.addData("detected blue: ", robot.blueDetected);
     telemetry.addData("detected yellow: ", robot.yellowDetected);
-    telemetry.addData("Intakepos: ", intakePos);
-    telemetry.addData("IntakePos2: ", intakePos2);
     telemetry.update();
 }
 }
