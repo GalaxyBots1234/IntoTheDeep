@@ -13,6 +13,7 @@ java {
 
 android {
 
+    buildFeatures.buildConfig true
     defaultConfig {
         minSdkVersion 24
         //noinspection ExpiredTargetSdkVersion
