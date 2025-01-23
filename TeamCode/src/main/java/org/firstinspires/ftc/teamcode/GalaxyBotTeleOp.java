@@ -143,35 +143,35 @@ public class GalaxyBotTeleOp extends OpMode
         }
     }
 //
-//    private void swingySwing()
-//    {
-//        if(currentGamepad2.square && !previousGamepad2.square)
-//        {
-//            robot.swing();
-//            if (robot.swingUp)
-//                swingDirection = "Swinged up";
-//            else
-//                swingDirection = "Swinged down";
-//        }
-//    }
-
-    private void slimSlidy()
+    private void swingySwing()
     {
-        if (currentGamepad2.dpad_up && !previousGamepad2.dpad_up) {
-            if (robot.slideUp) {
-                robot.slideDown();
-
-                robot.doSwingDown();
-                robot.doClawOpen();
-                slideDirection = "Slides going up";
-            }
-            else {
-                robot.slideUp();
-
-                robot.doSwingUp();
-                slideDirection = "Slides are down";
-            }
+        if(currentGamepad2.dpad_up && !previousGamepad2.dpad_up)
+        {
+            robot.swing();
+            if (robot.swingUp)
+                swingDirection = "Swinged up";
+            else
+                swingDirection = "Swinged down";
         }
+    }
+
+    //private void slimSlidy()
+    //{
+      //  if (currentGamepad2.dpad_up && !previousGamepad2.dpad_up) {
+        //    if (robot.slideUp) {
+          //      robot.slideDown();
+//
+  //              robot.doSwingDown();
+    //            robot.doClawOpen();
+      //          slideDirection = "Slides going up";
+        //    }
+          //  else {
+            //    robot.slideUp();
+//
+  //              robot.doSwingUp();
+    //            slideDirection = "Slides are down";
+      //      }
+        //}
 //
 //        if (currentGamepad2.dpad_up && previousGamepad2.dpad_up)
 //        {
@@ -185,7 +185,7 @@ public class GalaxyBotTeleOp extends OpMode
 //        {
 //            robot.ss();
 //        }
-    }
+//    }
 
     private void clawyClaw() throws InterruptedException {
         if (currentGamepad2.dpad_down && !previousGamepad2.dpad_down)
@@ -290,8 +290,8 @@ public void loop()
        twistyTwist();
 //
 //
-      // swingySwing();
-      slimSlidy();
+       swingySwing();
+      //slimSlidy();
 //
     try {
         clawyClaw();

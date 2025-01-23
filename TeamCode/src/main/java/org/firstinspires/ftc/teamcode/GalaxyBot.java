@@ -57,7 +57,7 @@ public class GalaxyBot {
     public static double intakeDetractPos = 0.0;
     public static double intakeExtendPos = 0.57;
 
-    public static int slideUpPos = 3000;
+    public static int slideUpPos = 3100;
     public static int slideDownPos = 0;
 
     public boolean redDetected = false;
@@ -307,7 +307,7 @@ public class GalaxyBot {
     }
 
     public static double unTwistPos = 0.27;
-    public static double twistPos = 0.63;
+    public static double twistPos = 0.60;
 
     public void doTwist()
     {
@@ -412,7 +412,7 @@ public class GalaxyBot {
         rightSwing.setPosition(swingDownAuto);
     }
 
-    public static double spinUpPos = 1;
+    public static double spinUpPos = 0.97;
     public static double spinDownPos = 0.0;
     public void spin()
     {

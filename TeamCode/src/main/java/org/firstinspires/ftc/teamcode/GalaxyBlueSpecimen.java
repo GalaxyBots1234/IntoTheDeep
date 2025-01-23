@@ -249,13 +249,13 @@ public class GalaxyBlueSpecimen extends LinearOpMode {
     public static double startHeading = -Math.PI / 2;
 
     public static double preloadScorePosX = -8;
-    public static double preloadScorePosY = 36.25;
+    public static double preloadScorePosY = 36.75;
     public static double preloadScoreHeading = -Math.PI / 2;
     @Override
     public void runOpMode() throws InterruptedException {
         Pose2d startPose = new Pose2d(startPosX, startPosY, startHeading);
         Pose2d preloadPose = new Pose2d(preloadScorePosX,preloadScorePosY,preloadScoreHeading);
-        Pose2d lineupOnePose = new Pose2d(-48, 60, Math.PI / 2);
+       Pose2d lineupOnePose = new Pose2d(-48, 60, Math.PI / 2);
         Pose2d putspecimenPose = new Pose2d(-40, 66.3, 0);
         bot = new GalaxyBot(hardwareMap);
         bot.doClawClose();
@@ -266,52 +266,65 @@ public class GalaxyBlueSpecimen extends LinearOpMode {
         drive = new MecanumDrive(hardwareMap, startPose);
         drive.updatePoseEstimate();
 
-        Action preloadScore = drive.actionBuilder(startPose)
+       Action preloadScore = drive.actionBuilder(startPose)
                 .splineToConstantHeading(
                             new Vector2d(
                                     preloadScorePosX,
-                                    preloadScorePosY
+                                    //preloadScorePosY
+                                    39
                                     ),
                                     preloadScoreHeading)
                 .build();
 
         Action specimenDrop = drive.actionBuilder(putspecimenPose)
-                .splineToLinearHeading(
-                        new Pose2d(-4, 34.25, -Math.PI / 2),
-                        0)
+                .turnTo(-Math.PI/2)
                 .build();
-
-        Action lineupOne = drive.actionBuilder(preloadPose)
+        Action forward = drive.actionBuilder(putspecimenPose)
+                .lineToX(20)
+                .build();
+      Action toSpecimen = drive.actionBuilder(preloadPose)
                 .lineToY(60)
                 .turnTo(Math.PI / 2)
                 .setTangent(Math.PI)
                 .splineToConstantHeading(
                         new Vector2d(
-                                -44,
+                                -46,
                                 0),
                         Math.PI / 2
                 )
-                .lineToY(68)
+                .build();
+        Action toSpecimen2 = drive.actionBuilder(putspecimenPose)
+                .splineToConstantHeading(
+                        new Vector2d(
+                                -48,
+                                65),
+                        Math.PI
+                )
                 .build();
 
-        Action lineupTwo = drive.actionBuilder(lineupOnePose)
-                .splineToConstantHeading(new Vector2d(-60, 6), Math.PI / 2)
-                .lineToY(68)
-                .build();
+
+
+
+      //  Action lineupTwo = drive.actionBuilder(lineupOnePose)
+        //        .splineToConstantHeading(new Vector2d(-60, 6), Math.PI / 2)
+            //    .lineToY(68)
+          //      .build();
+
+
 
         Action specimenBackup = drive.actionBuilder(lineupOnePose)
-                .lineToY(50)
-                .build();
+               .lineToY(50)
+             .build();
 
         Action specimenPickup = drive.actionBuilder(lineupOnePose)
-                .splineToConstantHeading(new Vector2d(-43, 66), Math.PI / 2)
+                .splineToConstantHeading(new Vector2d(-47, 63), Math.PI / 2)
                 .build();
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         waitForStart();
 
-        Actions.runBlocking(
+       Actions.runBlocking(
                 new SequentialAction(
                     new ParallelAction(
                         new SlideUpSpecimen(),
@@ -325,31 +338,36 @@ public class GalaxyBlueSpecimen extends LinearOpMode {
         );
         Actions.runBlocking(
                 new SequentialAction(
-                    new SlideDown(),
-                    lineupOne,
-                    lineupTwo
+                    new SlideDown()
+
                 )
         );
+       // Actions.runBlocking(
+         //       toSpecimen
+        //);
+        Actions.runBlocking(
+                new SequentialAction(
+                        forward,
+                        specimenDrop
+                )
+       );
 
         Actions.runBlocking(
                 new SequentialAction(
-                        specimenBackup,
                         new SleepAction(1),
-                        specimenPickup,
-                        new SlideUpSpecimenPickup(),
+                   //     new SlideUpSpecimenPickup(),
                         new ClawClose(),
                         new SleepAction(2)
                 )
         );
 
+
         Actions.runBlocking(
                     new ParallelAction(
-                            new SlideUp(),
-                            specimenDrop
+                            new SlideUpSpecimen(),
+                            specimenDrop,
+                            new SlideDown()
                     )
-        );
-        Actions.runBlocking(
-                new SlideDown()
         );
     }
 }
