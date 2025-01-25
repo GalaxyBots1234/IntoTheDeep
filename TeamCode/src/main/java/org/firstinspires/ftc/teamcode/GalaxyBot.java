@@ -227,7 +227,8 @@ public class GalaxyBot {
         leftSlide.setTargetPosition(slideDownFully);
         rightSlide.setTargetPosition(slideDownFully);
     }
-
+//
+    //
     public void slideUp()
     {
         slideUp = true;
