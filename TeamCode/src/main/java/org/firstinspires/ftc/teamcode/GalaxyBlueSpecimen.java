@@ -1,4 +1,6 @@
 package org.firstinspires.ftc.teamcode;
+import static org.firstinspires.ftc.teamcode.GalaxyBot.slideDownFully;
+
 import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
@@ -240,7 +242,6 @@ public class GalaxyBlueSpecimen extends LinearOpMode {
             return false;
         }
     }
-
     private GalaxyBot bot;
     private MecanumDrive drive;
 
@@ -259,7 +260,8 @@ public class GalaxyBlueSpecimen extends LinearOpMode {
         Pose2d putspecimenPose = new Pose2d(-40, 66.3, 0);
         bot = new GalaxyBot(hardwareMap);
         bot.doClawClose();
-        bot.doSwingDown();
+        //bot.doSwingDown();
+        bot.doInitAutoPos();
         bot.clawSpinSpecimen();
         bot.intakeDetract();
 
@@ -270,8 +272,7 @@ public class GalaxyBlueSpecimen extends LinearOpMode {
                 .splineToConstantHeading(
                             new Vector2d(
                                     preloadScorePosX,
-                                    //preloadScorePosY
-                                    39
+                                    preloadScorePosY
                                     ),
                                     preloadScoreHeading)
                 .build();
@@ -327,8 +328,10 @@ public class GalaxyBlueSpecimen extends LinearOpMode {
        Actions.runBlocking(
                 new SequentialAction(
                     new ParallelAction(
-                        new SlideUpSpecimen(),
-                        preloadScore)
+                        new SwingDown(),
+                                new SlideUpSpecimen(),
+                        preloadScore
+                            )
                         ,
                     new SequentialAction(
                             new SlideDownSpecimen(),
@@ -342,33 +345,30 @@ public class GalaxyBlueSpecimen extends LinearOpMode {
 
                 )
         );
-       // Actions.runBlocking(
-         //       toSpecimen
-        //);
-        Actions.runBlocking(
-                new SequentialAction(
-                        forward,
-                        specimenDrop
-                )
-       );
-
-        Actions.runBlocking(
-                new SequentialAction(
-                        new SleepAction(1),
-                   //     new SlideUpSpecimenPickup(),
-                        new ClawClose(),
-                        new SleepAction(2)
-                )
-        );
-
-
-        Actions.runBlocking(
-                    new ParallelAction(
-                            new SlideUpSpecimen(),
-                            specimenDrop,
-                            new SlideDown()
-                    )
-        );
+//        Actions.runBlocking(
+//                new SequentialAction(
+//                        forward,
+//                        specimenDrop
+//                )
+//       );
+//
+//        Actions.runBlocking(
+//                new SequentialAction(
+//                        new SleepAction(1),
+//                   //     new SlideUpSpecimenPickup(),
+//                        new ClawClose(),
+//                        new SleepAction(2)
+//                )
+//        );
+//
+//
+//        Actions.runBlocking(
+//                    new ParallelAction(
+//                            new SlideUpSpecimen(),
+//                            specimenDrop,
+//                            new SlideDown()
+//                    )
+//        );
     }
 }
 

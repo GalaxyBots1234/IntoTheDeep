@@ -281,7 +281,7 @@ public void loop()
     if (currentGamepad1.touchpad && !currentGamepad1.touchpad)
         robot.driveDir *= -1;
     double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
-    robot.updateSense();
+   // robot.updateSense();
     mecanumDrive(botHeading);
 //
        pushyPush();

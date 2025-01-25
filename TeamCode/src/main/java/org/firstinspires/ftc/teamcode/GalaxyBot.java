@@ -31,7 +31,7 @@ public class GalaxyBot {
     public DcMotorEx leftSlide;
     public DcMotorEx rightSlide;
 
-    public RevColorSensorV3 clawSense;
+   // public RevColorSensorV3 clawSense;
 
     Servo leftIntake;
     Servo rightIntake;
@@ -57,8 +57,10 @@ public class GalaxyBot {
     public static double intakeDetractPos = 0.0;
     public static double intakeExtendPos = 0.57;
 
+
     public static int slideUpPos = 3100;
-    public static int slideDownPos = 0;
+    public static int slideDownPos = 1600;
+    public static int slideDownFully = 0;
 
     public boolean redDetected = false;
     public boolean blueDetected = false;
@@ -94,7 +96,7 @@ public class GalaxyBot {
         leftIntake = hwMap.get(Servo.class, "left_intake");
         rightIntake = hwMap.get(Servo.class, "right_intake");
 
-        clawSense = hwMap.get(RevColorSensorV3.class, "claw_sense");
+       // clawSense = hwMap.get(RevColorSensorV3.class, "claw_sense");
 
         leftSwing = hwMap.get(Servo.class, "left_swing");
         rightSwing = hwMap.get(Servo.class, "right_swing");
@@ -119,7 +121,7 @@ public class GalaxyBot {
         claw = hwMap.get(Servo.class, "claw");
         clawSpinner = hwMap.get(Servo.class, "claw_spinner");
 
-        clawSense.setGain(5);
+        //clawSense.setGain(5);
 
         leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -154,37 +156,37 @@ public class GalaxyBot {
         rightFront.setPower(frontRightPower);
     }
 
-    public void updateSense()
-    {
-        float[] hsv = new float[3];
-        clawColors = clawSense.getNormalizedColors();
-
-        Color.colorToHSV(clawColors.toColor(), hsv);
-        if (hsv[0] > 200 && hsv[0] < 240)
-        {
-            blueDetected = true;
-            redDetected = false;
-            yellowDetected = false;
-        }
-        else if (hsv[0] > 60 && hsv[0] < 90)
-        {
-            blueDetected = false;
-            redDetected = false;
-            yellowDetected = true;
-        }
-        else if (hsv[0] > 10 && hsv[0] < 40)
-        {
-            blueDetected = false;
-            redDetected = true;
-            yellowDetected = false;
-        }
-        else
-        {
-            blueDetected = false;
-            redDetected = false;
-            yellowDetected = false;
-        }
-    }
+//    public void updateSense()
+//    {
+//        float[] hsv = new float[3];
+//        clawColors = clawSense.getNormalizedColors();
+//
+//        Color.colorToHSV(clawColors.toColor(), hsv);
+//        if (hsv[0] > 200 && hsv[0] < 240)
+//        {
+//            blueDetected = true;
+//            redDetected = false;
+//            yellowDetected = false;
+//        }
+//        else if (hsv[0] > 60 && hsv[0] < 90)
+//        {
+//            blueDetected = false;
+//            redDetected = false;
+//            yellowDetected = true;
+//        }
+//        else if (hsv[0] > 10 && hsv[0] < 40)
+//        {
+//            blueDetected = false;
+//            redDetected = true;
+//            yellowDetected = false;
+//        }
+//        else
+//        {
+//            blueDetected = false;
+//            redDetected = false;
+//            yellowDetected = false;
+//        }
+//    }
 
     public static double slideSpeed = 1.0;
 //    public void slide()
@@ -220,6 +222,10 @@ public class GalaxyBot {
         rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         leftSlide.setPower(slideSpeed);
         rightSlide.setPower(slideSpeed);
+    }
+    public void doslideDownFully() {
+        leftSlide.setTargetPosition(slideDownFully);
+        rightSlide.setTargetPosition(slideDownFully);
     }
 
     public void slideUp()
@@ -370,8 +376,9 @@ public class GalaxyBot {
         intakeClaw.setPosition(intakeClawClosePos);
     }
 
-    public static double swingUpPos = 0.8;
-    public static double swingDownPos = 0.15;
+    public static double swingUpPos = 0.7;
+    public static double swingAutoInitPos = 0.12;
+    public static double swingDownPos = 0.05;
     public void swing()
     {
         swingUp = !swingUp;
@@ -398,6 +405,11 @@ public class GalaxyBot {
         leftSwing.setPosition(swingDownPos);
         rightSwing.setPosition(swingDownPos);
     }
+    public void doInitAutoPos()
+    {
+        leftSwing.setPosition(swingAutoInitPos);
+        rightSwing.setPosition(swingAutoInitPos);
+    }
 
     public static double swingUpAuto = 0.3;
     public static double swingDownAuto = 0.03;
@@ -412,7 +424,7 @@ public class GalaxyBot {
         rightSwing.setPosition(swingDownAuto);
     }
 
-    public static double spinUpPos = 0.97;
+    public static double spinUpPos = 0.965;
     public static double spinDownPos = 0.0;
     public void spin()
     {
@@ -438,8 +450,8 @@ public class GalaxyBot {
         rightSpin.setPosition(spinUpPos);
     }
 
-    public static double clawSpinSamplePos = 0.7;
-    public static double clawSpinSpecimenPos = 0.15;
+    public static double clawSpinSamplePos = 0.0;
+    public static double clawSpinSpecimenPos = 0.71;
 
     public void clawSpinSample()
     {
