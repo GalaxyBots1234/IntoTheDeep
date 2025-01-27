@@ -154,6 +154,7 @@ public class GalaxyBot {
         rightBack.setPower(backRightPower);
         rightFront.setPower(frontRightPower);
     }
+    //
 
 //    public void updateSense()
 //    {
@@ -243,7 +244,7 @@ public class GalaxyBot {
 
 
     public static int slideUpSpecimenPos = 2500;
-    public static int slideDownSpecimenPos = 1300;
+    public static int slideDownSpecimenPos = 1600;
     public static int slideUpSpecimenPickupPos = 400;
 
     public void slideUpSpecimen()
