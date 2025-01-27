@@ -22,7 +22,6 @@ public class GalaxyBot {
 
     int driveDir = 1;
 
-
     private DcMotor rightBack;
     private DcMotor rightFront;
 
@@ -59,7 +58,7 @@ public class GalaxyBot {
 
 
     public static int slideUpPos = 3100;
-    public static int slideDownPos = 1600;
+    public static int slideDownPos = 0;
     public static int slideDownFully = 0;
 
     public boolean redDetected = false;
@@ -451,13 +450,20 @@ public class GalaxyBot {
         rightSpin.setPosition(spinUpPos);
     }
 
-    public static double clawSpinSamplePos = 0.0;
-    public static double clawSpinSpecimenPos = 0.71;
+    public static double clawSpinSamplePos = 0.675;
+    public static double clawSpinSpecimenPos = 0;
+    public static double swingSamplePos = 0.4;
 
-    public void clawSpinSample()
-    {
+    public void clawSpinSample() throws InterruptedException {
         clawSampling = true;
+        clawSpinner.setPosition(clawSpinSpecimenPos);
+        doClawClose();
+        leftSwing.setPosition(swingSamplePos);
+        rightSwing.setPosition(swingSamplePos);
+        Thread.sleep(1000);
         clawSpinner.setPosition(clawSpinSamplePos);
+        Thread.sleep(1000);
+        doSwingDown();
     }
 
     public void clawSpinSpecimen()

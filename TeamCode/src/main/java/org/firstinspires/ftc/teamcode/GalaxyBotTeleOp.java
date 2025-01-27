@@ -155,37 +155,24 @@ public class GalaxyBotTeleOp extends OpMode
         }
     }
 
-    //private void slimSlidy()
-    //{
-      //  if (currentGamepad2.dpad_up && !previousGamepad2.dpad_up) {
-        //    if (robot.slideUp) {
-          //      robot.slideDown();
-//
-  //              robot.doSwingDown();
-    //            robot.doClawOpen();
-      //          slideDirection = "Slides going up";
-        //    }
-          //  else {
-            //    robot.slideUp();
-//
-  //              robot.doSwingUp();
-    //            slideDirection = "Slides are down";
-      //      }
-        //}
-//
-//        if (currentGamepad2.dpad_up && previousGamepad2.dpad_up)
-//        {
-//            robot.su();
-//        }
-//        else if (currentGamepad2.dpad_down && previousGamepad2.dpad_down)
-//        {
-//            robot.sd();
-//        }
-//        else
-//        {
-//            robot.ss();
-//        }
-//    }
+    private void slimSlidy()
+    {
+        if (currentGamepad2.dpad_up && !previousGamepad2.dpad_up) {
+            if (robot.slideUp) {
+                robot.slideDown();
+
+                robot.doSwingDown();
+                robot.doClawOpen();
+                slideDirection = "Slides going up";
+            }
+            else {
+                robot.slideUp();
+
+                robot.doSwingUp();
+                slideDirection = "Slides are down";
+            }
+        }
+    }
 
     private void clawyClaw() throws InterruptedException {
         if (currentGamepad2.dpad_down && !previousGamepad2.dpad_down)
@@ -259,12 +246,20 @@ public class GalaxyBotTeleOp extends OpMode
         }
     }
 
+    public void sampleMode() {
+        if(currentGamepad1.right_bumper && !previousGamepad1.right_bumper) {
+
+        }
+    }
+
     public void start()
     {
-        robot.clawSpinSample();
-        robot.doClawOpen();
+        try {
+            robot.clawSpinSample();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         robot.intakeClawOpen();
-        robot.doSwingDown();
         robot.spinUp();
         robot.intakeDetract();
         robot.doUnTwist();
@@ -292,7 +287,7 @@ public void loop()
 //
     //
        swingySwing();
-      //slimSlidy();
+      slimSlidy();
 //
     try {
         clawyClaw();

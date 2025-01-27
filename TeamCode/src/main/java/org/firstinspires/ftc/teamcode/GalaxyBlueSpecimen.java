@@ -4,7 +4,7 @@ import static org.firstinspires.ftc.teamcode.GalaxyBot.slideDownFully;
 import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.*;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
@@ -13,6 +13,8 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+import java.lang.Math;
 
 @Config
 @Autonomous(name = "GalaxyBlueSpecimen", group = "Autonomous")
@@ -117,6 +119,27 @@ public class GalaxyBlueSpecimen extends LinearOpMode {
             }
         }
     }
+
+    public class slideDownFully implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            bot.slideDown();
+            packet.put("left tick pos: ", bot.leftSlide.getCurrentPosition());
+            packet.put("right tick pos: ", bot.rightSlide.getCurrentPosition());
+            packet.put("slides down", "");
+            if (bot.leftSlide.isBusy() || bot.rightSlide.isBusy())
+            {
+                return true;
+            }
+            else
+            {
+                bot.leftSlide.setPower(0.0);
+                bot.rightSlide.setPower(0.0);
+                return false;
+            }
+        }
+    }
+
     public class IntakeExtend implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
@@ -228,7 +251,11 @@ public class GalaxyBlueSpecimen extends LinearOpMode {
     public class SpinSample implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            bot.clawSpinSample();
+            try {
+                bot.clawSpinSample();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             packet.put("claw spinned for sample", "");
             return false;
         }
@@ -335,7 +362,9 @@ public class GalaxyBlueSpecimen extends LinearOpMode {
                         ,
                     new SequentialAction(
                             new SlideDownSpecimen(),
-                            new ClawOpen()
+                            new ClawOpen(),
+                            new SleepAction(1),
+                            new slideDownFully()
                     )
                 )
         );
