@@ -17,7 +17,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import java.lang.Math;
 
 @Config
-@Autonomous(name = "GalaxyBlueSpecimen 3", group = "Autonomous")
+@Autonomous(name = "GalaxyBlueSpecimen 4", group = "Autonomous")
 public class GalaxyBlueSpecimen extends LinearOpMode {
 
     public class SlideUp implements Action {
@@ -274,8 +274,13 @@ public class GalaxyBlueSpecimen extends LinearOpMode {
 
     public static double startPosX = -12;
     public static double startPosY = 66;
-    public static double x1 = -24;
-    public static double y1 = 48;
+    public static double x1 = -48;
+    public static double y1 = 50;
+    public static double x2 = -54;
+    public static double y2 = 9;
+    public static double x3 = -47;
+    public static double y3 = 63;
+    public static double tan = 1.56;
     public static double startHeading = -Math.PI / 2;
 
     public static double preloadScorePosX = -8;
@@ -288,14 +293,13 @@ public class GalaxyBlueSpecimen extends LinearOpMode {
         Pose2d putspecimenPose = new Pose2d(-40, 66.3, 0);
         bot = new GalaxyBot(hardwareMap);
         bot.doClawClose();
-        //bot.doSwingDown();
         bot.doInitAutoPos();
         bot.clawSpinSpecimen();
         bot.intakeDetract();
 
         drive = new MecanumDrive(hardwareMap, startPose);
         drive.updatePoseEstimate();
-
+// Score preload speciemen
        Action preloadScore = drive.actionBuilder(startPose)
                 .splineToConstantHeading(
                             new Vector2d(
@@ -305,11 +309,12 @@ public class GalaxyBlueSpecimen extends LinearOpMode {
                                     preloadScoreHeading)
                 .build();
 
-        Action specimenDrop = drive.actionBuilder(putspecimenPose)
-                .turnTo(-Math.PI/2)
-                .build();
-
+//        Action specimenDrop = drive.actionBuilder(putspecimenPose)
+//                .turnTo(-Math.PI/2)
+//                .build();
+// Move diagnolly to new position
         Action forward = drive.actionBuilder(preloadPose)
+               // .setTangent(1.5277723)
                 .splineToConstantHeading(
                         new Vector2d(
                                 -31,
@@ -317,63 +322,73 @@ public class GalaxyBlueSpecimen extends LinearOpMode {
                         ),
                         preloadScoreHeading)
                 .build();
-        //
+
         Pose2d lineupOnePose = new Pose2d(-31, 40, -Math.PI / 2);
+// Move to the front of first block
         Action forward2 = drive.actionBuilder(lineupOnePose)
-                .splineToConstantHeading(
-                        new Vector2d(
-                                -38.6,
-                                9
+              //  .setTangent(1.539)
+          //      .turnTo(Math.PI/2)
+                .splineToLinearHeading(
+                        new Pose2d(
+                                -42,
+                                14,
+                                Math.PI/2
                         ),
-                        preloadScoreHeading)
-                .build();
-        Pose2d line2 = new Pose2d(-38.6, 9, -Math.PI / 2);
+                        Math.PI)
+        .build();
+        Pose2d line2 = new Pose2d(-42, 9, Math.PI/2);
+// turn 180 degrees (slides facing wall)
         Action forward3 = drive.actionBuilder(line2)
+                //.turnTo(Math.PI/2)
+                //.setTangent(1.5470)
                 .splineToConstantHeading(
                         new Vector2d(
                                 -48,
-                                50
+                                55
                         ),
-                        preloadScoreHeading)
+                        Math.PI/2)
+       //         .lineToY(55)
                 .build();
-        Pose2d line3 = new Pose2d(-48, 50, -Math.PI / 2);
+        Pose2d line3 = new Pose2d(-48, 55, Math.PI/2);
         Action forward4 = drive.actionBuilder(line3)
+                //.setTangent(1.5464)
                 .splineToConstantHeading(
                         new Vector2d(
-                                -49.5,
-                                9
+                                -54,
+                                14
                         ),
-                        preloadScoreHeading)
+                        Math.PI/2)
                 .build();
-        Pose2d line4 = new Pose2d(-49.5, 9, -Math.PI / 2);
+        Pose2d line4 = new Pose2d(-54, 14, Math.PI / 2);
         Action forward5 = drive.actionBuilder(line4)
+              //  .setTangent(1.54747)
                 .splineToConstantHeading(
                         new Vector2d(
-                                -62,
-                                50
+                                -47,
+                                66
                         ),
-                        preloadScoreHeading)
+                        Math.PI/2)
                 .build();
 
-      Action toSpecimen = drive.actionBuilder(preloadPose)
-                .lineToY(60)
-                .turnTo(Math.PI / 2)
-                .setTangent(Math.PI)
-                .splineTo(
-                        new Vector2d(
-                                -48,
-                                23),
-                        Math.PI / 2
-                )
-                .build();
-        Action toSpecimen2 = drive.actionBuilder(putspecimenPose)
-                .splineToConstantHeading(
-                        new Vector2d(
-                                -48,
-                                65),
-                        Math.PI
-                )
-                .build();
+//      Action toSpecimen = drive.actionBuilder(preloadPose)
+//                .lineToY(60)
+//                .turnTo(Math.PI / 2)
+//                .setTangent(Math.PI)
+//                .splineTo(
+//                        new Vector2d(
+//                                -48,
+//                                23),
+//                        Math.PI / 2
+//                )
+//                .build();
+//        Action toSpecimen2 = drive.actionBuilder(putspecimenPose)
+//                .splineToConstantHeading(
+//                        new Vector2d(
+//                                -48,
+//                                65),
+//                        Math.PI
+//                )
+//                .build();
 
 
 
@@ -385,13 +400,13 @@ public class GalaxyBlueSpecimen extends LinearOpMode {
 
 
 
-        Action specimenBackup = drive.actionBuilder(lineupOnePose)
-               .lineToY(50)
-             .build();
-
-        Action specimenPickup = drive.actionBuilder(lineupOnePose)
-                .splineToConstantHeading(new Vector2d(-47, 63), Math.PI / 2)
-                .build();
+//        Action specimenBackup = drive.actionBuilder(lineupOnePose)
+//               .lineToY(50)
+//             .build();
+//
+//        Action specimenPickup = drive.actionBuilder(lineupOnePose)
+//                .splineToConstantHeading(new Vector2d(-47, 63), Math.PI / 2)
+//                .build();
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -422,9 +437,9 @@ public class GalaxyBlueSpecimen extends LinearOpMode {
         Actions.runBlocking(
                 new SequentialAction(
                         forward,
-                      forward2,
+               forward2,
                         forward3,
-                        forward4,
+                       forward4,
                         forward5
                 )
        );
