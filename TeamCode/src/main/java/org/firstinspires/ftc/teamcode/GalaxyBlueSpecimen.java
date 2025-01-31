@@ -277,13 +277,15 @@ public class GalaxyBlueSpecimen extends LinearOpMode {
     public static double x1 = -48;
     public static double y1 = 50;
     public static double x2 = -54;
-    public static double y2 = 9;
+    public static double y2 = 14;
     public static double x3 = -47;
-    public static double y3 = 63;
+    public static double y3 = 68;
+    public static double x4 = -6;
+    public static double y4 = 36.75;
     public static double tan = 1.56;
     public static double startHeading = -Math.PI / 2;
 
-    public static double preloadScorePosX = -8;
+    public static double preloadScorePosX = -6;
     public static double preloadScorePosY = 36.75;
     public static double preloadScoreHeading = -Math.PI / 2;
     @Override
@@ -336,39 +338,53 @@ public class GalaxyBlueSpecimen extends LinearOpMode {
                         ),
                         Math.PI)
         .build();
-        Pose2d line2 = new Pose2d(-42, 9, Math.PI/2);
+        Pose2d line2 = new Pose2d(-42, 14, Math.PI/2);
 // turn 180 degrees (slides facing wall)
         Action forward3 = drive.actionBuilder(line2)
                 //.turnTo(Math.PI/2)
                 //.setTangent(1.5470)
-                .splineToConstantHeading(
-                        new Vector2d(
-                                -48,
-                                55
-                        ),
-                        Math.PI/2)
-       //         .lineToY(55)
+//                .splineToConstantHeading(
+//                        new Vector2d(
+//                                -48,
+//                                55
+//                        ),
+//                        Math.PI/2)
+
+              .lineToY(55)
                 .build();
         Pose2d line3 = new Pose2d(-48, 55, Math.PI/2);
         Action forward4 = drive.actionBuilder(line3)
                 //.setTangent(1.5464)
                 .splineToConstantHeading(
                         new Vector2d(
-                                -54,
-                                14
+                                x2,
+                                y2
                         ),
                         Math.PI/2)
                 .build();
-        Pose2d line4 = new Pose2d(-54, 14, Math.PI / 2);
+        Pose2d line4 = new Pose2d(x2, y2, Math.PI / 2);
         Action forward5 = drive.actionBuilder(line4)
               //  .setTangent(1.54747)
                 .splineToConstantHeading(
                         new Vector2d(
-                                -47,
-                                66
+                                x3,
+                                69
                         ),
                         Math.PI/2)
                 .build();
+        Pose2d line5 = new Pose2d(x3, y3, Math.PI / 2);
+        //shit smehow works idk rlly
+        //from wall to bar
+        Action forward6 = drive.actionBuilder(line5)
+                        .lineToY(50)
+                        .splineToLinearHeading(
+                                new Pose2d(
+                                        x4,
+                                        y4,
+                                        -Math.PI/2
+                                ),
+                                Math.PI)
+                        .build();
 
 //      Action toSpecimen = drive.actionBuilder(preloadPose)
 //                .lineToY(60)
@@ -423,8 +439,8 @@ public class GalaxyBlueSpecimen extends LinearOpMode {
                     new SequentialAction(
                             new SlideDownSpecimen(),
                             new ClawOpen(),
-                            new SleepAction(0.01),
-                            new slideDownFully()
+                           new SleepAction(0.01),
+                            new SlideUpSpecimenPickup()
                     )
                 )
         );
@@ -434,15 +450,31 @@ public class GalaxyBlueSpecimen extends LinearOpMode {
 //                    new SlideDown()
 //                )
 //        );
+               Actions.runBlocking(
+                       new SequentialAction(
+                               forward,
+                               forward2,
+                               forward3,
+                               forward4,
+                               forward5
+
+                       )
+               );
+               Actions.runBlocking(
+                       new SequentialAction(
+                               new ClawClose(),
+        new SleepAction(1)
+                       )
+
+               );
+               //bunch of random shit idk, dont change ts
         Actions.runBlocking(
-                new SequentialAction(
-                        forward,
-               forward2,
-                        forward3,
-                       forward4,
-                        forward5
+                new ParallelAction(
+                        new SlideUpSpecimen(),
+                        forward6,
+                        new SlideDownSpecimen()
                 )
-       );
+        );
 ////
 ////        Actions.runBlocking(
 ////                new SequentialAction(

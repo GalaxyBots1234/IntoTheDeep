@@ -245,7 +245,8 @@ public class GalaxyBot {
 
     public static int slideUpSpecimenPos = 2500;
     public static int slideDownSpecimenPos = 1600;
-    public static int slideUpSpecimenPickupPos = 400;
+
+    public static int slideUpSpecimenPickupPos = 210;
 
     public void slideUpSpecimen()
     {
