@@ -331,7 +331,7 @@ public class GalaxyBlueSample extends LinearOpMode{
 
         Pose2d lineUpOne5 = new Pose2d(58, 57, Math.PI / 4);
         Action dolineUpOne5 = drive.actionBuilder(lineUpOne5)
-                .splineToLinearHeading(new Pose2d(X4, Y4, Math.PI), -Math.PI / 2)
+                .splineToLinearHeading(new Pose2d(X4, Y4, Math.PI), -Math.PI / 4 * 3)
                 .build();
 
         Pose2d lineUpOne6 = new Pose2d(X4, Y4, -Math.PI / 2);
@@ -362,7 +362,6 @@ public class GalaxyBlueSample extends LinearOpMode{
         // sequence to score block
         Actions.runBlocking(
                 new SequentialAction(
-                        new SleepAction(0.5),
                         new ClawOpen(),
                         new SleepAction(0.5)
                 )
@@ -408,7 +407,7 @@ public class GalaxyBlueSample extends LinearOpMode{
         Actions.runBlocking(
                 new SequentialAction(
                         new SwingUp(),
-                        new SleepAction(1),
+                        new SleepAction(0.75),
                         new ClawOpen(),
                         new SleepAction(0.25)
                 )
@@ -453,7 +452,7 @@ public class GalaxyBlueSample extends LinearOpMode{
         Actions.runBlocking(
                 new SequentialAction(
                         new SwingUp(),
-                        new SleepAction(1),
+                        new SleepAction(0.75),
                         new ClawOpen(),
                         new SleepAction(0.5)
                 )
@@ -499,7 +498,7 @@ public class GalaxyBlueSample extends LinearOpMode{
         Actions.runBlocking(
                 new SequentialAction(
                         new SwingUp(),
-                        new SleepAction(1),
+                        new SleepAction(0.75),
                         new ClawOpen(),
                         new SleepAction(0.5)
                 )
