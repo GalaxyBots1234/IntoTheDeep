@@ -15,11 +15,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import java.lang.Math;
+import java.util.Vector;
 
 @Config
-@Autonomous(name = "GalaxyBlueSpecimen 4", group = "Autonomous")
-public class GalaxyBlueSpecimen extends LinearOpMode {
-
+@Autonomous(name = "GalaxyBlueSample", group = "Autonomous")
+public class GalaxyBlueSample extends LinearOpMode{
     public class SlideUp implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
@@ -27,7 +27,7 @@ public class GalaxyBlueSpecimen extends LinearOpMode {
             packet.put("left tick pos: ", bot.leftSlide.getCurrentPosition());
             packet.put("right tick pos: ", bot.rightSlide.getCurrentPosition());
             packet.put("slides up:", bot.slideUp);
-            if (bot.leftSlide.isBusy() || bot.rightSlide.isBusy())
+            if (bot.leftSlide.getCurrentPosition() < 3050 || bot.rightSlide.getCurrentPosition() < 3050)
             {
                 return true;
             }
@@ -251,8 +251,7 @@ public class GalaxyBlueSpecimen extends LinearOpMode {
     public class SpinSample implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-
-                bot.clawSpinSample();
+            bot.clawSpinSample();
             packet.put("claw spinned for sample", "");
             return false;
         }
@@ -269,223 +268,241 @@ public class GalaxyBlueSpecimen extends LinearOpMode {
     private GalaxyBot bot;
     private MecanumDrive drive;
 
-    public static double startPosX = -12;
-    public static double startPosY = 66;
-    public static double x1 = -48;
-    public static double y1 = 50;
-    public static double x2 = -54;
-    public static double y2 = 14;
-    public static double x3 = -47;
-    public static double y3 = 68;
-    public static double x4 = -6;
-    public static double y4 = 35;
-    public static double tan = 1.56;
-    public static double startHeading = -Math.PI / 2;
+    public static double preloadScorePosX= 60;
+    public static double preloadScorePosY= 55;
+    public static double X1= 50;
+    public static double Y1= 50;
+    public static double X2= 60;
+    public static double Y2= 55;
+    public static double X3 = 67;
+    public static double Y3= 48.5;
 
-    public static double preloadScorePosX = -6;
-    public static double preloadScorePosY = 37;
-    public static double preloadScoreHeading = -Math.PI / 2;
+    public static double X4= 46;
+    public static double Y4= 28;
+    public static double X5= 60;
+    public static double Y5= 55;
+
+
     @Override
     public void runOpMode() throws InterruptedException {
-        Pose2d startPose = new Pose2d(startPosX, startPosY, startHeading);
-        Pose2d putspecimenPose = new Pose2d(-40, 66.3, 0);
         bot = new GalaxyBot(hardwareMap);
-        bot.doClawClose();
-        bot.doInitAutoPos();
-        bot.clawSpinSpecimen();
-        bot.intakeDetract();
 
+        bot.doClawClose();
+        bot.intakeDetract();
+        bot.clawSpinSample();
+        bot.doSwingDown();
+        bot.doUnTwist();
+        bot.intakeClawOpen();
+
+        Pose2d startPose = new Pose2d(36, 66, Math.PI/2);
         drive = new MecanumDrive(hardwareMap, startPose);
         drive.updatePoseEstimate();
-// Score preload speciemen
-       Action preloadScore = drive.actionBuilder(startPose)
-                .splineToConstantHeading(
-                            new Vector2d(
-                                    preloadScorePosX,
-                                    preloadScorePosY
-                                    ),
-                                    preloadScoreHeading)
-               .lineToY(34)
-                .build();
-        Pose2d preloadPose = new Pose2d(preloadScorePosX,34,preloadScoreHeading);
-        Action forward = drive.actionBuilder(preloadPose)
-//                .splineToConstantHeading(
-//                        new Vector2d(
-//                                -31,
-//                                40
-//                        ),
-//                        preloadScoreHeading)
-                .strafeTo(
-                        new Vector2d(-31,34)
+
+        Action preloadScore = drive.actionBuilder(startPose)
+                .lineToY(60)
+                .splineToLinearHeading(
+                        new Pose2d(60, 55, Math.PI / 4),
+                        0
                 )
                 .build();
 
-        Pose2d lineupOnePose = new Pose2d(-31, 34, -Math.PI / 2);
-// Move to the front of first block
-        Action forward2 = drive.actionBuilder(lineupOnePose)
-              //  .setTangent(1.539)
-          //      .turnTo(Math.PI/2)
+        Pose2d lineUpOne = new Pose2d(60, 55, Math.PI/4);
+        Action dolineUpOne = drive.actionBuilder(lineUpOne)
+                .splineToLinearHeading(new Pose2d(X1, Y1, Math.PI / 2), -Math.PI / 2)
+                .build();
+
+        Pose2d lineUpOne2 = new Pose2d(49, 55, Math.PI/4);
+        Action dolineUpOne2 = drive.actionBuilder(lineUpOne2)
                 .splineToLinearHeading(
-                        new Pose2d(
-                                -42,
-                                14,
-                                Math.PI/2
-                        ),
-                        Math.PI)
-        .build();
-        Pose2d line2 = new Pose2d(-42, 14, Math.PI/2);
-// turn 180 degrees (slides facing wall)
-        Action forward3 = drive.actionBuilder(line2)
-                .splineToConstantHeading(
-                        new Vector2d(
-                                -48,
-                                55
-                        ),
-                        Math.PI/2)
-           //   .lineToY(55)
+                        new Pose2d(X2, Y2, Math.PI / 4),
+                        -Math.PI / 2
+                )
                 .build();
-        Pose2d line3 = new Pose2d(-48, 55, Math.PI/2);
-        Action forward4 = drive.actionBuilder(line3)
-                //.setTangent(1.5464)
-                .splineToConstantHeading(
-                        new Vector2d(
-                                x2,
-                                y2
-                        ),
-                        Math.PI/2)
+        Pose2d lineUpOne3 = new Pose2d(60, 55, Math.PI/4);
+        Action dolineUpOne3 = drive.actionBuilder(lineUpOne3)
+                .lineToY(50)
+                .splineToLinearHeading(new Pose2d(X3, Y3, Math.PI / 2), -Math.PI / 2)
                 .build();
-        Pose2d line4 = new Pose2d(x2, y2, Math.PI / 2);
-        Action forward5 = drive.actionBuilder(line4)
-              //  .setTangent(1.54747)
-                .splineToConstantHeading(
-                        new Vector2d(
-                                x3,
-                                69
-                        ),
-                        Math.PI/2)
+        Pose2d lineUpOne4 = new Pose2d(X3, Y3, Math.PI/4);
+
+        Action dolineUpOne4 = drive.actionBuilder(lineUpOne4)
+                .splineToLinearHeading(new Pose2d(58, 57, Math.PI / 4), Math.PI / 2)
                 .build();
-        Pose2d line5 = new Pose2d(x3, y3, Math.PI / 2);
-        //shit smehow works idk rlly
-        //from wall to bar
-        Action forward6 = drive.actionBuilder(line5)
-                        .lineToY(50)
-                        .splineToLinearHeading(
-                                new Pose2d(
-                                        x4,
-                                        y4,
-                                        -Math.PI/2
-                                ),
-                                Math.PI)
-                        .build();
 
-//      Action toSpecimen = drive.actionBuilder(preloadPose)
-//                .lineToY(60)
-//                .turnTo(Math.PI / 2)
-//                .setTangent(Math.PI)
-//                .splineTo(
-//                        new Vector2d(
-//                                -48,
-//                                23),
-//                        Math.PI / 2
-//                )
-//                .build();
-//        Action toSpecimen2 = drive.actionBuilder(putspecimenPose)
-//                .splineToConstantHeading(
-//                        new Vector2d(
-//                                -48,
-//                                65),
-//                        Math.PI
-//                )
-//                .build();
+        Pose2d lineUpOne5 = new Pose2d(58, 57, Math.PI / 4);
+        Action dolineUpOne5 = drive.actionBuilder(lineUpOne5)
+                .splineToLinearHeading(new Pose2d(X4, Y4, Math.PI), -Math.PI / 2)
+                .build();
+
+        Pose2d lineUpOne6 = new Pose2d(X4, Y4, -Math.PI / 2);
+        Action dolineUpOne6 = drive.actionBuilder(lineUpOne5)
+
+                .splineToLinearHeading(new Pose2d(X5, Y5, 0.92), 0.92)
+                .splineToLinearHeading(
+                        new Pose2d(65, 52, Math.PI / 4),
+                        -Math.PI / 2
+                )
+                .build();
 
 
-
-
-      //  Action lineupTwo = drive.actionBuilder(lineupOnePose)
-        //        .splineToConstantHeading(new Vector2d(-60, 6), Math.PI / 2)
-            //    .lineToY(68)
-          //      .build();
-
-
-
-//        Action specimenBackup = drive.actionBuilder(lineupOnePose)
-//               .lineToY(50)
-//             .build();
-//
-//        Action specimenPickup = drive.actionBuilder(lineupOnePose)
-//                .splineToConstantHeading(new Vector2d(-47, 63), Math.PI / 2)
-//                .build();
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         waitForStart();
 
-       Actions.runBlocking(
-                new SequentialAction(
-                    new ParallelAction(
-                        new SwingDown(),
-                                new SlideUpSpecimen(),
-                        preloadScore
-                            )
-                        ,
-                    new SequentialAction(
-                            new SlideDownSpecimen(),
-                            new ClawOpen(),
-                           new SleepAction(0.01),
-                            new SlideUpSpecimenPickup()
-                    )
-                )
-        );
-
-//        Actions.runBlocking(
-//                new SequentialAction(
-//                    new SlideDown()
-//                )
-//        );
-               Actions.runBlocking(
-                       new SequentialAction(
-                               forward,
-                               forward2,
-                               forward3,
-                               forward4,
-                               forward5
-
-                       )
-               );
-               Actions.runBlocking(
-                       new SequentialAction(
-                               new ClawClose(),
-        new SleepAction(0.5)
-                       )
-
-               );
-               //bunch of random shit idk, dont change ts
+        // move to basket to score first sample
         Actions.runBlocking(
                 new ParallelAction(
-                        new SlideUpSpecimen(),
-                        forward6,
-                        new SlideDownSpecimen()
+
+                        new SlideUp(),
+                        new SwingUp(),
+                        preloadScore
                 )
         );
-////
-////        Actions.runBlocking(
-////                new SequentialAction(
-////                        new SleepAction(1),
-////                   //     new SlideUpSpecimenPickup(),
-////                        new ClawClose(),
-////                        new SleepAction(2)
-////                )
-//        );
-//
-//
-//        Actions.runBlocking(
-//                    new ParallelAction(
-//                            new SlideUpSpecimen(),
-//                            specimenDrop,
-//                            new SlideDown()
-//                    )
-//        );
+        // sequence to score block
+        Actions.runBlocking(
+                new SequentialAction(
+                        new SleepAction(0.5),
+                        new ClawOpen(),
+                        new SleepAction(0.5)
+                )
+        );
+        // sequence to go to and pick up first sample
+        Actions.runBlocking(
+                new SequentialAction(
+                        dolineUpOne,
+                        new ParallelAction
+                                (
+                                        new slideDownFully(),
+                        new IntakeExtend(),
+                        new SpinDown(),
+                        new IntakeClawOpen()
+                                ),
+
+                        new SwingDown(),
+                        new SleepAction(0.5),
+                        new IntakeClawClose(),
+                        new SleepAction(0.5)
+                )
+        );
+        // sequence to do handoff of first sample
+        Actions.runBlocking(
+                new SequentialAction(
+                        new ParallelAction(
+                                new SpinUp(),
+                                new IntakeDetract()
+                        ),
+                        new SleepAction(1),
+                        new IntakeClawOpen(),
+                        new ClawClose(),
+                        new SleepAction(0.25)
+                )
+        );
+
+        Actions.runBlocking(
+                new ParallelAction(
+                        dolineUpOne2,
+                        new SlideUp()
+                )
+        );
+        Actions.runBlocking(
+                new SequentialAction(
+                        new SwingUp(),
+                        new SleepAction(1),
+                        new ClawOpen(),
+                        new SleepAction(0.25)
+                )
+        );
+        Actions.runBlocking(
+                new SequentialAction(
+                        dolineUpOne3,
+                        new ParallelAction
+                                (
+                                        new slideDownFully(),
+                                        new IntakeExtend(),
+                                        new SpinDown(),
+                                        new IntakeClawOpen()
+
+                                ),
+
+                        new SwingDown(),
+                        new SleepAction(0.5),
+                        new IntakeClawClose(),
+                        new SleepAction(0.5)
+                )
+        );
+        // sequence to do handoff of first sample
+        Actions.runBlocking(
+                new SequentialAction(
+                        new ParallelAction(
+                                new SpinUp(),
+                                new IntakeDetract()
+                        ),
+                        new SleepAction(1),
+                        new IntakeClawOpen(),
+                        new ClawClose(),
+                        new SleepAction(0.25)
+                )
+        );
+        Actions.runBlocking(
+                new ParallelAction(
+                        dolineUpOne4,
+                        new SlideUp()
+                )
+        );
+        Actions.runBlocking(
+                new SequentialAction(
+                        new SwingUp(),
+                        new SleepAction(1),
+                        new ClawOpen(),
+                        new SleepAction(0.5)
+                )
+        );
+        Actions.runBlocking(
+                new SequentialAction(
+                        dolineUpOne5,
+                        new ParallelAction
+                                (
+                                        new slideDownFully(),
+                                        new IntakeExtend(),
+                                        new SpinDown(),
+                                        new IntakeClawOpen()
+                                ),
+
+                        new SwingDown(),
+                        new Twist(),
+                        new SleepAction(0.5),
+                        new IntakeClawClose(),
+                        new SleepAction(0.5)
+                )
+        );
+        // sequence to do handoff of first sample
+        Actions.runBlocking(
+                new SequentialAction(
+                        new Untwist(),
+                        new ParallelAction(
+                                new SpinUp(),
+                                new IntakeDetract()
+                        ),
+                        new SleepAction(1),
+                        new IntakeClawOpen(),
+                        new ClawClose(),
+                        new SleepAction(0.25)
+                )
+        );
+        Actions.runBlocking(
+                new ParallelAction(
+                        dolineUpOne6,
+                        new SlideUp()
+                )
+        );
+        Actions.runBlocking(
+                new SequentialAction(
+                        new SwingUp(),
+                        new SleepAction(1),
+                        new ClawOpen(),
+                        new SleepAction(0.5)
+                )
+        );
     }
 }
-
-

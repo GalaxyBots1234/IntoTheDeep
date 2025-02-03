@@ -254,15 +254,14 @@ public class GalaxyBotTeleOp extends OpMode
 
     public void start()
     {
-        try {
+
             robot.clawSpinSample();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+
         robot.intakeClawOpen();
         robot.spinUp();
         robot.intakeDetract();
         robot.doUnTwist();
+        robot.doSwingDown();
     }
 
 @Override
