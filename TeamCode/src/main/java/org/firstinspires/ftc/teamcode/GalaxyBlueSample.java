@@ -365,6 +365,7 @@ public class GalaxyBlueSample extends LinearOpMode{
                         preloadScore
                 )
         );
+        //
         // sequence to score block
         Actions.runBlocking(
                 new SequentialAction(
