@@ -270,7 +270,7 @@ public class GalaxyBlueSample extends LinearOpMode{
 
     public static double preloadScorePosX= 60;
     public static double preloadScorePosY= 55;
-    public static double X1= 50;
+    public static double X1= 47.5;
     public static double Y1= 50;
     public static double X2= 60;
     public static double Y2= 55;
@@ -281,6 +281,8 @@ public class GalaxyBlueSample extends LinearOpMode{
     public static double Y4= 28;
     public static double X5= 60;
     public static double Y5= 55;
+    public static double X6= 44;
+    public static double Y6= 20;
 
 
     @Override
@@ -331,17 +333,21 @@ public class GalaxyBlueSample extends LinearOpMode{
 
         Pose2d lineUpOne5 = new Pose2d(58, 57, Math.PI / 4);
         Action dolineUpOne5 = drive.actionBuilder(lineUpOne5)
+                .lineToY(50)
                 .splineToLinearHeading(new Pose2d(X4, Y4, Math.PI), -Math.PI / 4 * 3)
                 .build();
 
         Pose2d lineUpOne6 = new Pose2d(X4, Y4, -Math.PI / 2);
         Action dolineUpOne6 = drive.actionBuilder(lineUpOne5)
-
                 .splineToLinearHeading(new Pose2d(X5, Y5, 0.92), 0.92)
                 .splineToLinearHeading(
                         new Pose2d(65, 52, Math.PI / 4),
                         -Math.PI / 2
                 )
+                .build();
+        Pose2d backUpPose = new Pose2d(65, 52, -Math.PI / 2);
+        Action backUp = drive.actionBuilder(backUpPose)
+                .splineToLinearHeading(new Pose2d(X6, Y6, Math.PI / 2), -Math.PI / 2)
                 .build();
 
 
@@ -502,6 +508,13 @@ public class GalaxyBlueSample extends LinearOpMode{
                         new ClawOpen(),
                         new SleepAction(0.5)
                 )
+        );
+        Actions.runBlocking(
+                new ParallelAction(
+                        backUp,
+                        new IntakeExtend()
+                )
+
         );
     }
 }
