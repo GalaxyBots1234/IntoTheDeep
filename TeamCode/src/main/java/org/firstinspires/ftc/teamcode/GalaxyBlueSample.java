@@ -347,7 +347,7 @@ public class GalaxyBlueSample extends LinearOpMode{
                 .build();
         Pose2d backUpPose = new Pose2d(65, 52, -Math.PI / 2);
         Action backUp = drive.actionBuilder(backUpPose)
-                .splineToLinearHeading(new Pose2d(X6, Y6, Math.PI / 2), -Math.PI / 2)
+                .splineToLinearHeading(new Pose2d(X1, Y1, Math.PI / 2), -Math.PI / 2)
                 .build();
 
 
@@ -512,8 +512,7 @@ public class GalaxyBlueSample extends LinearOpMode{
         );
         Actions.runBlocking(
                 new ParallelAction(
-                        backUp,
-                        new IntakeExtend()
+                        backUp
                 )
 
         );
