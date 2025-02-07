@@ -514,7 +514,6 @@ public class GalaxyBlueSample extends LinearOpMode{
                 new ParallelAction(
                         backUp
                 )
-
         );
     }
 }

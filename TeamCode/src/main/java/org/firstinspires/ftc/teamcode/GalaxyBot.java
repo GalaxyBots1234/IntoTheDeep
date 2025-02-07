@@ -243,10 +243,10 @@ public class GalaxyBot {
     }
 
 
-    public static int slideUpSpecimenPos = 2500;
-    public static int slideDownSpecimenPos = 1600;
+    public static int slideUpSpecimenPos = 2350;
+    public static int slideDownSpecimenPos = 1450;
 
-    public static int slideUpSpecimenPickupPos = 210;
+    public static int slideUpSpecimenPickupPos = 150;
 
     public void slideUpSpecimen()
     {
@@ -330,7 +330,7 @@ public class GalaxyBot {
     }
 
     public static double clawOpenPos = 0.8;
-    public static double clawClosedPos = 1.0;
+    public static double clawClosedPos = 0.985;
 
     public void claw()
     {
@@ -380,7 +380,7 @@ public class GalaxyBot {
 
     public static double swingUpPos = 0.7;
     public static double swingAutoInitPos = 0.12;
-    public static double swingDownPos = 0.07;
+    public static double swingDownPos = 0.03;
     public void swing()
     {
         swingUp = !swingUp;
@@ -452,8 +452,8 @@ public class GalaxyBot {
         rightSpin.setPosition(spinUpPos);
     }
 
-    public static double clawSpinSamplePos = 0.675;
-    public static double clawSpinSpecimenPos = 0;
+    public static double clawSpinSamplePos = 0.7;
+    public static double clawSpinSpecimenPos = 0.15;
     public static double swingSamplePos = 0.4;
 
     public void clawSpinSample() {
