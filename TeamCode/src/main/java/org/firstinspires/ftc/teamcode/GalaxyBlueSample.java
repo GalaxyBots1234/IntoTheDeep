@@ -268,21 +268,28 @@ public class GalaxyBlueSample extends LinearOpMode{
     private GalaxyBot bot;
     private MecanumDrive drive;
 
+    public static double startPosX= 36;
+    public static double startPosY= 63.6;
     public static double preloadScorePosX= 60;
     public static double preloadScorePosY= 55;
-    public static double X1= 47.5;
-    public static double Y1= 50;
-    public static double X2= 60;
-    public static double Y2= 55;
-    public static double X3 = 67;
-    public static double Y3= 48.5;
+    public static double firstSampleX= 49.5;
+    public static double firstSampleY= 48;
+    public static double returnFirstX= 59.5;
+    public static double returnFirstY= 48.5;
+    public static double secondSampleX = 66;
+    public static double secondSampleY= 47.8;
+    public static double returnSecondSampleX = 65;
+    public static double returnSecondSampleY= 51;
 
-    public static double X4= 46;
-    public static double Y4= 28;
-    public static double X5= 60;
-    public static double Y5= 55;
-    public static double X6= 44;
-    public static double Y6= 20;
+    public static double thirdSampleX= 46.3;
+    public static double thirdSampleY= 24.4;
+    public static double returnthirdSampleX= 60.5;
+    public static double returnthirdSampleY= 53.5;
+    public static double returnthirdSampleX2= 63.5;
+    public static double returnthirdSampleY2= 47.8;
+    public static double moveBack= 60;
+    public static double moveBack2= 50;
+
 
 
     @Override
@@ -296,60 +303,59 @@ public class GalaxyBlueSample extends LinearOpMode{
         bot.doUnTwist();
         bot.intakeClawOpen();
 
-        Pose2d startPose = new Pose2d(36, 66, Math.PI/2);
+        Pose2d startPose = new Pose2d(startPosX, startPosY, Math.PI/2);
         drive = new MecanumDrive(hardwareMap, startPose);
         drive.updatePoseEstimate();
 
         Action preloadScore = drive.actionBuilder(startPose)
-                .lineToY(60)
+                .lineToY(moveBack)
                 .splineToLinearHeading(
-                        new Pose2d(60, 55, Math.PI / 4),
+                        new Pose2d(preloadScorePosX, preloadScorePosY, Math.PI / 4),
                         0
                 )
                 .build();
 
-        Pose2d lineUpOne = new Pose2d(60, 55, Math.PI/4);
+        Pose2d lineUpOne = new Pose2d(preloadScorePosX, preloadScorePosY, Math.PI/4);
         Action dolineUpOne = drive.actionBuilder(lineUpOne)
-                .splineToLinearHeading(new Pose2d(X1, Y1, Math.PI / 2), -Math.PI / 2)
+                .splineToLinearHeading(new Pose2d(firstSampleX, firstSampleY, Math.PI / 2), -Math.PI / 2)
                 .build();
 
-        Pose2d lineUpOne2 = new Pose2d(49, 55, Math.PI/4);
+        Pose2d lineUpOne2 = new Pose2d(firstSampleX, firstSampleY, Math.PI/4);
         Action dolineUpOne2 = drive.actionBuilder(lineUpOne2)
                 .splineToLinearHeading(
-                        new Pose2d(X2, Y2, Math.PI / 4),
+                        new Pose2d(returnFirstX, returnFirstY, Math.PI / 4),
                         -Math.PI / 2
                 )
                 .build();
-        Pose2d lineUpOne3 = new Pose2d(60, 55, Math.PI/4);
+        Pose2d lineUpOne3 = new Pose2d(returnFirstX, returnFirstY, Math.PI/4);
         Action dolineUpOne3 = drive.actionBuilder(lineUpOne3)
-                .lineToY(50)
-                .splineToLinearHeading(new Pose2d(X3, Y3, Math.PI / 2), -Math.PI / 2)
+                .lineToY(moveBack2)
+                .splineToLinearHeading(new Pose2d(secondSampleX, secondSampleY, Math.PI / 2), -Math.PI / 2)
                 .build();
-        Pose2d lineUpOne4 = new Pose2d(X3, Y3, Math.PI/4);
 
+        Pose2d lineUpOne4 = new Pose2d(secondSampleX, secondSampleY, Math.PI/4);
         Action dolineUpOne4 = drive.actionBuilder(lineUpOne4)
-                .splineToLinearHeading(new Pose2d(58, 57, Math.PI / 4), Math.PI / 2)
+                .splineToLinearHeading(new Pose2d(returnSecondSampleX, returnSecondSampleY, Math.PI / 4), Math.PI / 2)
                 .build();
 
-        Pose2d lineUpOne5 = new Pose2d(58, 57, Math.PI / 4);
+        Pose2d lineUpOne5 = new Pose2d(returnSecondSampleX, returnSecondSampleY, Math.PI / 4);
         Action dolineUpOne5 = drive.actionBuilder(lineUpOne5)
-                .lineToY(50)
-                .splineToLinearHeading(new Pose2d(X4, Y4, Math.PI), -Math.PI / 4 * 3)
+                .lineToY(moveBack2)
+                .splineToLinearHeading(new Pose2d(thirdSampleX, thirdSampleY, Math.PI), -Math.PI / 4 * 3)
                 .build();
 
-        Pose2d lineUpOne6 = new Pose2d(X4, Y4, -Math.PI / 2);
+        Pose2d lineUpOne6 = new Pose2d(thirdSampleX, thirdSampleY, -Math.PI / 2);
         Action dolineUpOne6 = drive.actionBuilder(lineUpOne5)
-                .splineToLinearHeading(new Pose2d(X5, Y5, 0.92), 0.92)
+                .splineToLinearHeading(new Pose2d(returnthirdSampleX, returnthirdSampleY, 0.92), 0.92)
                 .splineToLinearHeading(
-                        new Pose2d(65, 52, Math.PI / 4),
-                        -Math.PI / 2
+                        new Pose2d(returnthirdSampleX2, returnthirdSampleY2, Math.PI / 4),
+                        Math.PI / 2
                 )
                 .build();
-        Pose2d backUpPose = new Pose2d(65, 52, -Math.PI / 2);
+        Pose2d backUpPose = new Pose2d(returnthirdSampleX2, returnthirdSampleY2, -Math.PI / 2);
         Action backUp = drive.actionBuilder(backUpPose)
-                .splineToLinearHeading(new Pose2d(X1, Y1, Math.PI / 2), -Math.PI / 2)
+                .splineToLinearHeading(new Pose2d(firstSampleX, firstSampleY, Math.PI / 2), -Math.PI / 2)
                 .build();
-
 
 
         telemetry.addData("Status", "Initialized");
