@@ -212,6 +212,15 @@ public class GalaxyBlueSpecimen extends LinearOpMode {
             return false;
         }
     }
+    public class SwingSample implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            bot.leftSwing.setPosition(bot.swingSamplePos);
+            bot.rightSwing.setPosition(bot.swingSamplePos);
+            packet.put("swing down", "");
+            return false;
+        }
+    }
 
     public class SpinUp implements Action {
         @Override
@@ -262,11 +271,11 @@ public class GalaxyBlueSpecimen extends LinearOpMode {
     public static double goForwardX = -50;
     public static double goForwardY = 64.8;
     public static double scoreFirstX = -6;
-    public static double scoreFirstY = 34;
+    public static double scoreFirstY = 35.8;
     public static double goBacksecondX = -45;
     public static double goBacksecondY = 63.6;
     public static double scoreSecondX = -4;
-    public static double scoreSecondY = 33.8;
+    public static double scoreSecondY = 36.55;
     public static double goBack1 = 44;
     public static double goBack2 = 66;
     public static double parkX = -45;
@@ -278,7 +287,7 @@ public class GalaxyBlueSpecimen extends LinearOpMode {
     public static double startHeading = -Math.PI / 2;
 
     public static double preloadScorePosX = -8;
-    public static double preloadScorePosY = 33.8;
+    public static double preloadScorePosY = 34.8;
     public static double preloadScoreHeading = -Math.PI / 2;
 
     @Override
@@ -443,6 +452,17 @@ public class GalaxyBlueSpecimen extends LinearOpMode {
                         new ClawOpen(),
                         new SleepAction(1),
                         forward6
+                )
+        );
+        Actions.runBlocking(
+                new SequentialAction(
+                        new SpinSample(),
+                        new ClawClose(),
+                        new SwingSample(),
+                        new SleepAction(0.5),
+                        new SwingDown(),
+                        new slideDownFully()
+
                 )
         );
     }

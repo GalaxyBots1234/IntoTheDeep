@@ -270,21 +270,22 @@ public class GalaxyBlueSample extends LinearOpMode{
 
     public static double startPosX= 36;
     public static double startPosY= 63.6;
-    public static double preloadScorePosX= 60;
-    public static double preloadScorePosY= 55;
-    public static double firstSampleX= 49.5;
+    public static double preloadScorePosX= 59.75;
+    public static double preloadScorePosY= 54.75
+            ;
+    public static double firstSampleX= 47;
     public static double firstSampleY= 48;
     public static double returnFirstX= 59.5;
-    public static double returnFirstY= 48.5;
-    public static double secondSampleX = 66;
+    public static double returnFirstY= 51.5;
+    public static double secondSampleX = 66.5;
     public static double secondSampleY= 47.8;
-    public static double returnSecondSampleX = 65;
-    public static double returnSecondSampleY= 51;
+    public static double returnSecondSampleX = 60.25;
+    public static double returnSecondSampleY= 56.75;
 
-    public static double thirdSampleX= 46.3;
-    public static double thirdSampleY= 24.4;
-    public static double returnthirdSampleX= 60.5;
-    public static double returnthirdSampleY= 53.5;
+    public static double thirdSampleX= 46.55;
+    public static double thirdSampleY= 27.25;
+    public static double returnthirdSampleX= 60.25;
+    public static double returnthirdSampleY= 53.25;
     public static double returnthirdSampleX2= 63.5;
     public static double returnthirdSampleY2= 47.8;
     public static double moveBack= 60;
@@ -354,7 +355,7 @@ public class GalaxyBlueSample extends LinearOpMode{
                 .build();
         Pose2d backUpPose = new Pose2d(returnthirdSampleX2, returnthirdSampleY2, -Math.PI / 2);
         Action backUp = drive.actionBuilder(backUpPose)
-                .splineToLinearHeading(new Pose2d(firstSampleX, firstSampleY, Math.PI / 2), -Math.PI / 2)
+                .lineToY(44)
                 .build();
 
 
@@ -513,12 +514,14 @@ public class GalaxyBlueSample extends LinearOpMode{
                         new SwingUp(),
                         new SleepAction(0.75),
                         new ClawOpen(),
-                        new SleepAction(0.5)
+                        new SleepAction(0.25)
                 )
         );
         Actions.runBlocking(
-                new ParallelAction(
-                        backUp
+                new SequentialAction(
+                        backUp,
+                        new slideDownFully(),
+                        new SwingDown()
                 )
         );
     }
