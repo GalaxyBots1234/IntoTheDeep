@@ -264,16 +264,16 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
 
     public static double startPosX = -12;
     public static double startPosY = 63.6;
-    public static double backUpafterscoreX = -29;
-    public static double backUpafterscoreY = 39;
-    public static double loopSplineX = -42;
-    public static double loopSplineY = 14;
-    public static double goForwardX = -50;
-    public static double goForwardY = 64.8;
-    public static double scoreFirstX = -6;
-    public static double scoreFirstY = 35.8;
-    public static double goBacksecondX = -45;
-    public static double goBacksecondY = 63.6;
+    public static double goToFirstX = -29;
+    public static double goToFirstY = 39;
+    public static double turnAngleFirst = 0.658;
+    public static double turnAngleFirstback = -0.5712;
+    public static double goToputX = -32;
+    public static double goToputY = 43;
+    public static double turnBackX = -37;
+    public static double turnBackY = 39;
+    public static double goBacksecondX = -32;
+    public static double goBacksecondY = 42;
     public static double scoreSecondX = -4;
     public static double scoreSecondY = 36.55;
     public static double goBack1 = 44;
@@ -315,81 +315,46 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
                 .lineToY(goBack1)
                 .splineToConstantHeading(
                         new Vector2d(
-                                backUpafterscoreX,
-                                backUpafterscoreY
+                                goToFirstX,
+                                goToFirstY
                         ),
                         preloadScoreHeading)
-                .turnTo(Math.PI/4.8)
-
-//                .splineToLinearHeading(
-//                        new Pose2d(
-//                                loopSplineX,
-//                                loopSplineY,
-//                                Math.PI/2
-//                        ),
-//                        Math.PI)
+                .turnTo(turnAngleFirst)
                 .build();
 
-//        Pose2d afterloop =new Pose2d(loopSplineX, loopSplineY, Math.PI/2);
-//        Action forward2 =  drive.actionBuilder(afterloop)
+        Pose2d turnyTurns =new Pose2d(goToFirstX,goToFirstY,turnAngleFirst);
+        Action forward2 =  drive.actionBuilder(turnyTurns)
 //                .splineToConstantHeading(
 //                        new Vector2d(
-//                                goForwardX,
-//                                goForwardY
+//                                goToputX,
+//                                goToputY
 //                        ),
-//                        Math.PI/2
+//                        Math.toRadians(turnAngleFirstback)
 //                )
-//                .build();
-//
-//        Pose2d afterloop1 =new Pose2d(goForwardX, goForwardY, Math.PI/2);
-//        Action forward3 = drive.actionBuilder(afterloop1)
-//                .lineToY(goBack2)
-//                .splineToLinearHeading(
-//                        new Pose2d(
-//                                scoreFirstX,
-//                                scoreFirstY
-//                                ,
-//                                -Math.PI/2
-//                        ),
-//                        Math.toRadians(0.54))
-//                .build();
-//
-//        Pose2d afterloop2 =new Pose2d(scoreFirstX, scoreFirstY, -Math.PI/2);
-//        Action forward4 = drive.actionBuilder(afterloop2)
-//                .splineToLinearHeading(
-//                        new Pose2d(
-//                                goBacksecondX,
-//                                goBacksecondY
-//                                ,
-//                                Math.PI/2
-//                        ),
-//                        Math.toRadians(tan))
-//                .build();
-//
-//        Pose2d afterloop3 =new Pose2d(goBacksecondX, goBacksecondY, Math.PI/2);
-//        Action forward5 = drive.actionBuilder(afterloop3)
-//                .lineToY(goBack2)
-//                .splineToLinearHeading(
-//                        new Pose2d(
-//                                scoreSecondX,
-//                                scoreSecondY
-//                                ,
-//                                -Math.PI/2
-//                        ),
-//                        Math.toRadians(0.54))
-//                .build();
-//
-//        Pose2d afterloop4 =new Pose2d(scoreSecondX, scoreSecondY, -Math.PI/2);
-//        Action forward6 = drive.actionBuilder(afterloop4)
-//                .splineToLinearHeading(
-//                        new Pose2d(
-//                                goBacksecondX,
-//                                goBacksecondY
-//                                ,
-//                                Math.PI/2
-//                        ),
-//                        Math.toRadians(tan))
-//                .build();
+                .turnTo(0.8)
+                .build();
+
+        Pose2d turnyTurns1 =new Pose2d(goToputX, goToputY, turnAngleFirstback);
+        Action forward3 = drive.actionBuilder(turnyTurns1)
+                .splineToConstantHeading(
+                        new Vector2d(
+                                turnBackX,
+                                turnBackY
+                        ),
+                        Math.toRadians(turnAngleFirst))
+                .build();
+        Pose2d turnyTurns2 =new Pose2d(turnBackX, turnBackY, turnAngleFirst);
+        Action forward4 = drive.actionBuilder(turnyTurns2)
+                .splineToLinearHeading(
+                        new Pose2d(
+                                goBacksecondX,
+                                goBacksecondY
+                                ,
+                                Math.toRadians(turnAngleFirstback)
+                        ),
+                        Math.toRadians(tan))
+                .build();
+
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -414,32 +379,55 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
         );
         Actions.runBlocking(
                 new SequentialAction(
+                        new IntakeClawOpen(),
+                        new SlideDownSpecimen(),
                         new IntakeExtend(),
                         new SpinDown(),
-                        new SleepAction(0.5),
+                        new SleepAction(1),
+                        new Twist(),
                         new IntakeClawClose(),
                         new SleepAction(1)
                 )
         );
 
-//        Actions.runBlocking(
-//                new ParallelAction(
-//                        forward2,
-//                        new SlideUpSpecimenPickup()
-//                )
-//        );
-//        Actions.runBlocking(
-//                new SequentialAction(
-//                        new ClawClose(),
-//                        new SleepAction(0.5)));
-//
-//        Actions.runBlocking(
-//                new ParallelAction(
-//                        forward3,
-//                        new SlideUpSpecimen()
-//                )
-//
-//        );
+        Actions.runBlocking(
+                new SequentialAction(
+                        forward2,
+                        new IntakeClawOpen()
+                )
+        );
+        Actions.runBlocking(
+                new SequentialAction(
+                        new ClawClose(),
+                        new SleepAction(0.5)));
+
+        Actions.runBlocking(
+                (
+                        forward3
+                )
+        );
+        Actions.runBlocking(
+                new SequentialAction(
+                        new IntakeExtend(),
+                        new SpinDown(),
+                        new SleepAction(1),
+                        new IntakeClawClose(),
+                        new SleepAction(1),
+                        new slideDownFully()
+                )
+        );
+        Actions.runBlocking(
+                new SequentialAction(
+                        forward4,
+                        new IntakeClawOpen()
+                )
+        );
+        Actions.runBlocking(
+                new SequentialAction(
+                        new ClawClose(),
+                        new SleepAction(0.5)));
+
+
 //        Actions.runBlocking(
 //                new SequentialAction(
 //                        new SleepAction(0.125),

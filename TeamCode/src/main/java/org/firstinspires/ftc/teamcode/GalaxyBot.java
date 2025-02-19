@@ -54,7 +54,7 @@ public class GalaxyBot {
     public boolean twisted = false;
 
     public static double intakeDetractPos = 0.0;
-    public static double intakeExtendPos = 0.57;
+    public static double intakeExtendPos = 0.25;
 
 
     public static int slideUpPos = 3100;
@@ -380,7 +380,7 @@ public class GalaxyBot {
 
     public static double swingUpPos = 0.6575;
     public static double swingAutoInitPos = 0.12;
-    public static double swingDownPos = 0.03;
+    public static double swingDownPos = 0.045;
     public void swing()
     {
         swingUp = !swingUp;

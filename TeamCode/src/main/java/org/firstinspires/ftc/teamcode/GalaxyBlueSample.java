@@ -27,12 +27,9 @@ public class GalaxyBlueSample extends LinearOpMode{
             packet.put("left tick pos: ", bot.leftSlide.getCurrentPosition());
             packet.put("right tick pos: ", bot.rightSlide.getCurrentPosition());
             packet.put("slides up:", bot.slideUp);
-            if (bot.leftSlide.getCurrentPosition() < 3050 || bot.rightSlide.getCurrentPosition() < 3050)
-            {
+            if (bot.leftSlide.isBusy() || bot.rightSlide.isBusy()) {
                 return true;
-            }
-            else
-            {
+            } else {
                 bot.leftSlide.setPower(0.0);
                 bot.rightSlide.setPower(0.0);
                 return false;
@@ -47,12 +44,9 @@ public class GalaxyBlueSample extends LinearOpMode{
             packet.put("left tick pos: ", bot.leftSlide.getCurrentPosition());
             packet.put("right tick pos: ", bot.rightSlide.getCurrentPosition());
             packet.put("slides down", "");
-            if (bot.leftSlide.isBusy() || bot.rightSlide.isBusy())
-            {
+            if (bot.leftSlide.isBusy() || bot.rightSlide.isBusy()) {
                 return true;
-            }
-            else
-            {
+            } else {
                 bot.leftSlide.setPower(0.0);
                 bot.rightSlide.setPower(0.0);
                 return false;
@@ -67,12 +61,9 @@ public class GalaxyBlueSample extends LinearOpMode{
             packet.put("left tick pos: ", bot.leftSlide.getCurrentPosition());
             packet.put("right tick pos: ", bot.rightSlide.getCurrentPosition());
             packet.put("slides up:", bot.slideUp);
-            if (bot.leftSlide.isBusy() || bot.rightSlide.isBusy())
-            {
+            if (bot.leftSlide.isBusy() || bot.rightSlide.isBusy()) {
                 return true;
-            }
-            else
-            {
+            } else {
                 bot.leftSlide.setPower(0.0);
                 bot.rightSlide.setPower(0.0);
                 return false;
@@ -87,12 +78,9 @@ public class GalaxyBlueSample extends LinearOpMode{
             packet.put("left tick pos: ", bot.leftSlide.getCurrentPosition());
             packet.put("right tick pos: ", bot.rightSlide.getCurrentPosition());
             packet.put("slides up:", bot.slideUp);
-            if (bot.leftSlide.isBusy() || bot.rightSlide.isBusy())
-            {
+            if (bot.leftSlide.isBusy() || bot.rightSlide.isBusy()) {
                 return true;
-            }
-            else
-            {
+            } else {
                 bot.leftSlide.setPower(0.0);
                 bot.rightSlide.setPower(0.0);
                 return false;
@@ -107,12 +95,9 @@ public class GalaxyBlueSample extends LinearOpMode{
             packet.put("left tick pos: ", bot.leftSlide.getCurrentPosition());
             packet.put("right tick pos: ", bot.rightSlide.getCurrentPosition());
             packet.put("slides down", "");
-            if (bot.leftSlide.isBusy() || bot.rightSlide.isBusy())
-            {
+            if (bot.leftSlide.isBusy() || bot.rightSlide.isBusy()) {
                 return true;
-            }
-            else
-            {
+            } else {
                 bot.leftSlide.setPower(0.0);
                 bot.rightSlide.setPower(0.0);
                 return false;
@@ -127,12 +112,9 @@ public class GalaxyBlueSample extends LinearOpMode{
             packet.put("left tick pos: ", bot.leftSlide.getCurrentPosition());
             packet.put("right tick pos: ", bot.rightSlide.getCurrentPosition());
             packet.put("slides down", "");
-            if (bot.leftSlide.isBusy() || bot.rightSlide.isBusy())
-            {
+            if (bot.leftSlide.isBusy() || bot.rightSlide.isBusy()) {
                 return true;
-            }
-            else
-            {
+            } else {
                 bot.leftSlide.setPower(0.0);
                 bot.rightSlide.setPower(0.0);
                 return false;
@@ -229,6 +211,15 @@ public class GalaxyBlueSample extends LinearOpMode{
             return false;
         }
     }
+    public class SwingSample implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            bot.leftSwing.setPosition(bot.swingSamplePos);
+            bot.rightSwing.setPosition(bot.swingSamplePos);
+            packet.put("swing down", "");
+            return false;
+        }
+    }
 
     public class SpinUp implements Action {
         @Override
@@ -251,6 +242,7 @@ public class GalaxyBlueSample extends LinearOpMode{
     public class SpinSample implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
+
             bot.clawSpinSample();
             packet.put("claw spinned for sample", "");
             return false;
@@ -270,24 +262,28 @@ public class GalaxyBlueSample extends LinearOpMode{
 
     public static double startPosX= 36;
     public static double startPosY= 63.6;
-    public static double preloadScorePosX= 59.75;
-    public static double preloadScorePosY= 54.75
-            ;
-    public static double firstSampleX= 47;
-    public static double firstSampleY= 48;
+    public static double preloadScorePosX= 63;
+    public static double preloadScorePosY= 53;
+    public static double firstSampleX= 50;
+    public static double firstSampleY= 46;
     public static double returnFirstX= 59.5;
     public static double returnFirstY= 51.5;
-    public static double secondSampleX = 66.5;
-    public static double secondSampleY= 47.8;
+    public static double secondSampleX = 66.05;
+    public static double secondSampleY= 45.7;
     public static double returnSecondSampleX = 60.25;
     public static double returnSecondSampleY= 56.75;
 
-    public static double thirdSampleX= 46.55;
-    public static double thirdSampleY= 27.25;
+    public static double thirdSampleX= 50.85;
+    public static double thirdSampleY= 26.4;
     public static double returnthirdSampleX= 60.25;
     public static double returnthirdSampleY= 53.25;
     public static double returnthirdSampleX2= 63.5;
     public static double returnthirdSampleY2= 47.8;
+    public static double parkX= 30;
+    public static double parkY= 12;
+    public static double tan= 1.483;
+
+
     public static double moveBack= 60;
     public static double moveBack2= 50;
 
@@ -331,7 +327,7 @@ public class GalaxyBlueSample extends LinearOpMode{
         Pose2d lineUpOne3 = new Pose2d(returnFirstX, returnFirstY, Math.PI/4);
         Action dolineUpOne3 = drive.actionBuilder(lineUpOne3)
                 .lineToY(moveBack2)
-                .splineToLinearHeading(new Pose2d(secondSampleX, secondSampleY, Math.PI / 2), -Math.PI / 2)
+                .splineToLinearHeading(new Pose2d(secondSampleX, secondSampleY, Math.PI*2/3), -Math.PI)
                 .build();
 
         Pose2d lineUpOne4 = new Pose2d(secondSampleX, secondSampleY, Math.PI/4);
@@ -353,9 +349,9 @@ public class GalaxyBlueSample extends LinearOpMode{
                         Math.PI / 2
                 )
                 .build();
-        Pose2d backUpPose = new Pose2d(returnthirdSampleX2, returnthirdSampleY2, -Math.PI / 2);
+        Pose2d backUpPose = new Pose2d(returnthirdSampleX2, returnthirdSampleY2, Math.PI /4 );
         Action backUp = drive.actionBuilder(backUpPose)
-                .lineToY(44)
+                .splineToLinearHeading(new Pose2d(parkX, parkY, Math.PI/2), tan)
                 .build();
 
 
