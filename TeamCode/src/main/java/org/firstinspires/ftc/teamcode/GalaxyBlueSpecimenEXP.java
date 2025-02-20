@@ -264,8 +264,8 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
 
     public static double startPosX = -12;
     public static double startPosY = 63.6;
-    public static double goToFirstX = -29;
-    public static double goToFirstY = 39;
+    public static double goToFirstX = -32;
+    public static double goToFirstY = 43;
     public static double turnAngleFirst = 0.658;
     public static double turnAngleFirstback = -0.5712;
     public static double goToputX = -32;
@@ -283,11 +283,11 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
 
 
 
-    public static double tan = 2.52;
+    public static double tan = 0.0873;
     public static double startHeading = -Math.PI / 2;
 
     public static double preloadScorePosX = -8;
-    public static double preloadScorePosY = 32;
+    public static double preloadScorePosY = 29.5;
     public static double preloadScoreHeading = -Math.PI / 2;
 
     @Override
@@ -311,28 +311,52 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
                         preloadScoreHeading)
                 .build();
 
+        Pose2d afterScore = new Pose2d(preloadScorePosX, preloadScorePosY, startHeading);
+        Action goToFirst = drive.actionBuilder(afterScore)
+                .splineToConstantHeading(
+                        new Vector2d(
+                                goToFirstX,
+                                goToFirstY
+                        ),
+                        preloadScoreHeading)
+                .turnTo(Math.toRadians(tan))
+                .build();
+
+
+
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
         waitForStart();
 
+//        Actions.runBlocking(
+//                new SequentialAction(
+//                        new ParallelAction(
+//                                new SwingDown(),
+//                                new SlideUpSpecimen()
+//                        ),
+//                        preloadScore
+//                )
+//        );
+//        Actions.runBlocking(
+//                new SequentialAction(
+//                        new SlideDownSpecimen(),
+//                        new ClawOpen()
+//                )
+//        );
         Actions.runBlocking(
                 new SequentialAction(
-                        new ParallelAction(
-                                new SwingDown(),
-                                new SlideUpSpecimen(),
-                                preloadScore
-                        )
+                        //goToFirst,
+                        //new SleepAction(1),
+                        new IntakeExtend(),
+                        new SpinDown(),
+                        new IntakeClawOpen(),
+                        new Twist(),
+                        new IntakeClawClose()
                 )
         );
-        Actions.runBlocking(
-                new SequentialAction(
-                        new SlideDownSpecimen(),
-                        new ClawOpen(),
-                        new SleepAction(0.5)
 
-                        )
-        );
+
     }
 }
 
