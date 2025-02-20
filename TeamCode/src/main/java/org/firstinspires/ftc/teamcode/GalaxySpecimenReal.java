@@ -350,9 +350,9 @@ public class GalaxySpecimenReal extends LinearOpMode{
                 new SequentialAction(
                         //goToFirst,
                         //new SleepAction(1),
-                        new IntakeExtend(),
-                        new SpinDown(),
-                        new IntakeClawOpen()
+                        new IntakeExtend()
+                        //new SpinDown(),
+                        //new IntakeClawOpen()
                 )
         );
 
