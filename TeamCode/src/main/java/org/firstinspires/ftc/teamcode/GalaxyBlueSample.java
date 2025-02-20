@@ -514,7 +514,7 @@ public class GalaxyBlueSample extends LinearOpMode{
                 )
         );
         Actions.runBlocking(
-                new SequentialAction(
+                new ParallelAction(
                         backUp,
                         new slideDownFully(),
                         new SwingDown()
