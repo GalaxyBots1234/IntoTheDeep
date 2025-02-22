@@ -46,18 +46,9 @@ public class GalaxyBotTeleOp extends OpMode
         float y = -gamepad1.left_stick_y;
         float x = gamepad1.left_stick_x * 1.1f;
         float rx = gamepad1.right_stick_x;
-        if(gamepad1.dpad_left) {
-
-            x = -1;
-        }
-        if(gamepad1.dpad_right) {
-            x = 1;
-        }
-        if(gamepad1.dpad_up) {
-            y = 1;
-        }
-        if(gamepad1.dpad_down) {
-            y = -1;
+        if(currentGamepad1.right_bumper && previousGamepad1.right_bumper)
+        {
+            LIMIT_SPEED = 0.45f;
         }
 
         double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
@@ -263,6 +254,7 @@ public class GalaxyBotTeleOp extends OpMode
         robot.doUnTwist();
         robot.doSwingDown();
         robot.slideDown();
+        robot.doClawOpen();
     }
 
 @Override

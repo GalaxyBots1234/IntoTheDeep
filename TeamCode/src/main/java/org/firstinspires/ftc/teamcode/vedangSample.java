@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import java.lang.Math;
+import java.util.Arrays;
 import java.util.Vector;
 
 @Config
@@ -268,17 +269,17 @@ public class vedangSample extends LinearOpMode{
     public static double firstSampleY= 49;
     public static double returnFirstX= 56;
     public static double returnFirstY= 56;
-    public static double secondSampleX = 60;
+    public static double secondSampleX = 61;
     public static double secondSampleY= 49;
     public static double returnSecondSampleX = 58;
     public static double returnSecondSampleY= 58;
 
-    public static double thirdSampleX= 46.5;
+    public static double thirdSampleX= 47.2;
     public static double thirdSampleY= 27;
     public static double returnthirdSampleX= 60.25;
     public static double returnthirdSampleY= 53.25;
-    public static double returnthirdSampleX2= 58;
-    public static double returnthirdSampleY2= 58;
+    public static double returnthirdSampleX2= 56;
+    public static double returnthirdSampleY2= 56;
     public static double parkX= 30;
     public static double parkY= 12;
     public static double tan= 1.483;
@@ -303,55 +304,74 @@ public class vedangSample extends LinearOpMode{
         Pose2d startPose = new Pose2d(startPosX, startPosY, Math.PI/2);
         drive = new MecanumDrive(hardwareMap, startPose);
         drive.updatePoseEstimate();
+        VelConstraint preloadConstraint = new MinVelConstraint(Arrays.asList(
+                new TranslationalVelConstraint(50),
+                new AngularVelConstraint(Math.PI / 2)
+        ));
 
         Action preloadScore = drive.actionBuilder(startPose)
-                .lineToY(moveBack)
+                //.lineToY(moveBack)
+                .setTangent(-Math.PI / 2)
                 .splineToLinearHeading(
                         new Pose2d(preloadScorePosX, preloadScorePosY, Math.PI / 4),
-                        0
+                        Math.PI / 2,
+                        preloadConstraint,
+                        new ProfileAccelConstraint(-30, 30)
                 )
                 .build();
 
         Pose2d lineUpOne = new Pose2d(preloadScorePosX, preloadScorePosY, Math.PI/4);
         Action dolineUpOne = drive.actionBuilder(lineUpOne)
-                .splineToLinearHeading(new Pose2d(firstSampleX, firstSampleY, Math.PI / 2), -Math.PI / 2)
+                .setTangent(-Math.PI / 4 * 3)
+                .splineToLinearHeading(new Pose2d(firstSampleX, firstSampleY, Math.PI / 2), Math.PI / 4)
                 .build();
 
-        Pose2d lineUpOne2 = new Pose2d(firstSampleX, firstSampleY, Math.PI/4);
+        Pose2d lineUpOne2 = new Pose2d(firstSampleX, firstSampleY, Math.PI / 2);
         Action dolineUpOne2 = drive.actionBuilder(lineUpOne2)
+                .setTangent(Math.PI / 2)
                 .splineToLinearHeading(
                         new Pose2d(returnFirstX, returnFirstY, Math.PI / 4),
-                        -Math.PI / 2
+                        Math.PI / 2
                 )
                 .build();
-        Pose2d lineUpOne3 = new Pose2d(returnFirstX, returnFirstY, Math.PI/4);
+        Pose2d lineUpOne3 = new Pose2d(returnFirstX, returnFirstY, Math.PI / 4);
         Action dolineUpOne3 = drive.actionBuilder(lineUpOne3)
-                .lineToY(moveBack2)
-                .splineToLinearHeading(new Pose2d(secondSampleX, secondSampleY, Math.PI/2), -Math.PI/2)
+                //.lineToY(moveBack2)
+                .setTangent(-Math.PI / 4 * 3)
+                .splineToLinearHeading(new Pose2d(secondSampleX, secondSampleY, Math.PI/2), Math.PI / 4)
                 .build();
 
-        Pose2d lineUpOne4 = new Pose2d(secondSampleX, secondSampleY, Math.PI/4);
+        Pose2d lineUpOne4 = new Pose2d(secondSampleX, secondSampleY, Math.PI / 2);
         Action dolineUpOne4 = drive.actionBuilder(lineUpOne4)
+                .setTangent(Math.PI / 2)
                 .splineToLinearHeading(new Pose2d(returnSecondSampleX, returnSecondSampleY, Math.PI / 4), Math.PI / 2)
                 .build();
 
         Pose2d lineUpOne5 = new Pose2d(returnSecondSampleX, returnSecondSampleY, Math.PI / 4);
         Action dolineUpOne5 = drive.actionBuilder(lineUpOne5)
-                .lineToY(moveBack2)
-                .splineToLinearHeading(new Pose2d(thirdSampleX, thirdSampleY, Math.PI), -Math.PI / 4 * 3)
+                //.lineToY(moveBack2)
+                .setTangent(-Math.PI / 4 * 3)
+                .splineToLinearHeading(new Pose2d(thirdSampleX, thirdSampleY, Math.PI), Math.PI / 4)
                 .build();
 
-        Pose2d lineUpOne6 = new Pose2d(thirdSampleX, thirdSampleY, -Math.PI / 2);
-        Action dolineUpOne6 = drive.actionBuilder(lineUpOne5)
-                .splineToLinearHeading(new Pose2d(returnthirdSampleX, returnthirdSampleY, 0.92), 0.92)
+        Pose2d lineUpOne6 = new Pose2d(thirdSampleX, thirdSampleY, Math.PI);
+        Action dolineUpOne6 = drive.actionBuilder(lineUpOne6)
+                //.splineToLinearHeading(new Pose2d(returnthirdSampleX, returnthirdSampleY, 0.92), 0.92)
+                .setTangent(Math.PI)
                 .splineToLinearHeading(
                         new Pose2d(returnthirdSampleX2, returnthirdSampleY2, Math.PI / 4),
-                        Math.PI / 2
+                        Math.PI
                 )
                 .build();
-        Pose2d backUpPose = new Pose2d(returnthirdSampleX2, returnthirdSampleY2, Math.PI /4 );
+        VelConstraint backupConstraint = new MinVelConstraint(Arrays.asList(
+                new TranslationalVelConstraint(50),
+                new AngularVelConstraint(Math.PI / 2)
+        ));
+        Pose2d backUpPose = new Pose2d(returnthirdSampleX2, returnthirdSampleY2, Math.PI / 4);
         Action backUp = drive.actionBuilder(backUpPose)
-                .splineToLinearHeading(new Pose2d(parkX, parkY, Math.PI/2), tan)
+                .setTangent(-Math.PI / 2)
+                .splineToLinearHeading(new Pose2d(parkX, parkY, Math.PI / 2), Math.PI / 4,
+                            backupConstraint, new ProfileAccelConstraint(-30, 30))
                 .build();
 
 

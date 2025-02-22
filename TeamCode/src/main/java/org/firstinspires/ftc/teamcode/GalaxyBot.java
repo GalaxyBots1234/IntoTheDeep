@@ -380,7 +380,7 @@ public class GalaxyBot {
 
     public static double swingUpPos = 0.6575;
     public static double swingAutoInitPos = 0.12;
-    public static double swingDownPos = 0.03;
+    public static double swingDownPos = 0.05;
     public void swing()
     {
         swingUp = !swingUp;
@@ -452,7 +452,7 @@ public class GalaxyBot {
         rightSpin.setPosition(spinUpPos);
     }
 
-    public static double clawSpinSamplePos = 0.975;
+    public static double clawSpinSamplePos = 0.94;
     public static double clawSpinSpecimenPos = 0.15;
     public static double swingSamplePos = 0.4;
 

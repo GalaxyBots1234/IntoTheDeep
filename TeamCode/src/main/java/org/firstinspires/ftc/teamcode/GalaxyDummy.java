@@ -302,7 +302,7 @@ public class GalaxyDummy extends LinearOpMode{
         drive.updatePoseEstimate();
 
         Action preloadScore = drive.actionBuilder(startPose)
-                .splineToLinearHeading(new Pose2d(startPosX, startPosY - 48, 0), Math.PI / 2)
+                .lineToY(startPosY - 48)
                 .build();
 
         waitForStart();
