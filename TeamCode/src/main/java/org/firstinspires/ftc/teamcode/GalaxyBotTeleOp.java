@@ -262,6 +262,7 @@ public class GalaxyBotTeleOp extends OpMode
         robot.intakeDetract();
         robot.doUnTwist();
         robot.doSwingDown();
+        robot.slideDown();
     }
 
 @Override

@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode;
-import static org.firstinspires.ftc.teamcode.GalaxyBot.slideDownFully;
 
 import androidx.annotation.NonNull;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.acmerobotics.roadrunner.*;
+import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
@@ -14,12 +14,9 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import java.lang.Math;
-import java.util.Vector;
-
 @Config
-@Autonomous(name = "GalaxySpecimenReal", group = "Autonomous")
-public class GalaxySpecimenReal extends LinearOpMode{
+@Autonomous(name = "GalaxyDummy", group = "Autonomous")
+public class GalaxyDummy extends LinearOpMode{
     public class SlideUp implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
@@ -260,33 +257,32 @@ public class GalaxySpecimenReal extends LinearOpMode{
     private GalaxyBot bot;
     private MecanumDrive drive;
 
-    public static double startPosX = -12;
-    public static double startPosY = 63.6;
-    public static double goToFirstX = -32;
-    public static double goToFirstY = 43;
-    public static double turnAngleFirst = 0.658;
-    public static double turnAngleFirstback = -0.5712;
-    public static double goToputX = -32;
-    public static double goToputY = 43;
-    public static double turnBackX = -37;
-    public static double turnBackY = 39;
-    public static double goBacksecondX = -32;
-    public static double goBacksecondY = 42;
-    public static double scoreSecondX = -4;
-    public static double scoreSecondY = 36.55;
-    public static double goBack1 = 44;
-    public static double goBack2 = 66;
-    public static double parkX = -45;
-    public static double parkY = 60;
+    public static double startPosX= 36;
+    public static double startPosY= 63.6;
+    public static double preloadScorePosX= 63;
+    public static double preloadScorePosY= 53;
+    public static double firstSampleX= 50;
+    public static double firstSampleY= 46;
+    public static double returnFirstX= 59.5;
+    public static double returnFirstY= 51.5;
+    public static double secondSampleX = 66.05;
+    public static double secondSampleY= 45.7;
+    public static double returnSecondSampleX = 60.25;
+    public static double returnSecondSampleY= 56.75;
+
+    public static double thirdSampleX= 50.85;
+    public static double thirdSampleY= 26.4;
+    public static double returnthirdSampleX= 60.25;
+    public static double returnthirdSampleY= 53.25;
+    public static double returnthirdSampleX2= 63.5;
+    public static double returnthirdSampleY2= 47.8;
+    public static double parkX= 30;
+    public static double parkY= 12;
+    public static double tan= 1.483;
 
 
-
-    public static double tan = 0.0873;
-    public static double startHeading = -Math.PI / 2;
-
-    public static double preloadScorePosX = -8;
-    public static double preloadScorePosY = 29.5;
-    public static double preloadScoreHeading = -Math.PI / 2;
+    public static double moveBack= 60;
+    public static double moveBack2= 50;
 
 
 
@@ -294,71 +290,23 @@ public class GalaxySpecimenReal extends LinearOpMode{
     public void runOpMode() throws InterruptedException {
         bot = new GalaxyBot(hardwareMap);
 
-        // Score preload speciemen
-        Pose2d startPose = new Pose2d(startPosX, startPosY, startHeading);
-        bot = new GalaxyBot(hardwareMap);
         bot.doClawClose();
-        bot.doInitAutoPos();
-        bot.clawSpinSpecimen();
         bot.intakeDetract();
+        bot.clawSpinSample();
+        bot.doSwingDown();
+        bot.doUnTwist();
+        bot.intakeClawOpen();
 
+        Pose2d startPose = new Pose2d(startPosX, startPosY, Math.PI / 2);
         drive = new MecanumDrive(hardwareMap, startPose);
         drive.updatePoseEstimate();
-// Score preload speciemen
+
         Action preloadScore = drive.actionBuilder(startPose)
-                .splineToConstantHeading(
-                        new Vector2d(
-                                preloadScorePosX,
-                                preloadScorePosY
-                        ),
-                        preloadScoreHeading)
+                .splineToLinearHeading(new Pose2d(startPosX, startPosY - 48, 0), Math.PI / 2)
                 .build();
 
-        Pose2d afterScore = new Pose2d(preloadScorePosX, preloadScorePosY, startHeading);
-        Action goToFirst = drive.actionBuilder(afterScore)
-                .splineToConstantHeading(
-                        new Vector2d(
-                                goToFirstX,
-                                goToFirstY
-                        ),
-                        preloadScoreHeading)
-                .turnTo(Math.toRadians(tan))
-                .build();
-
-
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
         waitForStart();
 
-
-//        Actions.runBlocking(
-//                new SequentialAction(
-//                        new ParallelAction(
-//                                new SwingDown(),
-//                                new SlideUpSpecimen()
-//                        ),
-//                        preloadScore
-//                )
-//        );
-//        Actions.runBlocking(
-//                new SequentialAction(
-//                        new SlideDownSpecimen(),
-//                        new ClawOpen()
-//                )
-//        );
-        Actions.runBlocking(
-                new SequentialAction(
-                        //goToFirst,
-                        //new SleepAction(1),
-                        new IntakeExtend()
-                        //new SpinDown(),
-                        //new IntakeClawOpen()
-                )
-        );
-
-
-
-
-
+        Actions.runBlocking(preloadScore);
     }
 }

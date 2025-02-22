@@ -12,10 +12,12 @@ import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
+import com.arcrobotics.ftclib.kotlin.extensions.geometry.Pose2dExtKt;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import java.lang.Math;
+import java.util.Arrays;
 
 @Config
 @Autonomous(name = "GalaxyBlueSpecimenEXP", group = "Autonomous")
@@ -25,9 +27,7 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             bot.slideUp();
-            packet.put("left tick pos: ", bot.leftSlide.getCurrentPosition());
-            packet.put("right tick pos: ", bot.rightSlide.getCurrentPosition());
-            packet.put("slides up:", bot.slideUp);
+
             if (bot.leftSlide.isBusy() || bot.rightSlide.isBusy()) {
                 return true;
             } else {
@@ -42,9 +42,6 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             bot.slideDown();
-            packet.put("left tick pos: ", bot.leftSlide.getCurrentPosition());
-            packet.put("right tick pos: ", bot.rightSlide.getCurrentPosition());
-            packet.put("slides down", "");
             if (bot.leftSlide.isBusy() || bot.rightSlide.isBusy()) {
                 return true;
             } else {
@@ -59,9 +56,6 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             bot.slideUpSpecimen();
-            packet.put("left tick pos: ", bot.leftSlide.getCurrentPosition());
-            packet.put("right tick pos: ", bot.rightSlide.getCurrentPosition());
-            packet.put("slides up:", bot.slideUp);
             if (bot.leftSlide.isBusy() || bot.rightSlide.isBusy()) {
                 return true;
             } else {
@@ -76,9 +70,6 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             bot.slideUpSpecimenPickup();
-            packet.put("left tick pos: ", bot.leftSlide.getCurrentPosition());
-            packet.put("right tick pos: ", bot.rightSlide.getCurrentPosition());
-            packet.put("slides up:", bot.slideUp);
             if (bot.leftSlide.isBusy() || bot.rightSlide.isBusy()) {
                 return true;
             } else {
@@ -93,9 +84,6 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             bot.slideDownSpecimen();
-            packet.put("left tick pos: ", bot.leftSlide.getCurrentPosition());
-            packet.put("right tick pos: ", bot.rightSlide.getCurrentPosition());
-            packet.put("slides down", "");
             if (bot.leftSlide.isBusy() || bot.rightSlide.isBusy()) {
                 return true;
             } else {
@@ -110,9 +98,6 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             bot.slideDown();
-            packet.put("left tick pos: ", bot.leftSlide.getCurrentPosition());
-            packet.put("right tick pos: ", bot.rightSlide.getCurrentPosition());
-            packet.put("slides down", "");
             if (bot.leftSlide.isBusy() || bot.rightSlide.isBusy()) {
                 return true;
             } else {
@@ -127,7 +112,6 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             bot.intakeExtend();
-            packet.put("intake extended", "");
             return false;
         }
     }
@@ -136,7 +120,6 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             bot.intakeDetract();
-            packet.put("intake detracted", "");
             return false;
         }
     }
@@ -145,7 +128,6 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             bot.doTwist();
-            packet.put("twisted", "");
             return false;
         }
     }
@@ -154,7 +136,6 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             bot.doUnTwist();
-            packet.put("untwisted", "");
             return false;
         }
     }
@@ -163,7 +144,6 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             bot.doClawOpen();
-            packet.put("claw open", "");
             return false;
         }
     }
@@ -172,7 +152,6 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             bot.doClawClose();
-            packet.put("claw closed", "");
             return false;
         }
     }
@@ -181,7 +160,6 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             bot.intakeClawOpen();
-            packet.put("intake claw open", "");
             return false;
         }
     }
@@ -190,7 +168,6 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             bot.intakeClawClose();
-            packet.put("intake claw closed", "");
             return false;
         }
     }
@@ -199,7 +176,6 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             bot.doSwingUp();
-            packet.put("swing up", "");
             return false;
         }
     }
@@ -208,7 +184,6 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             bot.doSwingDown();
-            packet.put("swing down", "");
             return false;
         }
     }
@@ -217,7 +192,6 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
         public boolean run(@NonNull TelemetryPacket packet) {
             bot.leftSwing.setPosition(bot.swingSamplePos);
             bot.rightSwing.setPosition(bot.swingSamplePos);
-            packet.put("swing down", "");
             return false;
         }
     }
@@ -226,7 +200,6 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             bot.spinUp();
-            packet.put("spinned up", "");
             return false;
         }
     }
@@ -235,7 +208,6 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             bot.spinDown();
-            packet.put("spinned down", "");
             return false;
         }
     }
@@ -245,7 +217,6 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
         public boolean run(@NonNull TelemetryPacket packet) {
 
             bot.clawSpinSample();
-            packet.put("claw spinned for sample", "");
             return false;
         }
     }
@@ -254,7 +225,6 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             bot.clawSpinSpecimen();
-            packet.put("claw spinned for specimen", "");
             return false;
         }
     }
@@ -264,37 +234,29 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
 
     public static double startPosX = -12;
     public static double startPosY = 63.6;
-    public static double goToFirstX = -32;
-    public static double goToFirstY = 43;
-    public static double turnAngleFirst = 0.658;
-    public static double turnAngleFirstback = -0.5712;
-    public static double goToputX = -32;
-    public static double goToputY = 43;
-    public static double turnBackX = -37;
-    public static double turnBackY = 39;
-    public static double goBacksecondX = -32;
-    public static double goBacksecondY = 42;
-    public static double scoreSecondX = -4;
-    public static double scoreSecondY = 36.55;
-    public static double goBack1 = 44;
-    public static double goBack2 = 66;
-    public static double parkX = -45;
-    public static double parkY = 60;
+    public static double goToFirstX = -31.7;
+    public static double goToFirstY = 33.5;
+    public static double goTo2ndX = -43.5;
+    public static double goTo2ndY = 38;
+    public static double goTo3rdX = -65;
+    public static double goTo3rdY = 48;
+    public static double tan = 120;
+    public static double tan1 = -45;
+    public static double tan2 = 45;
+    public static double tan3 = 45;
 
-
-
-    public static double tan = 0.0873;
     public static double startHeading = -Math.PI / 2;
 
     public static double preloadScorePosX = -8;
-    public static double preloadScorePosY = 29.5;
-    public static double preloadScoreHeading = -Math.PI / 2;
-
+    public static double preloadScorePosY = 28.7;
+    public static double preloadScoreHeading = -Math.PI/2;
+    public static double preloadSpeed = 33.5;
     @Override
     public void runOpMode() throws InterruptedException {
         Pose2d startPose = new Pose2d(startPosX, startPosY, startHeading);
         bot = new GalaxyBot(hardwareMap);
         bot.doClawClose();
+        bot.intakeClawOpen();
         bot.doInitAutoPos();
         bot.clawSpinSpecimen();
         bot.intakeDetract();
@@ -302,25 +264,67 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
         drive = new MecanumDrive(hardwareMap, startPose);
         drive.updatePoseEstimate();
 // Score preload speciemen
+        VelConstraint preloadConstraint = new MinVelConstraint(Arrays.asList(
+                new TranslationalVelConstraint(preloadSpeed),
+                new AngularVelConstraint(Math.PI / 2)
+        ));
         Action preloadScore = drive.actionBuilder(startPose)
                 .splineToConstantHeading(
                         new Vector2d(
                                 preloadScorePosX,
                                 preloadScorePosY
                         ),
-                        preloadScoreHeading)
+                        preloadScoreHeading,
+                        preloadConstraint)
                 .build();
+//        Pose2d goback = new Pose2d(preloadScorePosX, preloadScorePosY, preloadScoreHeading);
+//        Action goBack = drive.actionBuilder(goback)
+//                .lineToY(42)
+//                .build();
 
-        Pose2d afterScore = new Pose2d(preloadScorePosX, preloadScorePosY, startHeading);
+        Pose2d afterScore = new Pose2d(preloadScorePosX, preloadScorePosY, preloadScoreHeading);
         Action goToFirst = drive.actionBuilder(afterScore)
-                .splineToConstantHeading(
-                        new Vector2d(
+                .setTangent(Math.PI / 2)
+                .splineToLinearHeading(
+                        new Pose2d(
                                 goToFirstX,
-                                goToFirstY
+                                goToFirstY,
+                                tan
                         ),
                         preloadScoreHeading)
-                .turnTo(Math.toRadians(tan))
                 .build();
+        Pose2d afterPick1 = new Pose2d(goToFirstX, goToFirstY, tan);
+        Action goToput1 = drive.actionBuilder(afterPick1)
+                .splineToLinearHeading(new Pose2d(goToFirstX,44,tan1),tan)
+                .build();
+
+        Pose2d goTo2 = new Pose2d(goToFirstX, 44, tan1);
+        Action goTo2nd = drive.actionBuilder(goTo2)
+                .splineToLinearHeading(new Pose2d(goTo2ndX,goTo2ndY,tan2),tan1)
+                .build();
+
+        Pose2d goToput2 = new Pose2d(goToFirstX, 44, tan2);
+        Action goToput2nd= drive.actionBuilder(goToput2)
+                .turnTo(tan1)
+                .build();
+
+//        Pose2d goTo3 = new Pose2d(goToFirstX, 44, tan1);
+//        Action goTo3rd = drive.actionBuilder(goTo3)
+//                .turnTo(tan3)
+//                .splineToConstantHeading(new Vector2d(goTo3rdX,goTo3rdY),tan3 )
+//                .build();
+
+        Pose2d goTopick = new Pose2d(goToFirstX, 44, tan1);
+        Action goTopickup = drive.actionBuilder(goTopick)
+                .turnTo(tan3)
+                .splineToConstantHeading(new Vector2d(goTo3rdX,goTo3rdY),tan3 )
+                .build();
+
+
+
+
+
+
 
 
 
@@ -328,35 +332,63 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
         telemetry.update();
 
         waitForStart();
-
-//        Actions.runBlocking(
-//                new SequentialAction(
-//                        new ParallelAction(
-//                                new SwingDown(),
-//                                new SlideUpSpecimen()
-//                        ),
-//                        preloadScore
-//                )
-//        );
-//        Actions.runBlocking(
-//                new SequentialAction(
-//                        new SlideDownSpecimen(),
-//                        new ClawOpen()
-//                )
-//        );
+        Actions.runBlocking(
+                        new ParallelAction(
+                                new SwingDown(),
+                                new SlideUpSpecimen(),
+                                preloadScore
+                        )
+        );
         Actions.runBlocking(
                 new SequentialAction(
-                        //goToFirst,
-                        //new SleepAction(1),
+                        new SlideDownSpecimen(),
+                        new ClawOpen()
+                )
+        );
+        Actions.runBlocking(
+                new SequentialAction(
+                        goToFirst,
                         new IntakeExtend(),
                         new SpinDown(),
                         new IntakeClawOpen(),
+                        new SleepAction(0.3),
                         new Twist(),
-                        new IntakeClawClose()
+                        new SleepAction(0.5),
+                        new IntakeClawClose(),
+                        new SleepAction(0.5)
                 )
         );
+        Actions.runBlocking(
+                new SequentialAction(
+                        goToput1,
+                        new IntakeClawOpen(),
+                        new SleepAction(0.3)
+                )
+        );
+        Actions.runBlocking(
+                new SequentialAction(
+                            goTo2nd,
+                            new Untwist(),
+                        new SleepAction(0.3),
+                        new IntakeClawClose(),
+                        new SleepAction(0.5)
 
-
+                )
+        );
+        Actions.runBlocking(
+                new SequentialAction(
+                        goToput2nd,
+                        new IntakeClawOpen(),
+                        new SleepAction(1)
+                )
+        );
+//        Actions.runBlocking(
+//                new SequentialAction(
+//                        goTo3rd,
+//                        new IntakeClawClose(),
+//                        new SleepAction(1)
+//                )
+//        );
     }
 }
 

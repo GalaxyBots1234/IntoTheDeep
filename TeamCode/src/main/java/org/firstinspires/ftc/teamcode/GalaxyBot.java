@@ -380,7 +380,7 @@ public class GalaxyBot {
 
     public static double swingUpPos = 0.6575;
     public static double swingAutoInitPos = 0.12;
-    public static double swingDownPos = 0.045;
+    public static double swingDownPos = 0.03;
     public void swing()
     {
         swingUp = !swingUp;
