@@ -244,9 +244,9 @@ public class GalaxyBot {
 
 
     public static int slideUpSpecimenPos = 2350;
-    public static int slideDownSpecimenPos = 1400;
+    public static int slideDownSpecimenPos = 1500;
 
-    public static int slideUpSpecimenPickupPos = 150;
+    public static int slideUpSpecimenPickupPos = 135;
 
     public void slideUpSpecimen()
     {
@@ -316,6 +316,7 @@ public class GalaxyBot {
 
     public static double unTwistPos = 0.27;
     public static double twistPos = 0.60;
+    public static double halfTwistPos = 0.45;
 
     public void doTwist()
     {
@@ -327,6 +328,10 @@ public class GalaxyBot {
     {
         twisted = false;
         twister.setPosition(unTwistPos);
+    }
+    public void doHalfTwist()
+    {
+        twister.setPosition(halfTwistPos);
     }
 
     public static double clawOpenPos = 0.8;
@@ -453,7 +458,7 @@ public class GalaxyBot {
     }
 
     public static double clawSpinSamplePos = 0.94;
-    public static double clawSpinSpecimenPos = 0.15;
+    public static double clawSpinSpecimenPos = 0.292;
     public static double swingSamplePos = 0.4;
 
     public void clawSpinSample() {

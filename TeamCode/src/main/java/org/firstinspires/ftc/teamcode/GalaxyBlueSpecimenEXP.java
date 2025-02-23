@@ -229,28 +229,54 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
         }
     }
 
+    public class halfSpinSpecimen implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            bot.doHalfTwist();
+            return false;
+        }
+    }
+
+
     private GalaxyBot bot;
     private MecanumDrive drive;
 
     public static double startPosX = -12;
-    public static double startPosY = 63.6;
-    public static double goToFirstX = -31.7;
-    public static double goToFirstY = 33.5;
-    public static double goTo2ndX = -43.5;
-    public static double goTo2ndY = 38;
-    public static double goTo3rdX = -65;
-    public static double goTo3rdY = 48;
-    public static double tan = 120;
-    public static double tan1 = -45;
+    public static double startPosY = 64;
+    public static double goToFirstX = -33;
+    public static double goToFirstY =43.5;
+    public static double goTo2ndX = -42;
+    public static double goTo2ndY = 44;
+    public static double goTo3rdX = -46.5;
+    public static double goTo3rdY = 27.5;
+    public static double goput3rdX = -48;
+    public static double goput3rdY = 46;
+    public static double goToPickupX = -48;
+    public static double goToPickupY = 64;
+
+    public static double tan = Math.PI / 4;
+    public static double tan1 = -Math.PI / 4;
     public static double tan2 = 45;
-    public static double tan3 = 45;
+    public static double tan3 = 0;
+    public static double back = 48;
 
     public static double startHeading = -Math.PI / 2;
 
     public static double preloadScorePosX = -8;
-    public static double preloadScorePosY = 28.7;
+    public static double preloadScorePosY = 34;
     public static double preloadScoreHeading = -Math.PI/2;
-    public static double preloadSpeed = 33.5;
+
+    public static double scoreFirstX = preloadScorePosX + 4;
+    public static double scoreFirstY = preloadScorePosY + 1;
+
+    public static double scoreSecondX = preloadScorePosX + 4 + 4;
+    public static double scoreSecondY = preloadScorePosY - 0.25;
+
+    public static double scoreThirdX = preloadScorePosX + 4 + 4 + 4;
+    public static double scoreFourthX = preloadScorePosX + 4 + 4 + 4 + 4;
+    public static double scoreThirdY = preloadScorePosY - 0.25;
+    public static double scoreFourthY = preloadScorePosY - 0.25;
+    public static double preloadSpeed = 27.5;
     @Override
     public void runOpMode() throws InterruptedException {
         Pose2d startPose = new Pose2d(startPosX, startPosY, startHeading);
@@ -260,6 +286,7 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
         bot.doInitAutoPos();
         bot.clawSpinSpecimen();
         bot.intakeDetract();
+        bot.doUnTwist();
 
         drive = new MecanumDrive(hardwareMap, startPose);
         drive.updatePoseEstimate();
@@ -284,7 +311,7 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
 
         Pose2d afterScore = new Pose2d(preloadScorePosX, preloadScorePosY, preloadScoreHeading);
         Action goToFirst = drive.actionBuilder(afterScore)
-                .setTangent(Math.PI / 2)
+                .setTangent(Math.PI / 4 * 3)
                 .splineToLinearHeading(
                         new Pose2d(
                                 goToFirstX,
@@ -295,37 +322,98 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
                 .build();
         Pose2d afterPick1 = new Pose2d(goToFirstX, goToFirstY, tan);
         Action goToput1 = drive.actionBuilder(afterPick1)
-                .splineToLinearHeading(new Pose2d(goToFirstX,44,tan1),tan)
+                .setTangent(Math.PI / 2)
+                .splineToLinearHeading(new Pose2d(goToFirstX, back, tan1), tan)
                 .build();
 
         Pose2d goTo2 = new Pose2d(goToFirstX, 44, tan1);
         Action goTo2nd = drive.actionBuilder(goTo2)
-                .splineToLinearHeading(new Pose2d(goTo2ndX,goTo2ndY,tan2),tan1)
+                .setTangent(-Math.PI / 2)
+                .splineToLinearHeading(new Pose2d(goTo2ndX,goTo2ndY, tan), tan1)
                 .build();
 
-        Pose2d goToput2 = new Pose2d(goToFirstX, 44, tan2);
+        Pose2d goToput2 = new Pose2d(goToFirstX, back, tan);
         Action goToput2nd= drive.actionBuilder(goToput2)
                 .turnTo(tan1)
                 .build();
 
-//        Pose2d goTo3 = new Pose2d(goToFirstX, 44, tan1);
-//        Action goTo3rd = drive.actionBuilder(goTo3)
-//                .turnTo(tan3)
-//                .splineToConstantHeading(new Vector2d(goTo3rdX,goTo3rdY),tan3 )
-//                .build();
+        VelConstraint thirdConstraint = new MinVelConstraint(Arrays.asList(
+                new TranslationalVelConstraint(60),
+                new AngularVelConstraint(Math.PI / 2)
+        ));
+        Pose2d goTo3 = new Pose2d(goToFirstX, back, tan1);
+        Action goTo3rd = drive.actionBuilder(goTo3)
+                .setTangent(0)
+                .splineToLinearHeading(new Pose2d(goTo3rdX,goTo3rdY, tan3), tan1)
+                .build();
 
-        Pose2d goTopick = new Pose2d(goToFirstX, 44, tan1);
+        Pose2d goToput3 = new Pose2d(goTo3rdX, goTo3rdY, tan3);
+        Action goToput3rd = drive.actionBuilder(goToput3)
+                .setTangent(0)
+                .splineToLinearHeading( new Pose2d(goput3rdX,goput3rdY, -Math.PI/2),tan3)
+                .build();
+
+        VelConstraint pickupConstraint = new MinVelConstraint(Arrays.asList(
+                new TranslationalVelConstraint(50),
+                new AngularVelConstraint(Math.PI * 1.5)
+        ));
+
+        Pose2d goTopick = new Pose2d(goput3rdX, goput3rdY, -Math.PI/2);
         Action goTopickup = drive.actionBuilder(goTopick)
-                .turnTo(tan3)
-                .splineToConstantHeading(new Vector2d(goTo3rdX,goTo3rdY),tan3 )
+                .lineToY(goput3rdY - 3)
+                .setTangent(-Math.PI / 2)
+                .splineToLinearHeading(new Pose2d(goToPickupX,goToPickupY,Math.PI/2),-Math.PI/2,
+                        pickupConstraint, new ProfileAccelConstraint(-70, 50))
+                .build();
+        VelConstraint scoreConstraint = new MinVelConstraint(Arrays.asList(
+                new TranslationalVelConstraint(50),
+                new AngularVelConstraint(Math.PI * 1.25)
+        ));
+        Pose2d score1st = new Pose2d(goToPickupX, goToPickupY, Math.PI/2);
+        Action scoreFirst = drive.actionBuilder(score1st)
+                .setTangent(0)
+                .splineToLinearHeading(new Pose2d(scoreFirstX,scoreFirstY,preloadScoreHeading),Math.PI/2,
+                        scoreConstraint, new ProfileAccelConstraint(-50, 50))
                 .build();
 
 
+        Pose2d goTopick2 = new Pose2d(scoreFirstX, scoreFirstY, -Math.PI/2);
+        Action goTopickup2 = drive.actionBuilder(goTopick2)
+                .setTangent(Math.atan2(goToPickupY - scoreFirstY, goToPickupX - scoreFirstX))
+                .lineToYLinearHeading(goToPickupY, Math.PI / 2)
+                .build();
 
+        Pose2d score2nd = new Pose2d(goToPickupX, goToPickupY, Math.PI/2);
+        Action scoreSecond = drive.actionBuilder(score2nd)
+                .setTangent(0)
+                .splineToLinearHeading(new Pose2d(scoreSecondX,scoreSecondY,preloadScoreHeading),Math.PI/2,
+                        scoreConstraint, new ProfileAccelConstraint(-50, 50))
+                .build();
 
+        Pose2d goTopick3 = new Pose2d(scoreSecondX, scoreSecondY, -Math.PI/2);
+        Action goTopickup3 = drive.actionBuilder(goTopick3)
+                .setTangent(Math.atan2(goToPickupY - scoreSecondY, goToPickupX - scoreSecondX))
+                .lineToYLinearHeading(goToPickupY, Math.PI / 2)
+                .build();
 
+        Pose2d score3rd = new Pose2d(goToPickupX, goToPickupY, Math.PI/2);
+        Action scoreThird = drive.actionBuilder(score3rd)
+                .setTangent(0)
+                .splineToLinearHeading(new Pose2d(scoreThirdX,scoreThirdY,preloadScoreHeading),Math.PI/2,
+                        scoreConstraint, new ProfileAccelConstraint(-50, 50))
+                .build();
 
-
+        Pose2d goTopick4 = new Pose2d(scoreThirdX, scoreThirdY, -Math.PI/2);
+        Action goTopickup4 = drive.actionBuilder(goTopick4)
+                .setTangent(Math.atan2(goToPickupY - scoreThirdY, goToPickupX - scoreThirdX))
+                .lineToYLinearHeading(goToPickupY, Math.PI / 2)
+                .build();
+        Pose2d score4th = new Pose2d(goToPickupX, goToPickupY, Math.PI/2);
+        Action scoreFourth = drive.actionBuilder(score4th)
+                .setTangent(0)
+                .splineToLinearHeading(new Pose2d(scoreFourthX,scoreFourthY,preloadScoreHeading),Math.PI/2,
+                        scoreConstraint, new ProfileAccelConstraint(-50, 50))
+                .build();
 
 
         telemetry.addData("Status", "Initialized");
@@ -347,48 +435,131 @@ public class GalaxyBlueSpecimenEXP extends LinearOpMode {
         );
         Actions.runBlocking(
                 new SequentialAction(
-                        goToFirst,
-                        new IntakeExtend(),
-                        new SpinDown(),
-                        new IntakeClawOpen(),
-                        new SleepAction(0.3),
-                        new Twist(),
-                        new SleepAction(0.5),
+                        new ParallelAction(
+                            goToFirst,
+                            new SlideUpSpecimenPickup()
+                        ),
+                        new ParallelAction(
+                            new IntakeExtend(),
+                            new SpinDown(),
+                            new IntakeClawOpen()
+                        ),
+                        new halfSpinSpecimen(),
+                        new SleepAction(0.75),
                         new IntakeClawClose(),
-                        new SleepAction(0.5)
+                        new SleepAction(0.25)
                 )
         );
         Actions.runBlocking(
                 new SequentialAction(
                         goToput1,
-                        new IntakeClawOpen(),
-                        new SleepAction(0.3)
+                        new IntakeClawOpen()
+//                        new SleepAction(0.13)
                 )
         );
         Actions.runBlocking(
                 new SequentialAction(
                             goTo2nd,
-                            new Untwist(),
-                        new SleepAction(0.3),
+                       new halfSpinSpecimen(),
                         new IntakeClawClose(),
-                        new SleepAction(0.5)
+                        new SleepAction(0.15)
 
                 )
         );
         Actions.runBlocking(
                 new SequentialAction(
                         goToput2nd,
-                        new IntakeClawOpen(),
-                        new SleepAction(1)
+                        new IntakeClawOpen()
+//                        new SleepAction(0.15)
                 )
         );
-//        Actions.runBlocking(
-//                new SequentialAction(
-//                        goTo3rd,
-//                        new IntakeClawClose(),
-//                        new SleepAction(1)
-//                )
-//        );
+        Actions.runBlocking(
+                new SequentialAction(
+                        new ParallelAction(
+                            goTo3rd,
+                            new Twist()
+                        ),
+                        new IntakeClawClose(),
+                        new SleepAction(0.15)
+                )
+        );
+
+        Actions.runBlocking(
+                new SequentialAction(
+                        goToput3rd,
+                        new IntakeClawOpen()
+//                        new SleepAction(0.05)
+                )
+        );
+        Actions.runBlocking(
+                new SequentialAction(
+                        new ParallelAction(
+                            new Untwist(),
+                            new SpinUp(),
+                            new IntakeDetract()
+                        ),
+                        new SleepAction(0.05)
+                )
+        );
+        Actions.runBlocking(
+                new SequentialAction(
+                        goTopickup,
+                        new ClawClose(),
+                        new SleepAction(0.05)
+                )
+        );
+        Actions.runBlocking(
+                new SequentialAction(
+                        new ParallelAction(
+                            scoreFirst,
+                            new SlideUpSpecimen()
+                        ),
+                        new SlideDownSpecimen(),
+                        new ClawOpen(),
+                        new ParallelAction(
+                            goTopickup2,
+                            new SlideUpSpecimenPickup()
+                        ),
+                        new ClawClose(),
+                        new SleepAction(0.05),
+                        new ParallelAction(
+                            scoreSecond,
+                            new SlideUpSpecimen()
+                        ),
+                        new SlideDownSpecimen(),
+                        new ClawOpen(),
+                        new ParallelAction(
+                                goTopickup3,
+                                new SlideUpSpecimenPickup()
+                        ),
+                        new ClawClose(),
+                        new SleepAction(0.05),
+                        new ParallelAction(
+                            scoreThird,
+                            new SlideUpSpecimen()
+                        ),
+                        new SlideDownSpecimen(),
+                        new ClawOpen(),
+                        new ParallelAction(
+                                goTopickup4,
+                                new SlideUpSpecimenPickup()
+                        ),
+                        new ClawClose(),
+                        new SleepAction(0.05),
+                        new ParallelAction(
+                                scoreFourth,
+                                new SlideUpSpecimen()
+                        ),
+                        new SlideDownSpecimen(),
+                        new ClawOpen(),
+                        new SleepAction(0.5)
+
+                )
+        );
+
+
+
+
     }
 }
 
