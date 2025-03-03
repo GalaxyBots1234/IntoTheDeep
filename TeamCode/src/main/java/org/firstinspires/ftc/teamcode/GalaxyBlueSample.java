@@ -266,14 +266,14 @@ public class GalaxyBlueSample extends LinearOpMode{
     public static double preloadScorePosX= 58;
     public static double preloadScorePosY= 58;
     public static double firstSampleX= 50;
-    public static double firstSampleY= 50;
+    public static double firstSampleY= 52.5;
     public static double returnFirstX= 58;
     public static double returnFirstY= 58;
     public static double secondSampleX = 60;
-    public static double secondSampleY= 50;
+    public static double secondSampleY= 52.5;
     public static double returnSecondSampleX = 58;
     public static double returnSecondSampleY= 58;
-    public static double thirdSampleX= 48;
+    public static double thirdSampleX= 49.25;
     public static double thirdSampleY= 28;
     public static double returnthirdSampleX= 60.25;
     public static double returnthirdSampleY= 53.25;

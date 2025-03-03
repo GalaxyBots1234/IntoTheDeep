@@ -40,6 +40,8 @@ public class GalaxyBotTeleOp extends OpMode
 
     private boolean fieldCentric = false;
 
+
+
     private void mecanumDrive(double botHeading)
     {
         float LIMIT_SPEED = 1.0f;
@@ -48,7 +50,7 @@ public class GalaxyBotTeleOp extends OpMode
         float rx = gamepad1.right_stick_x;
         if(currentGamepad1.right_bumper && previousGamepad1.right_bumper)
         {
-            LIMIT_SPEED = 0.45f;
+            LIMIT_SPEED = 0.375f;
         }
 
         double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
